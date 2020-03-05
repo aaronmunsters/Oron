@@ -2,7 +2,8 @@ const asc = require("assemblyscript/cli/asc");
 asc.ready.then(() => {
   asc.main(
     [
-      "./assembly/game-of-life/assembly/index.ts",
+      // "./assembly/game-of-life/assembly/index.ts",
+      "./assembly/index.ts",
       "--binaryFile",
       "./build/optimized.wasm",
       "--transform",

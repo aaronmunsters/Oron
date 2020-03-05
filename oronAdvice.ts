@@ -12,12 +12,12 @@ function deepTraverse(s: Source[], idx: number) {
   function traverse(n: Node) {
     const walker = new ASTWalker();
     const advice: oronAdvice = getEmptyAdvice();
-    advice.visitCallExpression = (node: CallExpression) =>
-      console.log(`Application of ${node.expression.text}`);
-    advice.visitFunctionDeclaration = node =>
-      console.log(`Declaration of ${node.name.text}`);
+    advice.visitCallExpression = (node: CallExpression) => {
+      console.log(node);
+      // node.expression.text = "Reflect.apply";
+    };
     walker.setAdvice(advice);
-    walker.build(n);
+    console.log(walker.build(n));
   }
 
   s[idx].statements.forEach(traverse);

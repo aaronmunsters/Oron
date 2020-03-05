@@ -80,7 +80,7 @@ import {
   SwitchCase,
   DeclarationStatement,
   isTypeOmitted
-} from "../../VUB/VUB3BA/bachelorThesis/assemblyscript/src/ast";
+} from "assemblyscript";
 
 export interface oronAdvice {
   visitNode: (node: Node) => void;
@@ -238,14 +238,14 @@ export function getEmptyAdvice(): oronAdvice {
   };
 }
 
-import { operatorTokenToString } from "../../VUB/VUB3BA/bachelorThesis/assemblyscript/src/tokenizer";
+import { operatorTokenToString } from "assemblyscript";
 
 import {
   CharCode,
   indent
-} from "../../VUB/VUB3BA/bachelorThesis/assemblyscript/src/util";
+} from "assemblyscript";
 
-import { CommonFlags } from "../../VUB/VUB3BA/bachelorThesis/assemblyscript/src/common";
+import { CommonFlags } from "assemblyscript";
 
 /** An AST builder. */
 export class ASTWalker {

@@ -13,7 +13,14 @@ function deepTraverse(s: Source[], idx: number) {
     const walker = new ASTWalker();
     const advice: oronAdvice = getEmptyAdvice();
     advice.visitCallExpression = (node: CallExpression) => {
+      /*
+      console.log(`\n\n\n//// Visiting ${node.expression.text} ////`);
       console.log(node);
+      console.log(`////////////////////////////////////////\n\n\n`);
+      const target = node.expression.text;
+      const thisArgument = null;
+      const argumentsList = node.arguments.map(arg => arg.text);*/
+      // console.log(argumentsList);
       // node.expression.text = "Reflect.apply";
     };
     walker.setAdvice(advice);

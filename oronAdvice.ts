@@ -19,7 +19,8 @@ function deepTraverse(s: Source[], idx: number) {
       console.log(`////////////////////////////////////////\n\n\n`);
       const target = node.expression.text;
       const thisArgument = null;
-      const argumentsList = node.arguments.map(arg => arg.text);*/
+      const argumentsList = node.arguments.map(arg => arg.text);
+      */
       // console.log(argumentsList);
       // node.expression.text = "Reflect.apply";
     };

@@ -1,3 +1,12 @@
 const wasmModule = require("./index");
 
-console.log(wasmModule.add(1, 2));
+for (let i = 1; i < 100; i++) {
+  console.log(wasmModule.squaresSum(i));
+
+  console.log(
+    new Array(i)
+      .fill(null)
+      .map((n, i) => i * i)
+      .reduce((p, n) => p + n)
+  );
+}

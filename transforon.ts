@@ -1,10 +1,8 @@
 /**
  * Abstract Syntax Tree extras.
- *
- * Not needed in a standalone compiler but useful for testing the parser.
- *
- * @module extra/ast
- */ /***/
+ */
+
+import { strict as assert } from "assert";
 
 import {
   Node,
@@ -240,10 +238,7 @@ export function getEmptyAdvice(): oronAdvice {
 
 import { operatorTokenToString } from "assemblyscript";
 
-import {
-  CharCode,
-  indent
-} from "assemblyscript";
+import { CharCode, indent } from "assemblyscript";
 
 import { CommonFlags } from "assemblyscript";
 

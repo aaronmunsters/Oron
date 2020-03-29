@@ -1,8 +1,12 @@
-/**
- * Abstract Syntax Tree extras.
- */
+import "../assemblyscript";
 
-import { strict as assert } from "assert";
+/**
+ * @fileoverview Abstract Syntax Tree extras.
+ *
+ * Provides serialization of the AssemblyScript AST back to it source form.
+ *
+ * @license Apache-2.0
+ */
 
 import {
   Node,
@@ -50,6 +54,7 @@ import {
   ExportDefaultStatement,
   ExpressionStatement,
   ForStatement,
+  ForOfStatement,
   IfStatement,
   ImportStatement,
   InstanceOfExpression,
@@ -78,7 +83,13 @@ import {
   SwitchCase,
   DeclarationStatement,
   isTypeOmitted
-} from "assemblyscript";
+} from "../assemblyscript/src/ast";
+
+import { operatorTokenToString } from "../assemblyscript/src/tokenizer";
+
+import { CharCode, indent } from "../assemblyscript/src/util/text";
+
+import { CommonFlags } from "../assemblyscript/src/common";
 
 export interface oronAdvice {
   visitNode: (node: Node) => void;
@@ -235,12 +246,6 @@ export function getEmptyAdvice(): oronAdvice {
     visitWhileStatement: (node: WhileStatement) => {}
   };
 }
-
-import { operatorTokenToString } from "assemblyscript";
-
-import { CharCode, indent } from "assemblyscript";
-
-import { CommonFlags } from "assemblyscript";
 
 /** An AST builder. */
 export class ASTWalker {
@@ -709,7 +714,6 @@ export class ASTWalker {
   }
 
   visitCallExpression(node: CallExpression): void {
-    this.advice.visitCallExpression(node);
     this.advice.visitCallExpression(node);
     this.visitNode(node.expression);
     this.visitArguments(node.typeArguments, node.arguments);
@@ -1823,7 +1827,7 @@ export class ASTWalker {
       this.serializeAccessModifiers(implicitFieldDeclaration);
     }
     if (kind == ParameterKind.REST) {
-      sb.push("../../VUB/VUB3BA/bachelorThesis/assemblyscript/src.");
+      sb.push("...");
     }
     this.visitIdentifierExpression(node.name);
     var type = node.type;

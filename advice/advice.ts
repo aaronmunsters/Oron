@@ -1,55 +1,29 @@
-// The entry file of your WebAssembly module.
+/* #################################
+   Advice to perform instrumentation
+   ################################# */
 
-function decr(a: i32): i32 {
-  return a - 1;
-}
+// type Function<RetTyp, InTyp> = (...args: InTyp[]) => RetTyp;
 
-export function add(a: i32, b: i32): i32 {
-  a = decr(a);
-  // decr.prop = a;
-  return a - b;
+function singleApply<RetTyp, InTyp>(
+  f: (...args: InTyp[]) => RetTyp, // the provided function
+  arg: InTyp // optional extra argument
+): RetTyp {
+  return f(arg); // empty analysis
 }
 
 /*
-  Desiderata:
-  - perform operations on the function name
-  - perform operations on the arguments
-  - perform any other code (effectively altering the program behaviour)
-  - changing the returned value of the call expression (shadowing all values with extra information)
-  
-  function incr(a: i32): i32 {
-    return a++;
-  }
-  
-  const testing = (nan: i32) => nan++;
-  
-  testing(256);
-  callExpression(testing, [256]);
-  
-  
-  */
-
-/*
-  Attempt:
-
-
-  function apply(f: Function, ...args: any): returnof<f> {
+function apply<RetTyp, InTyp>(
+  f: Function<RetTyp, InTyp>, // the provided function
+  ...args: InTyp[] // optional extra arguments
+): RetTyp {
   return f(...args);
 }
-
-const advice = {
-  apply: apply
-};
-
-function actualAdd(a: i32, b: i32): i32 {
-  return a + b;
-}
-
-export function add(a: i32, b: i32): i32 {
-  const res = advice.apply(actualAdd, a, b);
-  return res;
-}
-
-
-
 */
+
+function genericGet<K, V>(mapping: Map<K, V>, key: K, val: V): V {
+  return mapping.get(key); // empty analysis
+}
+
+function genericSet<K, V>(mapping: Map<K, V>, key: K, val: V): void {
+  mapping.set(key, val); // empty analysis
+}

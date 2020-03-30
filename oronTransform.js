@@ -1,32 +1,7 @@
 "use strict";
-// import { ready, main } from "./assemblyscript/cli/asc";
-exports.__esModule = true;
-// let args: string[] = process.argv.slice(2);
-// if (args.length === 0) {
-//   args = ["./assembly/index.ts", "--binaryFile", "./build/optimized.wasm"];
-// }
-// ready.then(() => {
-//   main(
-//     args
-//       // apply transformation
-//       .concat(["--transform"])
-//       .concat(["./oronAdviceApplier.ts"])
-//       // do not emit code, this will be emitted by transformer
-//       .concat("--noEmit"),
-//     {
-//       stdout: process.stdout,
-//       stderr: process.stderr
-//     },
-//     function(err) {
-//       if (err) {
-//         console.log(err);
-//       }
-//       return 0;
-//     }
-//   );
-// });
 // code below heavily based upon
 // https://blog.scottlogic.com/2017/05/02/typescript-compiler-api-revisited.html
+exports.__esModule = true;
 var ts = require("typescript");
 var filename = "./assembly/index.ts";
 var program = ts.createProgram([filename], {
@@ -45,18 +20,19 @@ var transformer = function (context) { return function (rootNode) {
             if (expr.kind === ts.SyntaxKind.PropertyAccessExpression) {
                 var propAccExpr = expr;
                 var expression = propAccExpr.expression; // map-object
-                var expressionType = typechecker.getTypeAtLocation(expression);
+                var expressionType = typechecker.getTypeAtLocation(expression); // <K, V>
+                console.log(expressionType);
                 var name_1 = propAccExpr.name; // operation
-                var nameType = typechecker.getTypeAtLocation(name_1);
-                var exprTypeNode = expressionType;
-                var nameTypeNode = nameType;
+                var nameType = typechecker.getTypeAtLocation(name_1); // i32 => number :(
+                var exprTypeNode = expressionType; // should still be updated!
+                var nameTypeNode = nameType; // should still be updated!
                 var newExpr = void 0;
                 switch (name_1.getText()) {
                     case "get":
-                        newExpr = ts.createCall(ts.createIdentifier("genericGet"), [exprTypeNode, nameTypeNode], [expression, name_1, callexpr]);
+                        newExpr = ts.createCall(ts.createIdentifier("genericGet"), [exprTypeNode, nameTypeNode], [expression, name_1]);
                         break;
                     case "set":
-                        newExpr = ts.createCall(ts.createIdentifier("genericSet"), [exprTypeNode, nameTypeNode], [expression, name_1, callexpr]);
+                        newExpr = ts.createCall(ts.createIdentifier("genericSet"), [exprTypeNode, nameTypeNode], [expression, name_1]);
                         break;
                     default:
                         newExpr = node;
@@ -73,4 +49,34 @@ var result = ts.transform(sourceFile, [
     transformer
 ]);
 var transformedSourceFile = result.transformed[0];
+// this should be written to a file
 console.log(printer.printNode(null, transformedSourceFile, sourceFile));
+/* *** Old way of performing code transformationbelow ***
+import { ready, main } from "./assemblyscript/cli/asc";
+
+let args: string[] = process.argv.slice(2);
+if (args.length === 0) {
+  args = ["./assembly/index.ts", "--binaryFile", "./build/optimized.wasm"];
+}
+
+ready.then(() => {
+  main(
+    args
+      // apply transformation
+      .concat(["--transform"])
+      .concat(["./oronAdviceApplier.ts"])
+      // do not emit code, this will be emitted by transformer
+      .concat("--noEmit"),
+    {
+      stdout: process.stdout,
+      stderr: process.stderr
+    },
+    function(err) {
+      if (err) {
+        console.log(err);
+      }
+      return 0;
+    }
+  );
+});
+*/

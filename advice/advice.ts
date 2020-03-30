@@ -20,7 +20,7 @@ function apply<RetTyp, InTyp>(
 }
 */
 
-function genericGet<K, V>(mapping: Map<K, V>, key: K, val: V): V {
+function genericGet<K, V>(mapping: Map<K, V>, key: K): V {
   return mapping.get(key); // empty analysis
 }
 

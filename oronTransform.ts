@@ -25,9 +25,9 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
       if (expr.kind === ts.SyntaxKind.PropertyAccessExpression) {
         const propAccExpr = expr as ts.PropertyAccessExpression;
         const expression = propAccExpr.expression as ts.Identifier; // map-object
-        const expressionType = typechecker.getTypeAtLocation(expression);
+        const expressionType = typechecker.getTypeAtLocation(expression); // <K, V>
         const name = propAccExpr.name as ts.Identifier; // operation
-        const nameType = typechecker.getTypeAtLocation(name);
+        const nameType = typechecker.getTypeAtLocation(name); // i32 => number :(
         const exprTypeNode = <ts.TypeNode>(expressionType as unknown); // should still be updated!
         const nameTypeNode = <ts.TypeNode>(nameType as unknown); // should still be updated!
         let newExpr;
@@ -36,14 +36,14 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
             newExpr = ts.createCall(
               ts.createIdentifier("genericGet"),
               [exprTypeNode, nameTypeNode],
-              [expression, name, callexpr]
+              [expression, name]
             );
             break;
           case "set":
             newExpr = ts.createCall(
               ts.createIdentifier("genericSet"),
               [exprTypeNode, nameTypeNode],
-              [expression, name, callexpr]
+              [expression, name]
             );
             break;
           default:

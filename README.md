@@ -17,5 +17,10 @@ tsc oronTransform && node oronTransform
 
 ## TODO:
 
-1. <del>add `get` and `set`</del> => add typeArguments for `get` and `set`
-2. provide cli to perform transformation
+1. Fix the debugger
+2. Fix the type resloving
+3. Correctly find a way to instrument objects (get and set) if they are a feature of the language
+4. <del>add `get` and `set` => add typeArguments for `get` and `set` </del>
+5. provide cli to perform transformation
+6. Pre, post and around traps (cfr. aop)
+7. Benchmark!

@@ -82,7 +82,7 @@ import {
   ExportMember,
   SwitchCase,
   DeclarationStatement,
-  isTypeOmitted
+  isTypeOmitted,
 } from "../assemblyscript/src/ast";
 
 import { operatorTokenToString } from "../assemblyscript/src/tokenizer";
@@ -243,7 +243,7 @@ export function getEmptyAdvice(): oronAdvice {
     visitTypeDeclaration: (node: TypeDeclaration) => {},
     visitVariableDeclaration: (node: VariableDeclaration) => {},
     visitVariableStatement: (node: VariableStatement) => {},
-    visitWhileStatement: (node: WhileStatement) => {}
+    visitWhileStatement: (node: WhileStatement) => {},
   };
 }
 
@@ -1195,9 +1195,9 @@ export class ASTWalker {
   visitEnumValueDeclaration(node: EnumValueDeclaration): void {
     this.advice.visitEnumValueDeclaration(node);
     this.visitIdentifierExpression(node.name);
-    if (node.value) {
+    if (node.initializer) {
       this.sb.push(" = ");
-      this.visitNode(node.value);
+      this.visitNode(node.initializer);
     }
   }
 

@@ -1,32 +1,44 @@
 (module
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_=>_none (func (param i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_f64_f64_=>_f64 (func (param i32 f64 f64) (result f64)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_f64_=>_i32 (func (param i32 i32 f64) (result i32)))
+ (type $none_=>_f64 (func (result f64)))
+ (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
  (data (i32.const 64) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
  (data (i32.const 128) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s\00")
- (data (i32.const 176) "\03\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00")
+ (data (i32.const 176) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00A\00a\00r\00o\00n\00")
+ (data (i32.const 208) "\04\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
- (global $~lib/rt/__rtti_base i32 (i32.const 176))
- (global $~lib/heap/__heap_base i32 (i32.const 204))
+ (global $assembly/index/arethmeticOperator.plus i32 (i32.const 0))
+ (global $assembly/index/arethmeticOperator.minus i32 (i32.const 1))
+ (global $assembly/index/arethmeticOperator.times i32 (i32.const 2))
+ (global $assembly/index/arethmeticOperator.divide i32 (i32.const 3))
+ (global $assembly/index/arethmeticOperator.modulus i32 (i32.const 4))
+ (global $assembly/index/a (mut i32) (i32.const 0))
+ (global $~lib/rt/__rtti_base i32 (i32.const 208))
+ (global $~lib/heap/__heap_base i32 (i32.const 244))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/tlsf/__alloc))
  (export "__retain" (func $~lib/rt/pure/__retain))
  (export "__release" (func $~lib/rt/pure/__release))
  (export "__collect" (func $~lib/rt/pure/__collect))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
- (export "add" (func $assembly/index/add))
+ (export "getValue" (func $assembly/index/getValue))
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1459,15 +1471,399 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $assembly/index/add (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
+ (func $assembly/index/Human#constructor (; 14 ;) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   local.get $1
-  i32.add
+  call $~lib/rt/pure/__retain
+  local.set $1
+  local.get $0
+  i32.eqz
+  if
+   i32.const 16
+   i32.const 3
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  f64.const 0
+  f64.store offset=8
+  local.get $0
+  local.tee $3
+  local.get $1
+  local.tee $4
+  local.get $3
+  i32.load
+  local.tee $5
+  i32.ne
+  if
+   local.get $4
+   call $~lib/rt/pure/__retain
+   local.set $4
+   local.get $5
+   call $~lib/rt/pure/__release
+  end
+  local.get $4
+  i32.store
+  local.get $0
+  local.get $2
+  f64.store offset=8
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $0
  )
- (func $~lib/rt/pure/__collect (; 15 ;)
+ (func $start:assembly/index (; 15 ;)
+  i32.const 0
+  i32.const 192
+  f64.const 21
+  call $assembly/index/Human#constructor
+  global.set $assembly/index/a
+ )
+ (func $~lib/math/NativeMath.mod (; 16 ;) (param $0 f64) (param $1 f64) (result f64)
+  (local $2 i64)
+  (local $3 i64)
+  (local $4 i64)
+  (local $5 i64)
+  (local $6 i64)
+  (local $7 i64)
+  (local $8 f64)
+  (local $9 i64)
+  (local $10 i32)
+  (local $11 i64)
+  local.get $0
+  i64.reinterpret_f64
+  local.set $2
+  local.get $1
+  i64.reinterpret_f64
+  local.set $3
+  local.get $2
+  i64.const 52
+  i64.shr_u
+  i64.const 2047
+  i64.and
+  local.set $4
+  local.get $3
+  i64.const 52
+  i64.shr_u
+  i64.const 2047
+  i64.and
+  local.set $5
+  local.get $2
+  i64.const 63
+  i64.shr_u
+  local.set $6
+  local.get $3
+  i64.const 1
+  i64.shl
+  local.set $7
+  local.get $7
+  i64.const 0
+  i64.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $4
+   i64.const 2047
+   i64.eq
+  end
+  if (result i32)
+   i32.const 1
+  else
+   local.get $1
+   local.get $1
+   f64.ne
+  end
+  if
+   local.get $0
+   local.get $1
+   f64.mul
+   local.set $8
+   local.get $8
+   local.get $8
+   f64.div
+   return
+  end
+  local.get $2
+  i64.const 1
+  i64.shl
+  local.set $9
+  local.get $9
+  local.get $7
+  i64.le_u
+  if
+   local.get $9
+   local.get $7
+   i64.eq
+   if
+    f64.const 0
+    local.get $0
+    f64.mul
+    return
+   end
+   local.get $0
+   return
+  end
+  local.get $4
+  i64.const 0
+  i64.ne
+  i32.eqz
+  if
+   local.get $4
+   local.get $2
+   i64.const 12
+   i64.shl
+   i64.clz
+   i64.sub
+   local.set $4
+   local.get $2
+   i64.const 0
+   local.get $4
+   i64.sub
+   i64.const 1
+   i64.add
+   i64.shl
+   local.set $2
+  else
+   local.get $2
+   i64.const -1
+   i64.const 12
+   i64.shr_u
+   i64.and
+   local.set $2
+   local.get $2
+   i64.const 1
+   i64.const 52
+   i64.shl
+   i64.or
+   local.set $2
+  end
+  local.get $5
+  i64.const 0
+  i64.ne
+  i32.eqz
+  if
+   local.get $5
+   local.get $3
+   i64.const 12
+   i64.shl
+   i64.clz
+   i64.sub
+   local.set $5
+   local.get $3
+   i64.const 0
+   local.get $5
+   i64.sub
+   i64.const 1
+   i64.add
+   i64.shl
+   local.set $3
+  else
+   local.get $3
+   i64.const -1
+   i64.const 12
+   i64.shr_u
+   i64.and
+   local.set $3
+   local.get $3
+   i64.const 1
+   i64.const 52
+   i64.shl
+   i64.or
+   local.set $3
+  end
+  loop $while-continue|0
+   local.get $4
+   local.get $5
+   i64.gt_s
+   local.set $10
+   local.get $10
+   if
+    local.get $2
+    local.get $3
+    i64.ge_u
+    if
+     local.get $2
+     local.get $3
+     i64.eq
+     if
+      f64.const 0
+      local.get $0
+      f64.mul
+      return
+     end
+     local.get $2
+     local.get $3
+     i64.sub
+     local.set $2
+    end
+    local.get $2
+    i64.const 1
+    i64.shl
+    local.set $2
+    local.get $4
+    i64.const 1
+    i64.sub
+    local.set $4
+    br $while-continue|0
+   end
+  end
+  local.get $2
+  local.get $3
+  i64.ge_u
+  if
+   local.get $2
+   local.get $3
+   i64.eq
+   if
+    f64.const 0
+    local.get $0
+    f64.mul
+    return
+   end
+   local.get $2
+   local.get $3
+   i64.sub
+   local.set $2
+  end
+  local.get $2
+  i64.const 11
+  i64.shl
+  i64.clz
+  local.set $11
+  local.get $4
+  local.get $11
+  i64.sub
+  local.set $4
+  local.get $2
+  local.get $11
+  i64.shl
+  local.set $2
+  local.get $4
+  i64.const 0
+  i64.gt_s
+  if
+   local.get $2
+   i64.const 1
+   i64.const 52
+   i64.shl
+   i64.sub
+   local.set $2
+   local.get $2
+   local.get $4
+   i64.const 52
+   i64.shl
+   i64.or
+   local.set $2
+  else
+   local.get $2
+   i64.const 0
+   local.get $4
+   i64.sub
+   i64.const 1
+   i64.add
+   i64.shr_u
+   local.set $2
+  end
+  local.get $2
+  local.get $6
+  i64.const 63
+  i64.shl
+  i64.or
+  local.set $2
+  local.get $2
+  f64.reinterpret_i64
+ )
+ (func $assembly/index/oronNumericOp (; 17 ;) (param $0 i32) (param $1 f64) (param $2 f64) (result f64)
+  (local $3 i32)
+  block $case5|0
+   block $case4|0
+    block $case3|0
+     block $case2|0
+      block $case1|0
+       block $case0|0
+        local.get $0
+        local.set $3
+        local.get $3
+        global.get $assembly/index/arethmeticOperator.plus
+        i32.eq
+        br_if $case0|0
+        local.get $3
+        global.get $assembly/index/arethmeticOperator.minus
+        i32.eq
+        br_if $case1|0
+        local.get $3
+        global.get $assembly/index/arethmeticOperator.times
+        i32.eq
+        br_if $case2|0
+        local.get $3
+        global.get $assembly/index/arethmeticOperator.divide
+        i32.eq
+        br_if $case3|0
+        local.get $3
+        global.get $assembly/index/arethmeticOperator.modulus
+        i32.eq
+        br_if $case4|0
+        br $case5|0
+       end
+       local.get $1
+       local.get $2
+       f64.add
+       return
+      end
+      local.get $1
+      local.get $2
+      f64.sub
+      return
+     end
+     local.get $1
+     local.get $2
+     f64.mul
+     return
+    end
+    local.get $1
+    local.get $2
+    f64.div
+    return
+   end
+   local.get $1
+   local.get $2
+   call $~lib/math/NativeMath.mod
+   return
+  end
+  f64.const 0
   return
  )
- (func $~lib/rt/tlsf/freeBlock (; 16 ;) (param $0 i32) (param $1 i32)
+ (func $assembly/index/numericOperator (; 18 ;) (param $0 i32) (param $1 f64) (param $2 f64) (result f64)
+  local.get $0
+  local.get $1
+  local.get $2
+  call $assembly/index/oronNumericOp
+ )
+ (func $assembly/index/getValue (; 19 ;) (result f64)
+  global.get $assembly/index/a
+  f64.load offset=8
+  drop
+  global.get $assembly/index/a
+  global.get $assembly/index/arethmeticOperator.plus
+  f64.const 1
+  f64.const 2
+  call $assembly/index/numericOperator
+  f64.store offset=8
+  global.get $assembly/index/a
+  f64.load offset=8
+ )
+ (func $~start (; 20 ;)
+  call $start:assembly/index
+ )
+ (func $~lib/rt/pure/__collect (; 21 ;)
+  return
+ )
+ (func $~lib/rt/tlsf/freeBlock (; 22 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -1481,7 +1877,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/pure/decrement (; 17 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 23 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1556,7 +1952,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 18 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 24 ;) (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -1580,7 +1976,7 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/rt/__visit_members (; 19 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 25 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$4
@@ -1589,7 +1985,7 @@
      i32.const 8
      i32.sub
      i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$default
+     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$default
     end
     return
    end

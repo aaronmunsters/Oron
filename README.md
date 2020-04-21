@@ -25,3 +25,27 @@ tsc oronTransform && node oronTransform
 6. provide cli to perform transformation
 7. Pre, post and around traps (cfr. aop)
 8. Benchmark!
+9. cfr Linvail paper programs to check which one's I could support
+
+1) Implement analysis to perform call to empty wasm
+2) Compare benchmarks of plain JS instrumentation and WASM-incl instrumentation
+3) Develop draft for complete slides
+4) ... work for other projects ...
+5) Update comments
+6) Code a class and perform a get and set opertation
+7) Manually transform the code and see how I would implement an advice
+8) Send over the original and transformed (by hand) and check if you agree
+9) Try and do it automatically with the AssemblyScript parser
+
+What he said:
+
+1. first focus on get and set (using low level operation)
+   "utility", "memory" (load) and "static type checks"
+
+   get class layout => determine offset => load(object-offset, object-content)
+
+2. Look into binary operations
+
+3. correctly implement the single-argument-apply
+
+4. contact him again!

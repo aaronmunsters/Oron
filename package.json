@@ -14,5 +14,9 @@
   },
   "devDependencies": {
     "assemblyscript": "^0.9.4"
-  }
+  },
+  "repository": {
+    "url": "https://github.com/aaronmunsters/Oron"
+  },
+  "license": "MIT"
 }

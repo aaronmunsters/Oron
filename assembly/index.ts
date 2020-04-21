@@ -1,16 +1,110 @@
+/* export function oronBinaryOp<RetTyp>(
+  operator: string,
+  left: any,
+  right: any
+): any {
+  switch (operator) {
+    case "==":
+      return left == right;
+    case "!=":
+      return left != right;
+    case "===":
+      return left === right;
+    case "!==":
+      return left !== right;
+    case "<":
+      return left < right;
+    case "<=":
+      return left <= right;
+    case ">":
+      return left > right;
+    case ">=":
+      return left >= right;
+    case "<<":
+      return left << right;
+    case ">>":
+      return left >> right;
+    case ">>>":
+      return left >>> right;
+    case "+":
+      return left + right;
+    case "-":
+      return left - right;
+    case "*":
+      return left * right;
+    case "/":
+      return left / right;
+    case "%":
+      return left % right;
+    case "|":
+      return left | right;
+    case "^":
+      return left ^ right;
+    case "&":
+      return left & right;
+    case "&&":
+      return left && right;
+    case "||":
+      return left || right;
+    case "in":
+      return left in right;
+    case "instanceof":
+      return left instanceof right;
+    default:
+      return null;
+  }
+}
+ */
+
+enum arethmeticOperator {
+  plus,
+  minus,
+  times,
+  divide,
+  modulus,
+}
+
+function oronNumericOp(op: arethmeticOperator, l: number, r: number): number {
+  switch (op) {
+    case arethmeticOperator.plus:
+      return l + r;
+    case arethmeticOperator.minus:
+      return l - r;
+    case arethmeticOperator.times:
+      return l * r;
+    case arethmeticOperator.divide:
+      return l / r;
+    case arethmeticOperator.modulus:
+      return l % r;
+    default:
+      return 0;
+    // throw "Oron: could not guarantee number return";
+  }
+}
+
+function numericOperator(op: arethmeticOperator, l: number, r: number): number {
+  return oronNumericOp(op, l, r);
+}
+
 /* ######################
-   Original program below
-   ###################### */
+     Original program below
+     ###################### */
+class Human {
+  name: string;
+  age: number;
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+}
 
-export function getValue(index: i32): String {
-  let mapping: Map<i32, string> = new Map();
-  //genericSet<i32, string>(mapping, 1, "hello world");
-  mapping.set(1, "hello world");
-  //genericSet<i32, string>(mapping, 2, "this is a string");
-  mapping.set(2, "this is a string");
-  //genericSet<i32, string>(mapping, 3, "will it work?");
-  mapping.set(3, "will it work?");
+const a: Human = new Human("Aaron", 21);
+const b: Human = new Human("Scull", 99);
 
-  //return genericGet<i32, string>(mapping, index, mapping.get(index));
-  return mapping.get(index);
+export function getValue(): number {
+  a.name + b.name;
+  a.age;
+  a.age = 2;
+  // a.age = numericOperator(arethmeticOperator.plus, 1, 2); // 1 + 2;
+  return a.age;
 }

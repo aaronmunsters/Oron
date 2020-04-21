@@ -1,29 +1,33 @@
 (module
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $none_=>_f64 (func (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 64) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (data (i32.const 128) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s")
- (data (i32.const 176) "\03\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10")
+ (data (i32.const 176) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00A\00a\00r\00o\00n")
+ (data (i32.const 208) "\04\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 176))
+ (global $assembly/index/a (mut i32) (i32.const 0))
+ (global $~lib/rt/__rtti_base i32 (i32.const 208))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/tlsf/__alloc))
  (export "__retain" (func $~lib/rt/pure/__retain))
  (export "__release" (func $~lib/rt/pure/__release))
  (export "__collect" (func $~lib/rt/pure/__collect))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
- (export "add" (func $assembly/index/add))
+ (export "getValue" (func $assembly/index/getValue))
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -612,11 +616,11 @@
    if
     unreachable
    end
-   i32.const 208
+   i32.const 256
    local.tee $0
    i32.const 0
    i32.store
-   i32.const 1776
+   i32.const 1824
    i32.const 0
    i32.store
    loop $for-loop|0
@@ -627,7 +631,7 @@
      local.get $1
      i32.const 2
      i32.shl
-     i32.const 208
+     i32.const 256
      i32.add
      i32.const 0
      i32.store offset=4
@@ -645,7 +649,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 208
+       i32.const 256
        i32.add
        i32.const 0
        i32.store offset=96
@@ -663,13 +667,13 @@
      br $for-loop|0
     end
    end
-   i32.const 208
-   i32.const 1792
+   i32.const 256
+   i32.const 1840
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 208
+   i32.const 256
    global.set $~lib/rt/tlsf/ROOT
   end
   local.get $0
@@ -1096,7 +1100,7 @@
  )
  (func $~lib/rt/pure/__retain (; 12 ;) (param $0 i32) (result i32)
   local.get $0
-  i32.const 204
+  i32.const 244
   i32.gt_u
   if
    local.get $0
@@ -1108,7 +1112,7 @@
  )
  (func $~lib/rt/pure/__release (; 13 ;) (param $0 i32)
   local.get $0
-  i32.const 204
+  i32.const 244
   i32.gt_u
   if
    local.get $0
@@ -1117,15 +1121,54 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $assembly/index/add (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/index/Human#constructor (; 14 ;) (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  i32.const 16
+  i32.const 3
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  i32.const 0
+  i32.store
   local.get $0
-  local.get $1
-  i32.add
+  f64.const 0
+  f64.store offset=8
+  local.get $0
+  i32.load
+  local.tee $1
+  i32.const 192
+  i32.ne
+  if
+   local.get $1
+   call $~lib/rt/pure/__release
+  end
+  local.get $0
+  i32.const 192
+  i32.store
+  local.get $0
+  f64.const 21
+  f64.store offset=8
+  local.get $0
  )
- (func $~lib/rt/pure/__collect (; 15 ;)
+ (func $assembly/index/getValue (; 15 ;) (result f64)
+  global.get $assembly/index/a
+  f64.load offset=8
+  drop
+  global.get $assembly/index/a
+  f64.const 3
+  f64.store offset=8
+  global.get $assembly/index/a
+  f64.load offset=8
+ )
+ (func $~start (; 16 ;)
+  call $assembly/index/Human#constructor
+  global.set $assembly/index/a
+ )
+ (func $~lib/rt/pure/__collect (; 17 ;)
   nop
  )
- (func $~lib/rt/pure/decrement (; 16 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 18 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1197,7 +1240,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/__visit_members (; 17 ;) (param $0 i32)
+ (func $~lib/rt/__visit_members (; 19 ;) (param $0 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2
@@ -1205,7 +1248,7 @@
      i32.const 8
      i32.sub
      i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$default
+     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$default
     end
     return
    end
@@ -1214,7 +1257,7 @@
    local.tee $0
    if
     local.get $0
-    i32.const 204
+    i32.const 244
     i32.ge_u
     if
      local.get $0

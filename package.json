@@ -4,7 +4,9 @@
     "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --validate --sourceMap --optimize",
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
     "test": "node tests",
-    "basic-example": "npx asc ./assembly/index.ts --binaryFile ./build/optimized.wasm"
+    "basic-example": "npx asc ./assembly/index.ts --binaryFile ./build/optimized.wasm",
+    "oroneg": "tsc Oron.ts && node Oron assembly/index.ts assembly/oronAdvice.ts assembly/output.ts",
+    "fapp": "npx asc assembly/functionApply.ts -o functionApply.wasm --enable reference-types"
   },
   "dependencies": {
     "@assemblyscript/loader": "^0.9.4",

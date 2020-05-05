@@ -36,3 +36,32 @@ class MyTransform extends Transform {
 }
 
 export = MyTransform;
+
+// // *** Code that would call this function: ***
+// import { ready, main } from "./assemblyscript/cli/asc";
+
+// let args: string[] = process.argv.slice(2);
+// if (args.length === 0) {
+//   args = ["./assembly/index.ts", "--binaryFile", "./build/optimized.wasm"];
+// }
+
+// ready.then(() => {
+//   main(
+//     args
+//       // apply transformation
+//       .concat(["--transform"])
+//       .concat(["./oronAdviceApplier.ts"])
+//       // do not emit code, this will be emitted by transformer
+//       .concat("--noEmit"),
+//     {
+//       stdout: process.stdout,
+//       stderr: process.stderr,
+//     },
+//     function (err) {
+//       if (err) {
+//         console.log(err);
+//       }
+//       return 0;
+//     }
+//   );
+// });

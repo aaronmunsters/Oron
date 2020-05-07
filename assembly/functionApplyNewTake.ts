@@ -1,21 +1,59 @@
-/* Different take on performing function applications
-   this example expects a logString function
+/* Different take on performing function applications this example expects a logString function
  */
 
+/* #############################################################################################
+   Start of definitions provided by Oron, currently enumeration of AS types and ADT of arguments
+   ############################################################################################# */
+
+/* ###################################################
+   Enumeration of all known AS types, provided by Oron
+   ################################################### */
+enum Types {
+  i32,
+  u32,
+  i64,
+  u64,
+  f32,
+  f64,
+  v128,
+  i8,
+  u8,
+  i16,
+  u16,
+  bool,
+  isize,
+  usize,
+  void,
+  anyref,
+  number,
+  boolean,
+  classInstance /* not a primitive type, should be looked up via `idof<ClassType>()` */,
+}
+
+/* ####################################################################################
+     ArgsBuffer, class representing function arguments and their types (provided by Oron)
+     #################################################################################### */
 class ArgsBuffer {
   argsAmount: i32;
   argSizes: i32[]; // sizeof <= is a value of type i32
   dynamicTypes: Types[];
   argBuffer: ArrayBuffer;
+  classIds: u32[];
   constructor(argsAmount: i32, argSizes: i32[]) {
     this.argsAmount = argsAmount;
     this.argSizes = argSizes;
     const bufLength = argSizes.reduce((p, n) => p + n, 0);
     this.argBuffer = new ArrayBuffer(bufLength);
     this.dynamicTypes = new Array<Types>(argsAmount);
+    this.classIds = new Array<u32>(argsAmount);
   }
 
-  setArgument<ArgTyp>(argIdx: i32, dynamicType: Types, arg: ArgTyp): void {
+  setArgument<ArgTyp>(
+    argIdx: i32,
+    dynamicType: Types,
+    arg: ArgTyp,
+    classId: u32
+  ): void {
     assert(argIdx >= 0 && argIdx < this.argsAmount, "arg idx out of arg range");
     this.dynamicTypes[argIdx] = dynamicType;
     let argStartIdx = 0;
@@ -24,6 +62,9 @@ class ArgsBuffer {
     }
     const bufferPtr = changetype<usize>(this.argBuffer);
     store<ArgTyp>(bufferPtr + argStartIdx, arg);
+    if (dynamicType === Types.classInstance) {
+      this.classIds[argIdx] = classId;
+    }
   }
 
   getArgument<ArgTyp>(argIdx: i32): ArgTyp {
@@ -36,6 +77,9 @@ class ArgsBuffer {
   }
 }
 
+/* #################################################
+     Start of analysis, provided by analysis developer
+     ################################################# */
 declare function logString(strPtr: string): void;
 
 function genericApply(fptr: usize, args: ArgsBuffer): void {
@@ -97,12 +141,22 @@ function genericApply(fptr: usize, args: ArgsBuffer): void {
         logString("Encountered a boolean");
         break;
       case Types.classInstance:
-        logString("Encountered a classInstance, however this is still TODO");
+        switch (args.classIds[argIdx]) {
+          case idof<Human>():
+            logString("Encountered a Human");
+            break;
+          default:
+            logString("Encountered a classInstance, couldn't determine type");
+            break;
+        }
         break;
     }
   }
 }
 
+/* ###################################################################################
+     Start of instrumented code, only a function application of two args is instrumented
+     ################################################################################### */
 function applyTwoArgs<RetType, In1, In2>(
   fptr: usize,
   argsBuff: ArgsBuffer
@@ -114,39 +168,28 @@ function applyTwoArgs<RetType, In1, In2>(
   return func(argsBuff.getArgument<In1>(0), argsBuff.getArgument<In2>(1));
 }
 
-function addition(a: i32, b: i32): i32 {
-  return a + b;
+function addToAge(a: Human, b: i32): i32 {
+  return a.age + b;
 }
 
-enum Types {
-  i32,
-  u32,
-  i64,
-  u64,
-  f32,
-  f64,
-  v128,
-  i8,
-  u8,
-  i16,
-  u16,
-  bool,
-  isize,
-  usize,
-  void,
-  anyref,
-  number,
-  boolean,
-  classInstance /* not a primitive type, should be looked up via `idof<ClassType>()` */,
+class Human {
+  name: string;
+  age: i32;
+  constructor(name: string, age: i32) {
+    this.name = name;
+    this.age = age;
+  }
 }
 
 export function main(): i32 {
-  // addition(12, 64);
-  const argsBuff = new ArgsBuffer(2, [sizeof<i32>(), sizeof<i32>()]);
-  argsBuff.setArgument<i32>(0, Types.i32, 12);
-  argsBuff.setArgument<i32>(1, Types.i32, 64);
+  const aaron: Human = new Human("aaron", 21);
+  const someNumber: i32 = 9;
 
-  const fptr: usize = changetype<usize>(addition);
-
-  return applyTwoArgs<i32, i32, i32>(fptr, argsBuff);
+  // return addToAge(aaron, someNumber);
+  const args = new ArgsBuffer(2, [sizeof<usize>(), sizeof<i32>()]);
+  const classPtr = changetype<usize>(aaron);
+  args.setArgument<usize>(0, Types.classInstance, classPtr, idof<Human>());
+  args.setArgument<i32>(1, Types.i32, someNumber, -1);
+  const fptr: usize = changetype<usize>(addToAge);
+  return applyTwoArgs<i32, Human, i32>(fptr, args);
 }

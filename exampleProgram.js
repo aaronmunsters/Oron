@@ -1,11 +1,15 @@
 const fs = require("fs");
 const loader = require("@assemblyscript/loader");
 
-let wasmStringLogger;
+const wasmStringLogger = [];
 const wasm = loader.instantiateSync(
   fs.readFileSync(__dirname + "/build/optimized.wasm"),
   {
-    /* imports */
+    output: {
+      logString(x) {
+        wasmStringLogger.push(x);
+      },
+    },
   }
 );
 
@@ -20,3 +24,6 @@ console.log(
     agePtr
   )}`
 );
+
+console.log("Program logs:");
+wasmStringLogger.forEach((strPtr) => console.log(wasm.__getString(strPtr)));

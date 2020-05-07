@@ -1,6 +1,7 @@
 import {
   dynamicPropertyRead,
   dynamicPropertyWrite,
+  ArgsBuffer,
 } from "./analysisDependancies";
 
 export { dynamicPropertyRead, dynamicPropertyWrite };
@@ -23,17 +24,7 @@ export interface Oron {
     offset: usize
   ): void;
 
-  preApply(fname: string): void;
-
-  /* Desired, but currently not implemented
-  apply<RetType, ArgTypes>(
-    fname: string,
-    f: Function,
-    args: ArgTypes[]
-  ): void;
-  */
-
-  singleApply<RetTyp, InTyp>(f: (arg: InTyp) => RetTyp, arg: InTyp): RetTyp;
+  genericApply(fptr: usize, args: ArgsBuffer): void;
 }
 
 export class OronAnalysis implements Oron {
@@ -59,12 +50,7 @@ export class OronAnalysis implements Oron {
     dynamicPropertyWrite<ClassInstance, Value>(classInstance, value, offset);
   }
 
-  preApply(fname: string): void {
-    return;
-  }
-
-  singleApply<RetTyp, InTyp>(f: (arg: InTyp) => RetTyp, arg: InTyp): RetTyp {
+  genericApply(fptr: usize, args: ArgsBuffer): void {
     /* Analysis would go here */
-    return f(arg);
   }
 }

@@ -1,7 +1,7 @@
 // code below heavily based upon
 // https://blog.scottlogic.com/2017/05/02/typescript-compiler-api-revisited.html
 import * as ts from "typescript";
-import { writeFileSync } from "fs";
+import { writeFileSync, appendFileSync } from "fs";
 
 const [sourceCodeFile, analysisFile, outputFile] = process.argv.slice(2); // only capture 3 args
 const asTypeDefinitions = "orondefaults/typedefs/typedefs.d.ts"; // empty file containing type-definitions
@@ -20,6 +20,8 @@ const analysisDefinitions: AnalysesisDef = {
   classInstance: null,
   methods: [],
 };
+
+const functionCallArgs = new Set<number>();
 
 function initAnalysis(node: ts.Node) {
   function determineAnalysisSpec(n: ts.Node) {
@@ -74,6 +76,8 @@ const getTypeNode: (n: ts.Node) => ts.TypeNode = (n: ts.Node) =>
 const createStringLiteral: (s: string) => ts.StringLiteral = (s: string) =>
   ts.createLiteral(ts.createStringLiteral(s));
 
+let clashCtr = 0;
+
 const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
   rootNode: T
 ) => {
@@ -114,7 +118,7 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
         const retString = createStringLiteral(propAccessExpr.name.text);
         const val = binExp.right;
 
-        // obj.prop = val
+        // obj.prPerform transformation and emit output codeop = val
         // ==TRANSFORM==>
         // setTrap<ObjClass, PropType>(obj, val, "prop", offsetof<ObjClass>("prop"))
         return ts.createCall(
@@ -136,6 +140,143 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
         );
       }
     }
+
+    if (ts.isCallExpression(node)) {
+      if (
+        node.typeArguments ===
+        undefined /* currently only support function w/o type args */
+      ) {
+        const args = node.arguments;
+        functionCallArgs.add(args.length);
+        const argsIdentifier = ts.createIdentifier(`fargs${clashCtr}`);
+
+        const funcInTypes = (typechecker.getResolvedSignature(node).declaration
+          .parameters as ts.NodeArray<ts.ParameterDeclaration>).map((par) =>
+          typechecker.getTypeFromTypeNode(par.type)
+        );
+
+        /* create arguments ADT */
+        const argsCreation = ts.createVariableStatement(
+          undefined,
+          ts.createVariableDeclarationList([
+            ts.createVariableDeclaration(
+              argsIdentifier /* variable name */,
+              undefined,
+              ts.createNew(ts.createIdentifier("ArgsBuffer"), undefined, [
+                ts.createNumericLiteral(`${args.length}`),
+                ts.createArrayLiteral(
+                  args.map((arg, index) =>
+                    ts.createCall(
+                      ts.createIdentifier("sizeof"),
+                      [typechecker.typeToTypeNode(funcInTypes[index])],
+                      []
+                    )
+                  )
+                ),
+              ])
+            ),
+          ])
+        );
+
+        const nodeToRuntimeType = (index: number) => {
+          const typeStr = typechecker.typeToString(funcInTypes[index]);
+          switch (typeStr) {
+            case "i32":
+            case "u32":
+            case "i64":
+            case "u64":
+            case "f32":
+            case "f64":
+            case "v128":
+            case "i8":
+            case "u8":
+            case "i16":
+            case "u16":
+            case "bool":
+            case "isize":
+            case "usize":
+            case "void":
+            case "anyref":
+            case "number":
+            case "boolean":
+              return typeStr;
+            default:
+              return "classInstance";
+          }
+        };
+
+        const argSetters = args.map((arg, index) => {
+          const classid =
+            nodeToRuntimeType(index) === "classInstance"
+              ? ts.createCall(
+                  ts.createIdentifier("idof"),
+                  [typechecker.typeToTypeNode(funcInTypes[index])],
+                  []
+                )
+              : ts.createNumericLiteral("0");
+          return ts.createExpressionStatement(
+            ts.createCall(
+              ts.createPropertyAccess(argsIdentifier, "setArgument"),
+              [typechecker.typeToTypeNode(funcInTypes[index])],
+              [
+                ts.createNumericLiteral(`${index}`),
+                ts.createPropertyAccess(
+                  ts.createIdentifier("Types"),
+
+                  nodeToRuntimeType(index)
+                ),
+                ts.createIdentifier(`arg${index}`),
+                classid,
+              ]
+            )
+          );
+        });
+
+        const effectiveCallTrap = ts.createReturn(
+          ts.createCall(
+            ts.createIdentifier(`apply${args.length}Args`),
+            [
+              getTypeNode(node),
+              ...funcInTypes.map((type) => typechecker.typeToTypeNode(type)),
+            ],
+            [
+              ts.createCall(
+                ts.createIdentifier("changetype"),
+                [ts.createTypeReferenceNode("usize", [])],
+                [node.expression]
+              ),
+              argsIdentifier,
+              analysisDefinitions.classInstance,
+            ]
+          )
+        );
+
+        const argsToPars = (node: ts.Expression, index: number) => {
+          return ts.createParameter(
+            undefined,
+            undefined,
+            undefined,
+            `arg${index}`,
+            undefined,
+            typechecker.typeToTypeNode(funcInTypes[index])
+          );
+        };
+
+        return ts.createCall(
+          ts.createFunctionExpression(
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            node.arguments.map(argsToPars),
+            getTypeNode(node),
+            ts.createBlock([argsCreation, ...argSetters, effectiveCallTrap])
+          ),
+          undefined,
+          node.arguments
+        );
+      }
+    }
     return ts.visitEachChild(node, visit, context);
   }
   return ts.visitNode(rootNode, visit);
@@ -144,10 +285,40 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
 // Perform transformation and emit output code
 const result = ts.transform(sourceFile, [transformer]);
 
+const applyArgsFuncs = [];
+functionCallArgs.forEach((amount) => {
+  applyArgsFuncs.push(
+    `
+function apply${amount}Args<RetType,${Array(amount)
+      .fill(null)
+      .map((v, idx) => `In${idx}`)
+      .join(",")}>(
+  fptr: usize,
+  argsBuff: ArgsBuffer,
+  analysis: OronAnalysis
+): RetType {
+  analysis.genericApply(fptr, argsBuff);
+  const func: (${Array(amount)
+    .fill(null)
+    .map((v, idx) => `in${idx}: In${idx}`)
+    .join(",")}) => RetType = changetype<(${Array(amount)
+      .fill(null)
+      .map((v, idx) => `in${idx}: In${idx}`)
+      .join(",")}) => RetType>(fptr);
+  return func(${Array(amount)
+    .fill(null)
+    .map((v, idx) => `argsBuff.getArgument<In${idx}>(${idx})`)
+    .join(",")});
+}
+`
+  );
+});
+
 const transformedSourceFile = result.transformed[0];
 
 const endResult =
   analysisSourceFile.text +
+  applyArgsFuncs.join("\n") +
   printer.printNode(null, transformedSourceFile, sourceFile);
 
 writeFileSync(outputFile, endResult);

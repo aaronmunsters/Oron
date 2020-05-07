@@ -1,19 +1,18 @@
 class Human {
   name: string;
-  age: number;
-  constructor(name: string, age: number) {
+  age: i32;
+  constructor(name: string, age: i32) {
     this.name = name;
     this.age = age;
   }
 }
 
-export function getValue(): number {
+function add(a: Human, b: i32): i32 {
+  return a.age + b;
+}
+
+export function getValue(): i32 {
   const a: Human = new Human("Aaron", 21);
   const b: Human = new Human("Scull", 99);
-  const aarAge = a.age;
-  const scullAge = b.age;
-  const combinedAge = aarAge + scullAge;
-  const c: Human = new Human("AaronScull", combinedAge);
-  const age = c.age;
-  return age;
+  return add(a, 9);
 }

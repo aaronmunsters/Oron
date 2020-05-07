@@ -1,18 +1,18 @@
-interface i32 {}
-interface u32 {}
-interface i64 {}
-interface u64 {}
-interface f32 {}
-interface f64 {}
-interface v128 {}
-interface i8 {}
-interface u8 {}
-interface i16 {}
-interface u16 {}
-interface bool {}
-interface isize {}
-interface usize {}
-// interface void {};
-interface anyref {}
-// interface number {};
-// interface boolean {};
+declare class i32 {}
+declare class u32 {}
+declare class i64 {}
+declare class u64 {}
+declare class f32 {}
+declare class f64 {}
+declare class v128 {}
+declare class i8 {}
+declare class u8 {}
+declare class i16 {}
+declare class u16 {}
+declare class bool {}
+declare class isize {}
+declare class usize {}
+// declare class void {};
+declare class anyref {}
+// declare class number {};
+// declare class boolean {};

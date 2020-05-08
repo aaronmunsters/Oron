@@ -246,7 +246,6 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
                 [node.expression]
               ),
               argsIdentifier,
-              analysisDefinitions.classInstance,
             ]
           )
         );
@@ -295,9 +294,8 @@ function apply${amount}Args<RetType,${Array(amount)
       .join(",")}>(
   fptr: usize,
   argsBuff: ArgsBuffer,
-  analysis: OronAnalysis
 ): RetType {
-  analysis.genericApply(fptr, argsBuff);
+  ${analysisDefinitions.classInstance.text}.genericApply(fptr, argsBuff);
   const func: (${Array(amount)
     .fill(null)
     .map((v, idx) => `in${idx}: In${idx}`)

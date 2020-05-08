@@ -2990,7 +2990,24 @@
   i32.add
   i32.load
  )
- (func $assembly/output/getValue~anonymous|0 (; 52 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/output/apply2Args<i32,assembly/output/Human,i32> (; 52 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  global.get $assembly/output/myAnalysis
+  i32.const 2
+  local.get $0
+  call $assembly/output/MyAnalysis#genericApply
+  i32.const 2
+  global.set $~argumentsLength
+  local.get $0
+  call $orondefaults/dependancies/analysisDependancies/ArgsBuffer#getArgument<assembly/output/Human>
+  local.tee $1
+  local.get $0
+  call $orondefaults/dependancies/analysisDependancies/ArgsBuffer#getArgument<i32>
+  call $assembly/output/add
+  local.get $1
+  call $~lib/rt/pure/__release
+ )
+ (func $assembly/output/getValue~anonymous|0 (; 53 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   call $~lib/rt/__allocArray
@@ -3003,22 +3020,14 @@
   local.get $2
   local.get $1
   call $orondefaults/dependancies/analysisDependancies/ArgsBuffer#setArgument<i32>
-  i32.const 2
-  global.set $~argumentsLength
   local.get $2
-  call $orondefaults/dependancies/analysisDependancies/ArgsBuffer#getArgument<assembly/output/Human>
-  local.tee $0
-  local.get $2
-  call $orondefaults/dependancies/analysisDependancies/ArgsBuffer#getArgument<i32>
-  call $assembly/output/add
-  local.get $0
-  call $~lib/rt/pure/__release
+  call $assembly/output/apply2Args<i32,assembly/output/Human,i32>
   local.get $3
   call $~lib/rt/pure/__release
   local.get $2
   call $~lib/rt/pure/__release
  )
- (func $assembly/output/getValue (; 53 ;) (result i32)
+ (func $assembly/output/getValue (; 54 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3040,7 +3049,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~start (; 54 ;)
+ (func $~start (; 55 ;)
   (local $0 i32)
   call $~lib/map/Map<~lib/string/String,f64>#constructor
   global.set $assembly/output/reads
@@ -3061,10 +3070,10 @@
   end
   global.set $assembly/output/myAnalysis
  )
- (func $~lib/rt/pure/__collect (; 55 ;)
+ (func $~lib/rt/pure/__collect (; 56 ;)
   nop
  )
- (func $~lib/rt/pure/decrement (; 56 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 57 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3130,7 +3139,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 57 ;) (param $0 i32)
+ (func $~lib/rt/pure/__visit (; 58 ;) (param $0 i32)
   local.get $0
   i32.const 2372
   i32.lt_u
@@ -3142,7 +3151,7 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/map/Map<~lib/string/String,f64>#__visit_impl (; 58 ;) (param $0 i32)
+ (func $~lib/map/Map<~lib/string/String,f64>#__visit_impl (; 59 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3183,7 +3192,7 @@
   local.get $2
   call $~lib/rt/pure/__visit
  )
- (func $~lib/rt/__visit_members (; 59 ;) (param $0 i32)
+ (func $~lib/rt/__visit_members (; 60 ;) (param $0 i32)
   (local $1 i32)
   block $block$4$break
    block $switch$1$default

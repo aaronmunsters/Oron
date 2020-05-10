@@ -19,3 +19,7 @@
 Intefaces are not supported by the compiler, but they're allowed as a construct to allow for IDE's to guide the developer.
 
 Option properties are not supported.
+
+Fix known issues:
+
+### There is a difference between compiling with or without flag "--optimized"

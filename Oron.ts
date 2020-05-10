@@ -57,7 +57,8 @@ function initAnalysis(node: ts.Node) {
     } else if (ts.isVariableStatement(n)) {
       n.declarationList.declarations.forEach((decl) => {
         const init = decl.initializer;
-        if (ts.isNewExpression(init)) {
+        /* Not all variables might have been initialized */
+        if (init && ts.isNewExpression(init)) {
           let exp = (<ts.NewExpression>init).expression;
           if (ts.isIdentifier(exp)) {
             if (exp.text === analysisDefinitions.className) {
@@ -188,7 +189,6 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
               argsIdentifier /* variable name */,
               undefined,
               ts.createNew(ts.createIdentifier("ArgsBuffer"), undefined, [
-                ts.createNumericLiteral(`${args.length}`),
                 ts.createArrayLiteral(
                   args.map((arg, index) =>
                     ts.createCall(
@@ -265,6 +265,11 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
               ...funcInTypes.map((type) => typechecker.typeToTypeNode(type)),
             ],
             [
+              ts.createStringLiteral(
+                ts.isIdentifier(node.expression)
+                  ? node.expression.text
+                  : "no direct function name, expression evaluating to function"
+              ),
               ts.createCall(
                 ts.createIdentifier("changetype"),
                 [ts.createTypeReferenceNode("usize", [])],
@@ -325,10 +330,11 @@ functionCallArgs.forEach((amt) => {
   applyArgsFuncs.push(
     `
 function apply${amt}Args<RetType,${idxFillGappedString(amt, "In$")}>(
+  fname: string,
   fptr: usize,
   argsBuff: ArgsBuffer,
 ): RetType {
-  ${analysisDefinitions.classInstance.text}.genericApply(fptr, argsBuff);
+  ${analysisDefinitions.classInstance.text}.genericApply(fname, fptr, argsBuff);
   const func: (${funcSignature}) => RetType = changetype<(${funcSignature})=> RetType>(fptr);
   return func(${idxFillGappedString(amt, "argsBuff.getArgument<In$>($)")})
 }

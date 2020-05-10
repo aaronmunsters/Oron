@@ -35,7 +35,9 @@ export function getRes(variable: string, target: string): number {
   }
 }
 
+declare function startLog(): void;
 declare function logString(strPtr: string): void;
+declare function endLog(): void;
 
 export class MyAnalysis extends OronAnalysis {
   propertyAccess<ClassInstance, ReturnValue>(
@@ -60,74 +62,32 @@ export class MyAnalysis extends OronAnalysis {
     dynamicPropertyWrite<ClassInstance, Value>(classInstance, value, offset);
   }
 
-  genericApply(fptr: usize, args: ArgsBuffer): void {
+  genericApply(fname: string, fptr: usize, args: ArgsBuffer): void {
+    startLog();
+    logString(
+      "Performing function call of [" +
+        fname +
+        "] with [" +
+        args.argsAmount.toString() +
+        "] arguments"
+    );
     for (let argIdx = 0; argIdx < args.argsAmount; argIdx++) {
       switch (args.dynamicTypes[argIdx]) {
         case Types.i32:
-          logString("Encountered a i32");
-          break;
-        case Types.u32:
-          logString("Encountered a u32");
-          break;
-        case Types.i64:
-          logString("Encountered a i64");
-          break;
-        case Types.u64:
-          logString("Encountered a u64");
-          break;
-        case Types.f32:
-          logString("Encountered a f32");
-          break;
-        case Types.f64:
-          logString("Encountered a f64");
-          break;
-        case Types.v128:
-          logString("Encountered a v128");
-          break;
-        case Types.i8:
-          logString("Encountered a i8");
-          break;
-        case Types.u8:
-          logString("Encountered a u8");
-          break;
-        case Types.i16:
-          logString("Encountered a i16");
-          break;
-        case Types.u16:
-          logString("Encountered a u16");
-          break;
-        case Types.bool:
-          logString("Encountered a bool");
-          break;
-        case Types.isize:
-          logString("Encountered a isize");
-          break;
-        case Types.usize:
-          logString("Encountered a usize");
-          break;
-        case Types.void:
-          logString("Encountered a void");
-          break;
-        case Types.anyref:
-          logString("Encountered a anyref");
-          break;
-        case Types.number:
-          logString("Encountered a number");
-          break;
-        case Types.boolean:
-          logString("Encountered a boolean");
+          logString(
+            "Argument " +
+              argIdx.toString() +
+              " is of type i32 and value: " +
+              args.getArgument<i32>(argIdx).toString()
+          );
           break;
         case Types.classInstance:
-          switch (args.classIds[argIdx]) {
-            case idof<Human>():
-              logString("Encountered a Human");
-              break;
-            default:
-              logString("Encountered a classInstance, couldn't determine type");
-              break;
-          }
+          logString("Found class instance");
           break;
+        default:
+          logString("Found a value not of interest for analysis");
       }
     }
+    endLog();
   }
 }

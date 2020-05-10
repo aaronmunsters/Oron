@@ -14,11 +14,7 @@ _Note_: `npx` is required to be installed for the transformation to take place.
 To see the output of the first working example run the following code after pulling repo:
 
 ```
-npm install
-npx tsc Oron
-node Oron assembly/index.ts assembly/oronAdvice.ts assembly/output.ts
-npx asc assembly/output.ts -b build/optimized.wasm -t build/optimized.wat --validate --sourceMap --optimize
-node exampleProgram.js
+npm install && npm run basic-instrumented
 ```
 
 The instrumented source-code can now be seen in `assembly/output.ts`

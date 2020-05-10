@@ -45,13 +45,13 @@ class ArgsBuffer {
   dynamicTypes: Types[];
   argBuffer: ArrayBuffer;
   classIds: u32[];
-  constructor(argsAmount: i32, argSizes: i32[]) {
-    this.argsAmount = argsAmount;
+  constructor(argSizes: i32[]) {
+    this.argsAmount = argSizes.length;
     this.argSizes = argSizes;
     const bufLength = argSizes.reduce((p, n) => p + n, 0);
     this.argBuffer = new ArrayBuffer(bufLength);
-    this.dynamicTypes = new Array<Types>(argsAmount);
-    this.classIds = new Array<u32>(argsAmount);
+    this.dynamicTypes = new Array<Types>(this.argsAmount);
+    this.classIds = new Array<u32>(this.argsAmount);
   }
 
   setArgument<ArgTyp>(

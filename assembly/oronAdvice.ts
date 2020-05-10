@@ -61,8 +61,6 @@ export class MyAnalysis extends OronAnalysis {
   }
 
   genericApply(fptr: usize, args: ArgsBuffer): void {
-    logString("function call");
-    /* Types are either primitives, or Classes, classes are still TODO */
     for (let argIdx = 0; argIdx < args.argsAmount; argIdx++) {
       switch (args.dynamicTypes[argIdx]) {
         case Types.i32:
@@ -133,5 +131,3 @@ export class MyAnalysis extends OronAnalysis {
     }
   }
 }
-
-const myAnalysis = new MyAnalysis();

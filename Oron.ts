@@ -13,17 +13,27 @@ interface AnalysesisDef {
   className: string;
   classInstance: ts.Identifier;
   methods: string[];
+  oronShouldAdd: boolean;
 }
 
 const analysisDefinitions: AnalysesisDef = {
   className: "",
   classInstance: null,
   methods: [],
+  oronShouldAdd: false,
 };
 
 const functionCallArgs = new Set<number>();
 
 function initAnalysis(node: ts.Node) {
+  /** Determine wheter @param n is a class instance extending OronAnalysis
+   *
+   * In case the analysis includes an extension of the class, all
+   * implemented methods (which would define the respective trap)
+   * are added to a list. In case the class has been instantiated
+   * Oron will not do this manually and traps will refer to this
+   * instance. If not, Oron will also instantiate the class.
+   */
   function determineAnalysisSpec(n: ts.Node) {
     if (
       ts.isClassDeclaration(n) &&
@@ -52,6 +62,7 @@ function initAnalysis(node: ts.Node) {
           if (ts.isIdentifier(exp)) {
             if (exp.text === analysisDefinitions.className) {
               if (ts.isIdentifier(decl.name)) {
+                /* The analysis developer has included their own instance of the analysis */
                 analysisDefinitions.classInstance = decl.name;
               }
             }
@@ -60,7 +71,13 @@ function initAnalysis(node: ts.Node) {
       });
     }
   }
+
+  /* Expected source code, look in every statent for class */
   ts.forEachChild(node, determineAnalysisSpec);
+  if (!analysisDefinitions.classInstance) {
+    analysisDefinitions.classInstance = ts.createIdentifier("myAnalysis");
+    analysisDefinitions.oronShouldAdd = true;
+  }
 }
 
 initAnalysis(analysisSourceFile);
@@ -76,13 +93,18 @@ const getTypeNode: (n: ts.Node) => ts.TypeNode = (n: ts.Node) =>
 const createStringLiteral: (s: string) => ts.StringLiteral = (s: string) =>
   ts.createLiteral(ts.createStringLiteral(s));
 
-let clashCtr = 0;
+function analysisDefined(m: string): boolean {
+  return analysisDefinitions.methods.some((v) => v === m);
+}
 
 const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
   rootNode: T
 ) => {
   function visit(node: ts.Node): ts.Node {
-    if (ts.isPropertyAccessExpression(node)) {
+    if (
+      analysisDefined("propertyAccess") &&
+      ts.isPropertyAccessExpression(node)
+    ) {
       const propAccessExpr = node as ts.PropertyAccessExpression;
       const objTn = getTypeNode(propAccessExpr.expression);
       const retTn = getTypeNode(propAccessExpr.name);
@@ -104,7 +126,7 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
         ]
       );
     }
-    if (ts.isBinaryExpression(node)) {
+    if (analysisDefined("propertySet") && ts.isBinaryExpression(node)) {
       const binExp = node as ts.BinaryExpression;
       if (
         // these two tests evaluate whether this is property assignment
@@ -118,7 +140,7 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
         const retString = createStringLiteral(propAccessExpr.name.text);
         const val = binExp.right;
 
-        // obj.prPerform transformation and emit output codeop = val
+        // obj.prop = val
         // ==TRANSFORM==>
         // setTrap<ObjClass, PropType>(obj, val, "prop", offsetof<ObjClass>("prop"))
         return ts.createCall(
@@ -141,14 +163,17 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
       }
     }
 
-    if (ts.isCallExpression(node)) {
+    if (analysisDefined("genericApply") && ts.isCallExpression(node)) {
       if (
         node.typeArguments ===
-        undefined /* currently only support function w/o type args */
+        undefined /* currently only support function with out type args */
       ) {
+        // funcCall(arg1, arg2, arg3);
+        // ==TRANSFORM==>
+        // (function (arg1: Typ1, arg2: Typ2){...cast function to pointer...; ...wrap args in ADT...; return apply2args(funcCallPointer, argsADT);})(arg1, arg2);
         const args = node.arguments;
         functionCallArgs.add(args.length);
-        const argsIdentifier = ts.createIdentifier(`fargs${clashCtr}`);
+        const argsIdentifier = ts.createIdentifier(`args`);
 
         const funcInTypes = (typechecker.getResolvedSignature(node).declaration
           .parameters as ts.NodeArray<ts.ParameterDeclaration>).map((par) =>
@@ -281,32 +306,31 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
   return ts.visitNode(rootNode, visit);
 };
 
-// Perform transformation and emit output code
+// Perform transformation
 const result = ts.transform(sourceFile, [transformer]);
 
+/* For every function call keep track of amount of arguments,
+ * for every amount, create generic apply */
+
+function idxFillGappedString(amount: number, str: string) {
+  return Array(amount)
+    .fill(str)
+    .map((toFormat, idx) => toFormat.replace(/\$/g, `${idx}`))
+    .join(",");
+}
+
 const applyArgsFuncs = [];
-functionCallArgs.forEach((amount) => {
+functionCallArgs.forEach((amt) => {
+  const funcSignature = idxFillGappedString(amt, "in$: In$");
   applyArgsFuncs.push(
     `
-function apply${amount}Args<RetType,${Array(amount)
-      .fill(null)
-      .map((v, idx) => `In${idx}`)
-      .join(",")}>(
+function apply${amt}Args<RetType,${idxFillGappedString(amt, "In$")}>(
   fptr: usize,
   argsBuff: ArgsBuffer,
 ): RetType {
   ${analysisDefinitions.classInstance.text}.genericApply(fptr, argsBuff);
-  const func: (${Array(amount)
-    .fill(null)
-    .map((v, idx) => `in${idx}: In${idx}`)
-    .join(",")}) => RetType = changetype<(${Array(amount)
-      .fill(null)
-      .map((v, idx) => `in${idx}: In${idx}`)
-      .join(",")}) => RetType>(fptr);
-  return func(${Array(amount)
-    .fill(null)
-    .map((v, idx) => `argsBuff.getArgument<In${idx}>(${idx})`)
-    .join(",")});
+  const func: (${funcSignature}) => RetType = changetype<(${funcSignature})=> RetType>(fptr);
+  return func(${idxFillGappedString(amt, "argsBuff.getArgument<In$>($)")})
 }
 `
   );
@@ -316,6 +340,9 @@ const transformedSourceFile = result.transformed[0];
 
 const endResult =
   analysisSourceFile.text +
+  (analysisDefinitions.oronShouldAdd
+    ? `\nconst ${analysisDefinitions.classInstance.text} = new ${analysisDefinitions.className}();\n`
+    : "") +
   applyArgsFuncs.join("\n") +
   printer.printNode(null, transformedSourceFile, sourceFile);
 

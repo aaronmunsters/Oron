@@ -1,7 +1,9 @@
 class Human {
   name: string;
   age: i32;
-  constructor(name: string, age: i32) {
+  friends: StaticArray<Human>;
+  constructor(friends: StaticArray<Human>, name: string, age: i32) {
+    this.friends = friends;
     this.name = name;
     this.age = age;
   }
@@ -17,8 +19,9 @@ function sub(a: Human, b: i32): i32 {
 }
 
 export function getValue(): i32 {
-  const a: Human = new Human("Aaron", 21);
-  const b: Human = new Human("Scull", 99);
+  const a: Human = new Human([], "Aaron", 21);
+  const b: Human = new Human([a], "Scull", 99);
+  b.friends;
   sub(b, 50);
   return add(a, 9);
 }

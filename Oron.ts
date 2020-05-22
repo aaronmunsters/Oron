@@ -139,6 +139,15 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
     ) {
       const propAccessExpr = node as ts.PropertyAccessExpression;
 
+      const objT = typechecker.getApparentType(
+        typechecker.getTypeAtLocation(propAccessExpr.expression)
+      );
+      const retT = typechecker.getApparentType(
+        typechecker.getTypeAtLocation(propAccessExpr.name)
+      );
+
+      console.log(typechecker.typeToString(retT));
+
       const objTn: ts.TypeNode = typechecker.typeToTypeNode(objT); // getTypeNode(propAccessExpr.expression);
       const retTn: ts.TypeNode = typechecker.typeToTypeNode(retT); // getTypeNode(propAccessExpr.name);
 

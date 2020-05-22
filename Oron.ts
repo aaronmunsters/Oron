@@ -1,12 +1,22 @@
 // code below heavily based upon
 // https://blog.scottlogic.com/2017/05/02/typescript-compiler-api-revisited.html
 import * as ts from "typescript";
-import { writeFileSync, appendFileSync } from "fs";
+import { writeFileSync, readdirSync } from "fs";
 
 const [sourceCodeFile, analysisFile, outputFile] = process.argv.slice(2); // only capture 3 args
-const asTypeDefinitions = "orondefaults/typedefs/typedefs.d.ts"; // empty file containing type-definitions
+const asTypeDefinitions = "oronRequirements/typedefs.d.ts"; // empty file containing type-definitions
+const stdLib = readdirSync(
+  __dirname + "/node_modules/assemblyscript/std/assembly"
+).filter((filename) => filename.endsWith("ts"));
 
-const analysisProgram = ts.createProgram([asTypeDefinitions, analysisFile], {});
+function partOfAssemblyScriptStdLib(s: string) {
+  return s === "Math"; // This can be expanded with the full library
+}
+
+const analysisProgram = ts.createProgram(
+  [asTypeDefinitions, analysisFile].concat(stdLib),
+  {}
+);
 const analysisSourceFile = analysisProgram.getSourceFile(analysisFile);
 
 interface AnalysesisDef {
@@ -86,7 +96,7 @@ initAnalysis(analysisSourceFile);
 const program = ts.createProgram([asTypeDefinitions, sourceCodeFile], {});
 const typechecker: ts.TypeChecker = program.getTypeChecker();
 const printer: ts.Printer = ts.createPrinter();
-const sourceFile: ts.SourceFile = program.getSourceFile("./assembly/index.ts");
+const sourceFile: ts.SourceFile = program.getSourceFile(sourceCodeFile);
 
 const getTypeNode: (n: ts.Node) => ts.TypeNode = (n: ts.Node) =>
   typechecker.typeToTypeNode(typechecker.getTypeAtLocation(n));
@@ -94,21 +104,55 @@ const getTypeNode: (n: ts.Node) => ts.TypeNode = (n: ts.Node) =>
 const createStringLiteral: (s: string) => ts.StringLiteral = (s: string) =>
   ts.createLiteral(ts.createStringLiteral(s));
 
+function assignmentToken(token: ts.BinaryOperatorToken) {
+  return [
+    ts.SyntaxKind.BarEqualsToken,
+    ts.SyntaxKind.PlusEqualsToken,
+    ts.SyntaxKind.SlashEqualsToken,
+    ts.SyntaxKind.CaretEqualsToken,
+    ts.SyntaxKind.MinusEqualsToken,
+    ts.SyntaxKind.PercentEqualsToken,
+    ts.SyntaxKind.AmpersandEqualsToken,
+    ts.SyntaxKind.ExclamationEqualsToken,
+    ts.SyntaxKind.AsteriskAsteriskEqualsToken,
+    ts.SyntaxKind.LessThanLessThanEqualsToken,
+    ts.SyntaxKind.GreaterThanGreaterThanEqualsToken,
+    ts.SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken,
+  ].some((t) => t === token.kind);
+}
+
 function analysisDefined(m: string): boolean {
   return analysisDefinitions.methods.some((v) => v === m);
 }
+analysisDefinitions;
 
 const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
   rootNode: T
 ) => {
   function visit(node: ts.Node): ts.Node {
+    if (ts.isBinaryExpression(node) && assignmentToken(node.operatorToken)) {
+      return node;
+    }
     if (
       analysisDefined("propertyAccess") &&
       ts.isPropertyAccessExpression(node)
     ) {
       const propAccessExpr = node as ts.PropertyAccessExpression;
-      const objTn = getTypeNode(propAccessExpr.expression);
-      const retTn = getTypeNode(propAccessExpr.name);
+
+      const objTn: ts.TypeNode = typechecker.typeToTypeNode(objT); // getTypeNode(propAccessExpr.expression);
+      const retTn: ts.TypeNode = typechecker.typeToTypeNode(retT); // getTypeNode(propAccessExpr.name);
+
+      if (
+        ts.isTypeReferenceNode(objTn) &&
+        ts.isIdentifier(objTn.typeName) &&
+        partOfAssemblyScriptStdLib(objTn.typeName.text)
+      ) {
+        return node; // do not further instrument, part standard library
+      }
+
+      // A check should be performed whenever the type is a compound structure
+      // As compount types such as "StaticArray<i32>" are currently still resolved
+
       const retString = createStringLiteral(propAccessExpr.name.text);
 
       // obj.prop
@@ -176,135 +220,138 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
         functionCallArgs.add(args.length);
         const argsIdentifier = ts.createIdentifier(`args`);
 
-        const funcInTypes = (typechecker.getResolvedSignature(node).declaration
-          .parameters as ts.NodeArray<ts.ParameterDeclaration>).map((par) =>
-          typechecker.getTypeFromTypeNode(par.type)
-        );
+        const declaration = typechecker.getResolvedSignature(node).declaration;
 
-        /* create arguments ADT */
-        const argsCreation = ts.createVariableStatement(
-          undefined,
-          ts.createVariableDeclarationList([
-            ts.createVariableDeclaration(
-              argsIdentifier /* variable name */,
-              undefined,
-              ts.createNew(ts.createIdentifier("ArgsBuffer"), undefined, [
-                ts.createArrayLiteral(
-                  args.map((arg, index) =>
-                    ts.createCall(
-                      ts.createIdentifier("sizeof"),
-                      [typechecker.typeToTypeNode(funcInTypes[index])],
-                      []
+        if (declaration) {
+          const funcInTypes: ts.Type[] = (declaration.parameters as ts.NodeArray<
+            ts.ParameterDeclaration
+          >).map((par) => typechecker.getTypeFromTypeNode(par.type));
+          /* create arguments ADT */
+          const argsCreation = ts.createVariableStatement(
+            undefined,
+            ts.createVariableDeclarationList([
+              ts.createVariableDeclaration(
+                argsIdentifier /* variable name */,
+                undefined,
+                ts.createNew(ts.createIdentifier("ArgsBuffer"), undefined, [
+                  ts.createArrayLiteral(
+                    args.map((arg, index) =>
+                      ts.createCall(
+                        ts.createIdentifier("sizeof"),
+                        [typechecker.typeToTypeNode(funcInTypes[index])],
+                        []
+                      )
                     )
+                  ),
+                ])
+              ),
+            ])
+          );
+
+          const nodeToRuntimeType = (index: number) => {
+            const typeStr = typechecker.typeToString(funcInTypes[index]);
+            switch (typeStr) {
+              case "i32":
+              case "u32":
+              case "i64":
+              case "u64":
+              case "f32":
+              case "f64":
+              case "v128":
+              case "i8":
+              case "u8":
+              case "i16":
+              case "u16":
+              case "bool":
+              case "isize":
+              case "usize":
+              case "void":
+              case "anyref":
+              case "number":
+              case "boolean":
+                return typeStr;
+              default:
+                return "classInstance";
+            }
+          };
+
+          const argSetters = args.map((arg, index) => {
+            const classid =
+              nodeToRuntimeType(index) === "classInstance"
+                ? ts.createCall(
+                    ts.createIdentifier("idof"),
+                    [typechecker.typeToTypeNode(funcInTypes[index])],
+                    []
                   )
-                ),
-              ])
-            ),
-          ])
-        );
+                : ts.createNumericLiteral("0");
+            return ts.createExpressionStatement(
+              ts.createCall(
+                ts.createPropertyAccess(argsIdentifier, "setArgument"),
+                [typechecker.typeToTypeNode(funcInTypes[index])],
+                [
+                  ts.createNumericLiteral(`${index}`),
+                  ts.createPropertyAccess(
+                    ts.createIdentifier("Types"),
 
-        const nodeToRuntimeType = (index: number) => {
-          const typeStr = typechecker.typeToString(funcInTypes[index]);
-          switch (typeStr) {
-            case "i32":
-            case "u32":
-            case "i64":
-            case "u64":
-            case "f32":
-            case "f64":
-            case "v128":
-            case "i8":
-            case "u8":
-            case "i16":
-            case "u16":
-            case "bool":
-            case "isize":
-            case "usize":
-            case "void":
-            case "anyref":
-            case "number":
-            case "boolean":
-              return typeStr;
-            default:
-              return "classInstance";
-          }
-        };
+                    nodeToRuntimeType(index)
+                  ),
+                  ts.createIdentifier(`arg${index}`),
+                  classid,
+                ]
+              )
+            );
+          });
 
-        const argSetters = args.map((arg, index) => {
-          const classid =
-            nodeToRuntimeType(index) === "classInstance"
-              ? ts.createCall(
-                  ts.createIdentifier("idof"),
-                  [typechecker.typeToTypeNode(funcInTypes[index])],
-                  []
-                )
-              : ts.createNumericLiteral("0");
-          return ts.createExpressionStatement(
+          const effectiveCallTrap = ts.createReturn(
             ts.createCall(
-              ts.createPropertyAccess(argsIdentifier, "setArgument"),
-              [typechecker.typeToTypeNode(funcInTypes[index])],
+              ts.createIdentifier(`apply${args.length}Args`),
               [
-                ts.createNumericLiteral(`${index}`),
-                ts.createPropertyAccess(
-                  ts.createIdentifier("Types"),
-
-                  nodeToRuntimeType(index)
+                getTypeNode(node),
+                ...funcInTypes.map((type) => typechecker.typeToTypeNode(type)),
+              ],
+              [
+                ts.createStringLiteral(
+                  ts.isIdentifier(node.expression)
+                    ? node.expression.text
+                    : node.getText()
                 ),
-                ts.createIdentifier(`arg${index}`),
-                classid,
+                ts.createCall(
+                  ts.createIdentifier("changetype"),
+                  [ts.createTypeReferenceNode("usize", [])],
+                  [node.expression]
+                ),
+                argsIdentifier,
               ]
             )
           );
-        });
 
-        const effectiveCallTrap = ts.createReturn(
-          ts.createCall(
-            ts.createIdentifier(`apply${args.length}Args`),
-            [
+          const argsToPars = (node: ts.Expression, index: number) => {
+            return ts.createParameter(
+              undefined,
+              undefined,
+              undefined,
+              `arg${index}`,
+              undefined,
+              typechecker.typeToTypeNode(funcInTypes[index])
+            );
+          };
+
+          return ts.createCall(
+            ts.createFunctionExpression(
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              node.arguments.map(argsToPars),
               getTypeNode(node),
-              ...funcInTypes.map((type) => typechecker.typeToTypeNode(type)),
-            ],
-            [
-              ts.createStringLiteral(
-                ts.isIdentifier(node.expression)
-                  ? node.expression.text
-                  : "no direct function name, expression evaluating to function"
-              ),
-              ts.createCall(
-                ts.createIdentifier("changetype"),
-                [ts.createTypeReferenceNode("usize", [])],
-                [node.expression]
-              ),
-              argsIdentifier,
-            ]
-          )
-        );
-
-        const argsToPars = (node: ts.Expression, index: number) => {
-          return ts.createParameter(
+              ts.createBlock([argsCreation, ...argSetters, effectiveCallTrap])
+            ),
             undefined,
-            undefined,
-            undefined,
-            `arg${index}`,
-            undefined,
-            typechecker.typeToTypeNode(funcInTypes[index])
+            node.arguments
           );
-        };
-
-        return ts.createCall(
-          ts.createFunctionExpression(
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            node.arguments.map(argsToPars),
-            getTypeNode(node),
-            ts.createBlock([argsCreation, ...argSetters, effectiveCallTrap])
-          ),
-          undefined,
-          node.arguments
-        );
+        }
       }
+      // else unable to resolve function signature, such as "assert"
     }
     return ts.visitEachChild(node, visit, context);
   }
@@ -313,6 +360,7 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
 
 // Perform transformation
 const result = ts.transform(sourceFile, [transformer]);
+const transformedSourceFile = result.transformed[0];
 
 /* For every function call keep track of amount of arguments,
  * for every amount, create generic apply */
@@ -341,8 +389,6 @@ function apply${amt}Args<RetType,${idxFillGappedString(amt, "In$")}>(
 `
   );
 });
-
-const transformedSourceFile = result.transformed[0];
 
 const endResult =
   analysisSourceFile.text +

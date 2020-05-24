@@ -139,17 +139,20 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
     ) {
       const propAccessExpr = node as ts.PropertyAccessExpression;
 
-      const objT = typechecker.getApparentType(
-        typechecker.getTypeAtLocation(propAccessExpr.expression)
-      );
-      const retT = typechecker.getApparentType(
-        typechecker.getTypeAtLocation(propAccessExpr.name)
-      );
-
-      console.log(typechecker.typeToString(retT));
+      const objT = typechecker.getTypeAtLocation(propAccessExpr.expression);
+      const retT = typechecker.getTypeAtLocation(propAccessExpr.name);
 
       const objTn: ts.TypeNode = typechecker.typeToTypeNode(objT); // getTypeNode(propAccessExpr.expression);
       const retTn: ts.TypeNode = typechecker.typeToTypeNode(retT); // getTypeNode(propAccessExpr.name);
+
+      if (
+        typechecker.typeToString(retT) === "any" ||
+        typechecker.typeToString(objT) === "any"
+      ) {
+        return node;
+      }
+
+      console.log(typechecker.typeToString(retT));
 
       if (
         ts.isTypeReferenceNode(objTn) &&
@@ -193,6 +196,16 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
         const retTn = getTypeNode(propAccessExpr.name);
         const retString = createStringLiteral(propAccessExpr.name.text);
         const val = binExp.right;
+
+        const objT = typechecker.getTypeAtLocation(propAccessExpr.expression);
+        const retT = typechecker.getTypeAtLocation(propAccessExpr.name);
+
+        if (
+          typechecker.typeToString(objT) === "any" ||
+          typechecker.typeToString(retT) === "any"
+        ) {
+          return node;
+        }
 
         // obj.prop = val
         // ==TRANSFORM==>
@@ -311,27 +324,38 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
             );
           });
 
-          const effectiveCallTrap = ts.createReturn(
-            ts.createCall(
-              ts.createIdentifier(`apply${args.length}Args`),
-              [
-                getTypeNode(node),
-                ...funcInTypes.map((type) => typechecker.typeToTypeNode(type)),
-              ],
-              [
-                ts.createStringLiteral(
-                  ts.isIdentifier(node.expression)
-                    ? node.expression.text
-                    : node.getText()
-                ),
-                ts.createCall(
-                  ts.createIdentifier("changetype"),
-                  [ts.createTypeReferenceNode("usize", [])],
-                  [node.expression]
-                ),
-                argsIdentifier,
-              ]
-            )
+          const returnTypeNode = getTypeNode(node);
+          const returnType = typechecker.getTypeFromTypeNode(returnTypeNode);
+
+          console.log(`Return type: ${typechecker.typeToString(returnType)}`);
+          const hasExplicitReturnType =
+            typechecker.typeToString(returnType) !== "void";
+
+          const typeArgs = hasExplicitReturnType ? [returnTypeNode] : [];
+          if (hasExplicitReturnType) {
+            funcInTypes.forEach((type) =>
+              typeArgs.push(typechecker.typeToTypeNode(type))
+            );
+          }
+
+          const effectiveCallTrap = ts.createCall(
+            ts.createIdentifier(
+              `apply${args.length}Args${hasExplicitReturnType ? "" : "Void"}`
+            ),
+            typeArgs,
+            [
+              ts.createStringLiteral(
+                ts.isIdentifier(node.expression)
+                  ? node.expression.text
+                  : node.getText()
+              ),
+              ts.createCall(
+                ts.createIdentifier("changetype"),
+                [ts.createTypeReferenceNode("usize", [])],
+                [node.expression]
+              ),
+              argsIdentifier,
+            ]
           );
 
           const argsToPars = (node: ts.Expression, index: number) => {
@@ -345,6 +369,10 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
             );
           };
 
+          const trap: ts.Statement = hasExplicitReturnType
+            ? ts.createReturn(effectiveCallTrap)
+            : ((effectiveCallTrap as unknown) as ts.Statement); // TODO: should change
+
           return ts.createCall(
             ts.createFunctionExpression(
               undefined,
@@ -353,7 +381,7 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
               undefined,
               node.arguments.map(argsToPars),
               getTypeNode(node),
-              ts.createBlock([argsCreation, ...argSetters, effectiveCallTrap])
+              ts.createBlock([argsCreation, ...argSetters, trap])
             ),
             undefined,
             node.arguments

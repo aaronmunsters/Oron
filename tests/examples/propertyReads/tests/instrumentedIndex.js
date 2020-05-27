@@ -13,6 +13,19 @@ switch (analysis) {
   case "countFunctionCalls.ts":
     break;
   case "countPropertyReads.ts":
+    const { __allocString, getRes } = myModule.exports;
+
+    function assertResult(property, times) {
+      assert.equal(
+        getRes(__allocString(property)),
+        times,
+        `${property} should be accessed ${times} time(s)`
+      );
+    }
+
+    assertResult("prop1", 1);
+    assertResult("prop2", 1);
+    assertResult("prop3", 1);
     break;
   case "countPropertyWrites.ts":
     break;

@@ -7,11 +7,13 @@ const analysis = args.length > 2 ? args[2] : false;
 assert(analysis, "Applied analysis required");
 // It is required to provide the applied analysis, for example "countFunctionCalls.ts"
 // to determine what should be retrieved to reason whether the output is correct or not
+const ackermanString = myModule.exports.__allocString("ackermann");
 switch (analysis) {
   case "combinedExamples.ts":
+    const callsString = myModule.exports.__allocString("calls");
+    assert.equal(myModule.exports.getRes(callsString, ackermanString), 13591);
     break;
   case "countFunctionCalls.ts":
-    const ackermanString = myModule.exports.__allocString("ackermann");
     assert.equal(myModule.exports.getRes(ackermanString), 13591);
     break;
   case "countPropertyReads.ts":

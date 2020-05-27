@@ -147,7 +147,8 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
     if (
       analysisDefined("propertyAccess") &&
       ts.isPropertyAccessExpression(node) &&
-      !isLeftOfAssignment(node)
+      !isLeftOfAssignment(node) &&
+      !ts.isCallExpression(node.parent)
     ) {
       const propAccessExpr = node as ts.PropertyAccessExpression;
 
@@ -203,9 +204,25 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
       ) {
         if (!analysisDefined("propertySet"))
           return ts.visitEachChild(node, visit, context);
+
         const propAccessExpr = binExp.left as ts.PropertyAccessExpression;
-        const objTn = getTypeNode(propAccessExpr.expression);
-        const retTn = getTypeNode(propAccessExpr.name);
+        const objTn = typechecker.typeToTypeNode(
+          typechecker.getTypeAtLocation(propAccessExpr.expression)
+        );
+        const retTn = typechecker.typeToTypeNode(
+          typechecker.getTypeAtLocation(propAccessExpr.name)
+        );
+        const objT = typechecker.getTypeAtLocation(propAccessExpr.expression);
+        const retT = typechecker.getTypeAtLocation(propAccessExpr.name);
+
+        if (
+          // This WILL occur for indexing arrays, as only primitives are allowed
+          typechecker.typeToString(retT) === "any" ||
+          typechecker.typeToString(objT) === "any"
+        ) {
+          return ts.visitEachChild(node, visit, context);
+        }
+
         const retString = createStringLiteral(propAccessExpr.name.text);
         const val = binExp.right;
 

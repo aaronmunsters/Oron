@@ -4,7 +4,9 @@ import * as ts from "typescript";
 import { writeFileSync, readdirSync } from "fs";
 
 const [sourceCodeFile, analysisFile, outputFile] = process.argv.slice(2); // only capture 3 args
-const asTypeDefinitions = __dirname + "/oronRequirements/typedefs.d.ts"; // empty file containing type-definitions
+const asTypeDefinitions =
+  // __dirname + "/node_modules/assemblyscript/std/assembly/index.d.ts";
+  __dirname + "/oronRequirements/typedefs.d.ts"; // empty file containing type-definitions
 const stdLib = readdirSync(
   __dirname + "/node_modules/assemblyscript/std/assembly"
 ).filter((filename) => filename.endsWith("ts"));
@@ -210,10 +212,10 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
           typechecker.getTypeAtLocation(propAccessExpr.expression)
         );
         const retTn = typechecker.typeToTypeNode(
-          typechecker.getTypeAtLocation(propAccessExpr.name)
+          typechecker.getTypeAtLocation(propAccessExpr)
         );
         const objT = typechecker.getTypeAtLocation(propAccessExpr.expression);
-        const retT = typechecker.getTypeAtLocation(propAccessExpr.name);
+        const retT = typechecker.getTypeAtLocation(propAccessExpr);
 
         if (
           // This WILL occur for indexing arrays, as only primitives are allowed

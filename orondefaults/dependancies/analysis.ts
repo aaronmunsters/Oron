@@ -56,81 +56,57 @@ export class OronAnalysis implements Oron {
     for (let argIdx = 0; argIdx < args.argsAmount; argIdx++) {
       switch (args.dynamicTypes[argIdx]) {
         case Types.i32:
-          null;
           break;
         case Types.u32:
-          null;
           break;
         case Types.i64:
-          null;
           break;
         case Types.u64:
-          null;
           break;
         case Types.f32:
-          null;
           break;
         case Types.f64:
-          null;
           break;
         case Types.v128:
-          null;
           break;
         case Types.i8:
-          null;
           break;
         case Types.u8:
-          null;
           break;
         case Types.i16:
-          null;
           break;
         case Types.u16:
-          null;
           break;
         case Types.bool:
-          null;
           break;
         case Types.isize:
-          null;
           break;
         case Types.usize:
-          null;
           break;
         case Types.void:
-          null;
           break;
         case Types.anyref:
-          null;
           break;
         case Types.number:
-          null;
           break;
         case Types.boolean:
-          null;
           break;
         case Types.classInstance:
           switch (args.classIds[argIdx]) {
             case idof<ArrayBuffer>():
-              null;
               break;
             case idof<DataView>():
-              null;
               break;
             case idof<Date>():
-              null;
               break;
             case idof<Error>():
-              null;
               break;
             case idof<String>():
-              null;
               break;
             /* Possible to include idof<Array<String>>, though finite, all combinations not included here */
             /* */
             default:
               // Encountered a classInstance, type unspecified in analysis
-              null;
               break;
           }
           break;

@@ -4,7 +4,7 @@ import * as ts from "typescript";
 import { writeFileSync, readdirSync } from "fs";
 
 const [sourceCodeFile, analysisFile, outputFile] = process.argv.slice(2); // only capture 3 args
-const asTypeDefinitions = "oronRequirements/typedefs.d.ts"; // empty file containing type-definitions
+const asTypeDefinitions = __dirname + "/oronRequirements/typedefs.d.ts"; // empty file containing type-definitions
 const stdLib = readdirSync(
   __dirname + "/node_modules/assemblyscript/std/assembly"
 ).filter((filename) => filename.endsWith("ts"));
@@ -47,6 +47,7 @@ function initAnalysis(node: ts.Node) {
   function determineAnalysisSpec(n: ts.Node) {
     if (
       ts.isClassDeclaration(n) &&
+      (n as ts.ClassDeclaration).heritageClauses &&
       (n as ts.ClassDeclaration).heritageClauses.some(
         (hc) =>
           hc.token === ts.SyntaxKind.ExtendsKeyword && // whether or not this implements Oron
@@ -104,7 +105,7 @@ const getTypeNode: (n: ts.Node) => ts.TypeNode = (n: ts.Node) =>
 const createStringLiteral: (s: string) => ts.StringLiteral = (s: string) =>
   ts.createLiteral(ts.createStringLiteral(s));
 
-function assignmentToken(token: ts.BinaryOperatorToken) {
+function isShortHandAssignmentToken(token: ts.BinaryOperatorToken) {
   return [
     ts.SyntaxKind.BarEqualsToken,
     ts.SyntaxKind.PlusEqualsToken,
@@ -121,21 +122,32 @@ function assignmentToken(token: ts.BinaryOperatorToken) {
   ].some((t) => t === token.kind);
 }
 
+function isAssignmentToken(node: ts.BinaryOperatorToken): boolean {
+  return (
+    isShortHandAssignmentToken(node) || node.kind === ts.SyntaxKind.EqualsToken
+  );
+}
+
 function analysisDefined(m: string): boolean {
   return analysisDefinitions.methods.some((v) => v === m);
 }
-analysisDefinitions;
+
+function isLeftOfAssignment(node: ts.PropertyAccessExpression): boolean {
+  return (
+    ts.isBinaryExpression(node.parent) &&
+    isAssignmentToken(node.parent.operatorToken) &&
+    node.parent.left === node
+  );
+}
 
 const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
   rootNode: T
 ) => {
   function visit(node: ts.Node): ts.Node {
-    if (ts.isBinaryExpression(node) && assignmentToken(node.operatorToken)) {
-      return node;
-    }
     if (
       analysisDefined("propertyAccess") &&
-      ts.isPropertyAccessExpression(node)
+      ts.isPropertyAccessExpression(node) &&
+      !isLeftOfAssignment(node)
     ) {
       const propAccessExpr = node as ts.PropertyAccessExpression;
 
@@ -149,17 +161,15 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
         typechecker.typeToString(retT) === "any" ||
         typechecker.typeToString(objT) === "any"
       ) {
-        return node;
+        return ts.visitEachChild(node, visit, context);
       }
-
-      console.log(typechecker.typeToString(retT));
 
       if (
         ts.isTypeReferenceNode(objTn) &&
         ts.isIdentifier(objTn.typeName) &&
         partOfAssemblyScriptStdLib(objTn.typeName.text)
       ) {
-        return node; // do not further instrument, part standard library
+        return ts.visitEachChild(node, visit, context); // do not further instrument, part standard library
       }
 
       // A check should be performed whenever the type is a compound structure
@@ -183,29 +193,21 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
         ]
       );
     }
-    if (analysisDefined("propertySet") && ts.isBinaryExpression(node)) {
+    if (ts.isBinaryExpression(node)) {
       const binExp = node as ts.BinaryExpression;
       if (
         // these two tests evaluate whether this is property assignment
-        //  however expressions such as aaron.age++ are not included in this method
+        //  however expressions such as object.age++ are not included in this method
         binExp.operatorToken.kind === ts.SyntaxKind.EqualsToken &&
         ts.isPropertyAccessExpression(binExp.left)
       ) {
+        if (!analysisDefined("propertySet"))
+          return ts.visitEachChild(node, visit, context);
         const propAccessExpr = binExp.left as ts.PropertyAccessExpression;
         const objTn = getTypeNode(propAccessExpr.expression);
         const retTn = getTypeNode(propAccessExpr.name);
         const retString = createStringLiteral(propAccessExpr.name.text);
         const val = binExp.right;
-
-        const objT = typechecker.getTypeAtLocation(propAccessExpr.expression);
-        const retT = typechecker.getTypeAtLocation(propAccessExpr.name);
-
-        if (
-          typechecker.typeToString(objT) === "any" ||
-          typechecker.typeToString(retT) === "any"
-        ) {
-          return node;
-        }
 
         // obj.prop = val
         // ==TRANSFORM==>
@@ -230,7 +232,11 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
       }
     }
 
-    if (analysisDefined("genericApply") && ts.isCallExpression(node)) {
+    if (
+      analysisDefined("genericApply") &&
+      ts.isCallExpression(node) &&
+      ts.isIdentifier(node.expression)
+    ) {
       if (
         node.typeArguments ===
         undefined /* currently only support function with out type args */
@@ -325,23 +331,24 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
           });
 
           const returnTypeNode = getTypeNode(node);
-          const returnType = typechecker.getTypeFromTypeNode(returnTypeNode);
+          const returnType = typechecker.getTypeAtLocation(node);
 
-          console.log(`Return type: ${typechecker.typeToString(returnType)}`);
           const hasExplicitReturnType =
             typechecker.typeToString(returnType) !== "void";
 
-          const typeArgs = hasExplicitReturnType ? [returnTypeNode] : [];
-          if (hasExplicitReturnType) {
-            funcInTypes.forEach((type) =>
-              typeArgs.push(typechecker.typeToTypeNode(type))
-            );
-          }
+          const typeArgs = (hasExplicitReturnType
+            ? [returnTypeNode]
+            : []
+          ).concat(
+            ...funcInTypes.map((type) => typechecker.typeToTypeNode(type))
+          );
+
+          const oronGuideFunctionName = hasExplicitReturnType
+            ? ts.createIdentifier(`apply${args.length}Args`)
+            : ts.createIdentifier(`apply${args.length}ArgsVoid`);
 
           const effectiveCallTrap = ts.createCall(
-            ts.createIdentifier(
-              `apply${args.length}Args${hasExplicitReturnType ? "" : "Void"}`
-            ),
+            oronGuideFunctionName,
             typeArgs,
             [
               ts.createStringLiteral(
@@ -384,7 +391,7 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
               ts.createBlock([argsCreation, ...argSetters, trap])
             ),
             undefined,
-            node.arguments
+            <ts.Expression[]>node.arguments.map((node) => visit(node))
           );
         }
       }
@@ -422,6 +429,23 @@ function apply${amt}Args<RetType,${idxFillGappedString(amt, "In$")}>(
   ${analysisDefinitions.classInstance.text}.genericApply(fname, fptr, argsBuff);
   const func: (${funcSignature}) => RetType = changetype<(${funcSignature})=> RetType>(fptr);
   return func(${idxFillGappedString(amt, "argsBuff.getArgument<In$>($)")})
+}
+`
+  );
+  applyArgsFuncs.push(
+    `
+function apply${amt}ArgsVoid${
+      (amt > 0 ? "<" : "") +
+      idxFillGappedString(amt, "In$") +
+      (amt > 0 ? ">" : "")
+    }(
+  fname: string,
+  fptr: usize,
+  argsBuff: ArgsBuffer,
+): void {
+  ${analysisDefinitions.classInstance.text}.genericApply(fname, fptr, argsBuff);
+  const func: (${funcSignature}) => void = changetype<(${funcSignature})=> void>(fptr);
+  func(${idxFillGappedString(amt, "argsBuff.getArgument<In$>($)")})
 }
 `
   );

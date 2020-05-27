@@ -4,6 +4,12 @@ An instrumentation platform for assemblyscript
 
 ## Current state of the project
 
+clone the current project recursively (to include other dependancies)
+
+```
+git clone https://github.com/aaronmunsters/Oron --recursive
+```
+
 All that works can be found in the following files:
 
 - `assembly/index.ts` <= the main program

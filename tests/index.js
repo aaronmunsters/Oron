@@ -25,7 +25,7 @@ const analyses = fs
   .readdirSync(oronDir + "/orondefaults")
   .filter((file) => file.endsWith(".ts"));
 
-const keepInstrumented = true;
+const keepInstrumented = false;
 
 const preTestingInstructions = `
     
@@ -47,6 +47,7 @@ for (const file of fs.readdirSync(examplesDir)) {
   echo "Copying oron required files to ${file} directory"
   cp -r ./orondefaults ./tests/examples/${file}/orondefaults
   cd ./tests/examples/${file}
+  npm install
   echo "Running default tests, uninstrumented"
   npm run asbuild && npm test
   echo "Running Oron to output instrumented code"

@@ -24,8 +24,9 @@ Fix known issues:
 
 ### There is a difference between compiling with or without flag "--optimized"
 
-
 Find a way to overcome / explain why I have not: limitations:
+
 1. Compound types; such as `StaticArray<i32>`
 2. Method calls of object: Cannot access method 'energy' without calling it as it requires 'this' to be set.
 3. To intercept native function calls such as Math.PI
+4. Fix 'mistakes' that have been introduced by completing the typeset

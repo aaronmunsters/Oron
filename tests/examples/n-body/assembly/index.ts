@@ -84,13 +84,13 @@ class NBodySystem {
     var pz: float = 0.0;
     var size = bodies.length;
     for (let i = 0; i < size; ++i) {
-      let b = unchecked(bodies[i]);
+      let b = = unchecked<Body>(bodies[i]);
       let m = b.mass;
       px += b.vx * m;
       py += b.vy * m;
       pz += b.vz * m;
     }
-    unchecked(bodies[0]).offsetMomentum(px, py, pz);
+    = unchecked<Body>(bodies[0]).offsetMomentum(px, py, pz);
   }
 
   advance(dt: float): void {
@@ -99,7 +99,7 @@ class NBodySystem {
     // var buffer = changetype<usize>(bodies.buffer_);
 
     for (let i: u32 = 0; i < size; ++i) {
-      let bodyi = unchecked(bodies[i]);
+      let bodyi = = unchecked<Body>(bodies[i]);
       // let bodyi = load<Body>(buffer + i * sizeof<Body>(), 8);
 
       let ix = bodyi.x;
@@ -112,7 +112,7 @@ class NBodySystem {
 
       let bodyim = bodyi.mass;
       for (let j: u32 = i + 1; j < size; ++j) {
-        let bodyj = unchecked(bodies[j]);
+        let bodyj = = unchecked<Body>(bodies[j]);
         // let bodyj = load<Body>(buffer + j * sizeof<Body>(), 8);
 
         let dx = ix - bodyj.x;
@@ -150,7 +150,7 @@ class NBodySystem {
     var bodies = this.bodies;
 
     for (let i: u32 = 0, size: u32 = bodies.length; i < size; ++i) {
-      let bodyi = unchecked(bodies[i]);
+      let bodyi = = unchecked<Body>(bodies[i]);
 
       let ix = bodyi.x;
       let iy = bodyi.y;
@@ -165,7 +165,7 @@ class NBodySystem {
       e += 0.5 * bim * (vx * vx + vy * vy + vz * vz);
 
       for (let j: u32 = i + 1; j < size; ++j) {
-        let bodyj = unchecked(bodies[j]);
+        let bodyj = = unchecked<Body>(bodies[j]);
         let dx = ix - bodyj.x;
         let dy = iy - bodyj.y;
         let dz = iz - bodyj.z;
@@ -194,5 +194,5 @@ export function bench(steps: u32): void {
 
 export function getBody(index: i32): Body | null {
   var bodies = system.bodies;
-  return <u32>index < <u32>bodies.length ? unchecked(bodies[index]) : null;
+  return <u32>index < <u32>bodies.length ? = unchecked<Body>(bodies[index]) : null;
 }

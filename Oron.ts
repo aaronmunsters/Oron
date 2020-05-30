@@ -1,7 +1,7 @@
 // code below heavily based upon
 // https://blog.scottlogic.com/2017/05/02/typescript-compiler-api-revisited.html
 import * as ts from "typescript";
-import { writeFileSync, readdirSync } from "fs";
+import { writeFileSync, readdirSync, fstat, readFileSync } from "fs";
 
 const [sourceCodeFile, analysisFile, outputFile] = process.argv.slice(2); // only capture 3 args
 const asTypeDefinitions =
@@ -160,12 +160,12 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
       const objTn: ts.TypeNode = typechecker.typeToTypeNode(objT); // getTypeNode(propAccessExpr.expression);
       const retTn: ts.TypeNode = typechecker.typeToTypeNode(retT); // getTypeNode(propAccessExpr.name);
 
-      if (
-        typechecker.typeToString(retT) === "any" ||
-        typechecker.typeToString(objT) === "any"
-      ) {
-        return ts.visitEachChild(node, visit, context);
-      }
+      // if (
+      //   typechecker.typeToString(retT) === "any" ||
+      //   typechecker.typeToString(objT) === "any"
+      // ) {
+      //   return ts.visitEachChild(node, visit, context);
+      // }
 
       if (
         ts.isTypeReferenceNode(objTn) &&
@@ -218,10 +218,16 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
         const retT = typechecker.getTypeAtLocation(propAccessExpr);
 
         if (
-          // This WILL occur for indexing arrays, as only primitives are allowed
           typechecker.typeToString(retT) === "any" ||
           typechecker.typeToString(objT) === "any"
         ) {
+          const inputText = readFileSync(sourceCodeFile, "utf8");
+          const lineNr = inputText.substring(0, node.getStart() + 1).split("\n")
+            .length;
+          inputText.split("\n");
+          console.error(`
+          ERROR: cannot resolve type, source-code: ${sourceCodeFile} on line ${lineNr} , analysis: ${analysisFile} => ${node.getText()}
+          `);
           return ts.visitEachChild(node, visit, context);
         }
 

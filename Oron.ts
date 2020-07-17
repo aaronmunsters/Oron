@@ -160,12 +160,16 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
       const objTn: ts.TypeNode = typechecker.typeToTypeNode(objT); // getTypeNode(propAccessExpr.expression);
       const retTn: ts.TypeNode = typechecker.typeToTypeNode(retT); // getTypeNode(propAccessExpr.name);
 
-      // if (
-      //   typechecker.typeToString(retT) === "any" ||
-      //   typechecker.typeToString(objT) === "any"
-      // ) {
-      //   return ts.visitEachChild(node, visit, context);
-      // }
+      if (
+        ["IMath", "INativeMath", "INativeMath", "IMath", "IMath"].some(
+          (native) =>
+            typechecker.typeToString(retT).includes(native) ||
+            typechecker.typeToString(objT).includes(native)
+        )
+      ) {
+        // Case in which native libraries such as IMath are accessed for a constant such as PI
+        return ts.visitEachChild(node, visit, context);
+      }
 
       if (
         ts.isTypeReferenceNode(objTn) &&
@@ -175,10 +179,26 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
         return ts.visitEachChild(node, visit, context); // do not further instrument, part standard library
       }
 
+      if (
+        typechecker.typeToString(objT).startsWith("StaticArray") &&
+        propAccessExpr.name.text === "length"
+      ) {
+        // Reading the length of a static array is accessing it's static header, differs from a read
+        return ts.visitEachChild(node, visit, context); // do not further instrument, part standard library
+      }
+
       // A check should be performed whenever the type is a compound structure
       // As compount types such as "StaticArray<i32>" are currently still resolved
 
-      const retString = createStringLiteral(propAccessExpr.name.text);
+      let retString = createStringLiteral(propAccessExpr.name.text);
+
+      if (
+        typechecker.typeToString(objT).endsWith("[]") &&
+        propAccessExpr.name.text === "length"
+      ) {
+        // Length is a getter, refering to a method, replaced with length_ fixes the compiler complaint
+        retString = createStringLiteral("length_");
+      }
 
       // obj.prop
       // ==TRANSFORM==>
@@ -196,6 +216,7 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
         ]
       );
     }
+
     if (ts.isBinaryExpression(node)) {
       const binExp = node as ts.BinaryExpression;
       if (
@@ -422,6 +443,7 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
       }
       // else unable to resolve function signature, such as "assert"
     }
+
     return ts.visitEachChild(node, visit, context);
   }
   return ts.visitNode(rootNode, visit);

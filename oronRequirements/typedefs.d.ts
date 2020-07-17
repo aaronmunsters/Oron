@@ -5,38 +5,40 @@
 
 /// <reference no-default-lib="true"/>
 
+// @ts-nocheck // To prevent error highlighting
+
 // Types
 
 /** An 8-bit signed integer. */
-declare type i8 = number & {};
+declare type i8 = number & { _t: "i8" };
 /** A 16-bit signed integer. */
-declare type i16 = number & {};
+declare type i16 = number & { _t: "i16" };
 /** A 32-bit signed integer. */
-declare type i32 = number & {};
+declare type i32 = number & { _t: "i32" };
 /** A 64-bit signed integer. */
-declare type i64 = number & {};
+declare type i64 = number & { _t: "i64" };
 /** A 32-bit signed integer when targeting 32-bit WebAssembly or a 64-bit signed integer when targeting 64-bit WebAssembly. */
-declare type isize = number & {};
+declare type isize = number & { _t: "isize" };
 /** An 8-bit unsigned integer. */
-declare type u8 = number & {};
+declare type u8 = number & { _t: "u8" };
 /** A 16-bit unsigned integer. */
-declare type u16 = number & {};
+declare type u16 = number & { _t: "u16" };
 /** A 32-bit unsigned integer. */
-declare type u32 = number & {};
+declare type u32 = number & { _t: "u32" };
 /** A 64-bit unsigned integer. */
-declare type u64 = number & {};
+declare type u64 = number & { _t: "u64" };
 /** A 32-bit unsigned integer when targeting 32-bit WebAssembly or a 64-bit unsigned integer when targeting 64-bit WebAssembly. */
-declare type usize = number & {};
+declare type usize = number & { _t: "usize" };
 /** A 1-bit unsigned integer. */
-declare type bool = (boolean | number) & {};
+declare type bool = (boolean | number) & { _t: "bool" };
 /** A 32-bit float. */
-declare type f32 = number & {};
+declare type f32 = number & { _t: "f32" };
 /** A 64-bit float. */
-declare type f64 = number & {};
+declare type f64 = number & { _t: "f64" };
 /** A 128-bit vector. */
-declare type v128 = object & {};
+declare type v128 = object & { _t: "v128" };
 /** A host reference. */
-declare type anyref = object & {};
+declare type anyref = object & { _t: "anyref" };
 
 // Compiler hints
 

@@ -11,14 +11,14 @@ class Class {
 
 export default function main(): number {
   const c = new Class(1, 2, "three");
-  assert(
+  assert<boolean>(
     c.prop1 === 1 && c.prop2 === 2 && c.prop3 === "three",
     "AssemblyScript: Property Reads: a property read should retrieve the correct value"
   );
   c.prop1 = 10;
   c.prop2 = 20;
   c.prop3 = "notThree";
-  assert(
+  assert<boolean>(
     c.prop1 === 10 && c.prop2 === 20 && c.prop3 === "notThree",
     "AssemblyScript: Property Writes: a property read should retrieve the correct value after a write"
   );

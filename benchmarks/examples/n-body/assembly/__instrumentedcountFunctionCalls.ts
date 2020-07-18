@@ -18,28 +18,6 @@ export class MyAnalysis extends OronAnalysis {
 
 const myAnalysis = new MyAnalysis();
 
-function apply1Args<RetType,In0>(
-  fname: string,
-  fptr: usize,
-  argsBuff: ArgsBuffer,
-): RetType {
-  myAnalysis.genericApply(fname, fptr, argsBuff);
-  const func: (in0: In0) => RetType = changetype<(in0: In0)=> RetType>(fptr);
-  return func(argsBuff.getArgument<In0>(0))
-}
-
-
-function apply1ArgsVoid<In0>(
-  fname: string,
-  fptr: usize,
-  argsBuff: ArgsBuffer,
-): void {
-  myAnalysis.genericApply(fname, fptr, argsBuff);
-  const func: (in0: In0) => void = changetype<(in0: In0)=> void>(fptr);
-  func(argsBuff.getArgument<In0>(0))
-}
-
-
 function apply0Args<RetType,>(
   fname: string,
   fptr: usize,
@@ -96,20 +74,20 @@ class NBodySystem {
         var pz: float = 0.0;
         var size = bodies.length;
         for (let i = 0; i < size; ++i) {
-            let b = unchecked(bodies[i]);
+            let b = bodies[i];
             let m = b.mass;
             px += b.vx * m;
             py += b.vy * m;
             pz += b.vz * m;
         }
-        unchecked(bodies[0]).offsetMomentum(px, py, pz);
+        bodies[0].offsetMomentum(px, py, pz);
     }
     advance(dt: float): void {
         var bodies = this.bodies;
         var size: u32 = bodies.length;
         // var buffer = changetype<usize>(bodies.buffer_);
         for (let i: u32 = 0; i < size; ++i) {
-            let bodyi = unchecked(bodies[i]);
+            let bodyi = bodies[i];
             // let bodyi = load<Body>(buffer + i * sizeof<Body>(), 8);
             let ix = bodyi.x;
             let iy = bodyi.y;
@@ -119,7 +97,7 @@ class NBodySystem {
             let bivz = bodyi.vz;
             let bodyim = bodyi.mass;
             for (let j: u32 = i + 1; j < size; ++j) {
-                let bodyj = unchecked(bodies[j]);
+                let bodyj = bodies[j];
                 // let bodyj = load<Body>(buffer + j * sizeof<Body>(), 8);
                 let dx = ix - bodyj.x;
                 let dy = iy - bodyj.y;
@@ -148,7 +126,7 @@ class NBodySystem {
         var e: float = 0.0;
         var bodies = this.bodies;
         for (let i: u32 = 0, size: u32 = bodies.length; i < size; ++i) {
-            let bodyi = unchecked(bodies[i]);
+            let bodyi = bodies[i];
             let ix = bodyi.x;
             let iy = bodyi.y;
             let iz = bodyi.z;
@@ -158,7 +136,7 @@ class NBodySystem {
             let bim = bodyi.mass;
             e += 0.5 * bim * (vx * vx + vy * vy + vz * vz);
             for (let j: u32 = i + 1; j < size; ++j) {
-                let bodyj = unchecked(bodies[j]);
+                let bodyj = bodies[j];
                 let dx = ix - bodyj.x;
                 let dy = iy - bodyj.y;
                 let dz = iz - bodyj.z;
@@ -183,5 +161,5 @@ export function bench(steps: u32): void {
 }
 export function getBody(index: i32): Body | null {
     var bodies = system.bodies;
-    return <u32>index < <u32>bodies.length ? unchecked(bodies[index]) : null;
+    return <u32>index < <u32>bodies.length ? bodies[index] : null;
 }

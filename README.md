@@ -24,3 +24,7 @@ npm install && npm run basic-instrumented
 ```
 
 The instrumented source-code can now be seen in `assembly/output.ts`
+
+### Resources:
+
+The benchmarks are based on the Sunspider Benchmark Suite, translated to TypeScript fixed to work for assembly based on [this repository](https://github.com/apurvaraman/sunspider-jsx/tree/master/js/tests/sunspider-1.0/ts)

@@ -4,9 +4,7 @@ import * as ts from "typescript";
 import { writeFileSync, readdirSync, fstat, readFileSync } from "fs";
 
 const [sourceCodeFile, analysisFile, outputFile] = process.argv.slice(2); // only capture 3 args
-const asTypeDefinitions =
-  // __dirname + "/node_modules/assemblyscript/std/assembly/index.d.ts";
-  __dirname + "/oronRequirements/typedefs.d.ts"; // empty file containing type-definitions
+const asTypeDefinitions = __dirname + "/oronRequirements/typedefs.d.ts";
 const stdLib = readdirSync(
   __dirname + "/node_modules/assemblyscript/std/assembly"
 ).filter((filename) => filename.endsWith("ts"));
@@ -19,6 +17,7 @@ const analysisProgram = ts.createProgram(
   [asTypeDefinitions, analysisFile].concat(stdLib),
   {}
 );
+
 const analysisSourceFile = analysisProgram.getSourceFile(analysisFile);
 
 interface AnalysesisDef {
@@ -36,6 +35,7 @@ const analysisDefinitions: AnalysesisDef = {
 };
 
 const functionCallArgs = new Set<number>();
+const functionVoidCallArgs = new Set<number>();
 
 function initAnalysis(node: ts.Node) {
   /** Determine wheter @param n is a class instance extending OronAnalysis
@@ -285,13 +285,12 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
     ) {
       if (
         node.typeArguments ===
-        undefined /* currently only support function with out type args */
+        undefined /* currently only support function without type args */
       ) {
-        // funcCall(arg1, arg2, arg3);
+        // funcCall(arg1, arg2);
         // ==TRANSFORM==>
         // (function (arg1: Typ1, arg2: Typ2){...cast function to pointer...; ...wrap args in ADT...; return apply2args(funcCallPointer, argsADT);})(arg1, arg2);
         const args = node.arguments;
-        functionCallArgs.add(args.length);
         const argsIdentifier = ts.createIdentifier(`args`);
 
         const declaration = typechecker.getResolvedSignature(node).declaration;
@@ -382,6 +381,10 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
           const hasExplicitReturnType =
             typechecker.typeToString(returnType) !== "void";
 
+          (hasExplicitReturnType ? functionCallArgs : functionVoidCallArgs).add(
+            args.length // call to exact matching function will be added later
+          );
+
           const typeArgs = (hasExplicitReturnType
             ? [returnTypeNode]
             : []
@@ -389,7 +392,7 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
             ...funcInTypes.map((type) => typechecker.typeToTypeNode(type))
           );
 
-          const oronGuideFunctionName = hasExplicitReturnType
+          const oronGuideFunctionName = hasExplicitReturnType // name of effective call to trap
             ? ts.createIdentifier(`apply${args.length}Args`)
             : ts.createIdentifier(`apply${args.length}ArgsVoid`);
 
@@ -411,8 +414,8 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
             ]
           );
 
-          const argsToPars = (node: ts.Expression, index: number) => {
-            return ts.createParameter(
+          const argsToPars = (_: ts.Expression, index: number) =>
+            ts.createParameter(
               undefined,
               undefined,
               undefined,
@@ -420,7 +423,6 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
               undefined,
               typechecker.typeToTypeNode(funcInTypes[index])
             );
-          };
 
           const trap: ts.Statement = hasExplicitReturnType
             ? ts.createReturn(effectiveCallTrap)
@@ -479,6 +481,10 @@ function apply${amt}Args<RetType,${idxFillGappedString(amt, "In$")}>(
 }
 `
   );
+});
+
+functionVoidCallArgs.forEach((amt) => {
+  const funcSignature = idxFillGappedString(amt, "in$: In$");
   applyArgsFuncs.push(
     `
 function apply${amt}ArgsVoid${

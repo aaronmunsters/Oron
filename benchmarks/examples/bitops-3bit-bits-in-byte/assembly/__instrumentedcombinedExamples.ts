@@ -72,17 +72,6 @@ function apply1Args<RetType,In0>(
   const func: (in0: In0) => RetType = changetype<(in0: In0)=> RetType>(fptr);
   return func(argsBuff.getArgument<In0>(0))
 }
-
-
-function apply1ArgsVoid<In0>(
-  fname: string,
-  fptr: usize,
-  argsBuff: ArgsBuffer,
-): void {
-  myAnalysis.genericApply(fname, fptr, argsBuff);
-  const func: (in0: In0) => void = changetype<(in0: In0)=> void>(fptr);
-  func(argsBuff.getArgument<In0>(0))
-}
 // Copyright (c) 2004 by Arthur Langereis (arthur_ext at domain xfinitegames, tld com
 // 1 op = 6 ANDs, 3 SHRs, 3 SHLs, 4 assigns, 2 ADDs
 // O(1)

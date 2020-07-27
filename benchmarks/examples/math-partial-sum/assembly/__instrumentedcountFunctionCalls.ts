@@ -29,28 +29,6 @@ function apply2Args<RetType,In0,In1>(
 }
 
 
-function apply2ArgsVoid<In0,In1>(
-  fname: string,
-  fptr: usize,
-  argsBuff: ArgsBuffer,
-): void {
-  myAnalysis.genericApply(fname, fptr, argsBuff);
-  const func: (in0: In0,in1: In1) => void = changetype<(in0: In0,in1: In1)=> void>(fptr);
-  func(argsBuff.getArgument<In0>(0),argsBuff.getArgument<In1>(1))
-}
-
-
-function apply1Args<RetType,In0>(
-  fname: string,
-  fptr: usize,
-  argsBuff: ArgsBuffer,
-): RetType {
-  myAnalysis.genericApply(fname, fptr, argsBuff);
-  const func: (in0: In0) => RetType = changetype<(in0: In0)=> RetType>(fptr);
-  return func(argsBuff.getArgument<In0>(0))
-}
-
-
 function apply1ArgsVoid<In0>(
   fname: string,
   fptr: usize,

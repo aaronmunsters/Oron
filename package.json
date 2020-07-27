@@ -1,11 +1,19 @@
 {
+  "name": "oron",
+  "version": "1.0.0",
+  "author": {
+    "name": "Aäron Munsters"
+  },
+  "keywords": [
+    "Instrumentation",
+    "Analysis",
+    "Profiling"
+  ],
+  "description": "Minimal instrumentation platform for AssemblyScript. Using source-to-souce code transformation",
+  "main": "oron.js",
   "scripts": {
-    "asbuild:untouched": "asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --validate --sourceMap --debug",
-    "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --validate --sourceMap --optimize",
-    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
     "test": "node tests",
-    "basic-example": "npx asc ./assembly/index.ts --binaryFile ./build/optimized.wasm",
-    "basic-instrumented": "tsc Oron && node Oron assembly/index.ts assembly/oronAdvice.ts assembly/output.ts && npx asc assembly/output.ts -b build/optimized.wasm -t build/optimized.wat --validate --sourceMap --optimize && node exampleProgram.js"
+    "benchmark": "node benchmark"
   },
   "dependencies": {
     "@assemblyscript/loader": "^0.9.4",

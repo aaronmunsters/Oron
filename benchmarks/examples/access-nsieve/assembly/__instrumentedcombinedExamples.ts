@@ -72,17 +72,6 @@ function apply2Args<RetType,In0,In1>(
   const func: (in0: In0,in1: In1) => RetType = changetype<(in0: In0,in1: In1)=> RetType>(fptr);
   return func(argsBuff.getArgument<In0>(0),argsBuff.getArgument<In1>(1))
 }
-
-
-function apply2ArgsVoid<In0,In1>(
-  fname: string,
-  fptr: usize,
-  argsBuff: ArgsBuffer,
-): void {
-  myAnalysis.genericApply(fname, fptr, argsBuff);
-  const func: (in0: In0,in1: In1) => void = changetype<(in0: In0,in1: In1)=> void>(fptr);
-  func(argsBuff.getArgument<In0>(0),argsBuff.getArgument<In1>(1))
-}
 function nsieve(m: i32, isPrime: i32[]): i32 {
     let i: i32;
     let k: i32;

@@ -1,18 +1,63 @@
 import { OronAnalysis } from "../orondefaults/dependancies/analysis";
+
 import {
-  ArgsBuffer,
   Types,
+  dynamicPropertyRead,
+  dynamicPropertyWrite,
+  ArgsBuffer,
 } from "../orondefaults/dependancies/analysisDependancies";
 
+const reads: Map<string, number> = new Map();
+const sets: Map<string, number> = new Map();
 const calls: Map<string, number> = new Map();
 
-export function getRes(target: string): number {
-  return calls.has(target) ? calls.get(target) : -1;
+function increase(countStructure: Map<string, number>, target: string): void {
+  countStructure.set(
+    target,
+    countStructure.has(target) ? countStructure.get(target) + 1 : 1
+  );
+}
+
+function getForRes(target: string, map: Map<string, number>): number {
+  return map.has(target) ? map.get(target) : -1;
+}
+
+export function getRes(struct: string, target: string): number {
+  if (struct == "reads") {
+    return getForRes(target, reads);
+  } else if (struct == "sets") {
+    return getForRes(target, sets);
+  } else if (struct == "calls") {
+    return getForRes(target, calls);
+  }
+  return -2;
 }
 
 export class MyAnalysis extends OronAnalysis {
+  propertyAccess<ClassInstance, ReturnValue>(
+    classInstance: ClassInstance,
+    key: string,
+    offset: usize
+  ): ReturnValue {
+    increase(reads, key);
+    return dynamicPropertyRead<ClassInstance, ReturnValue>(
+      classInstance,
+      offset
+    );
+  }
+
+  propertySet<ClassInstance, Value>(
+    classInstance: ClassInstance,
+    value: Value,
+    key: string,
+    offset: usize
+  ): void {
+    increase(sets, key);
+    dynamicPropertyWrite<ClassInstance, Value>(classInstance, value, offset);
+  }
+
   genericApply(fname: string, fptr: usize, args: ArgsBuffer): void {
-    calls.set(fname, (calls.has(fname) ? calls.get(fname) : 0) + 1);
+    increase(calls, fname);
   }
 }
 
@@ -27,17 +72,6 @@ function apply0Args<RetType,>(
   const func: () => RetType = changetype<()=> RetType>(fptr);
   return func()
 }
-
-
-function apply0ArgsVoid(
-  fname: string,
-  fptr: usize,
-  argsBuff: ArgsBuffer,
-): void {
-  myAnalysis.genericApply(fname, fptr, argsBuff);
-  const func: () => void = changetype<()=> void>(fptr);
-  func()
-}
 // From The Computer Language Benchmarks Game
 // http://benchmarksgame.alioth.debian.org
 type float = f64; // interchangeable f32/f64 for testing
@@ -46,9 +80,9 @@ const DAYS_PER_YEAR: float = 365.24;
 class Body {
     constructor(public x: float, public y: float, public z: float, public vx: float, public vy: float, public vz: float, public mass: float) { }
     offsetMomentum(px: float, py: float, pz: float): this {
-        this.vx = -px / SOLAR_MASS;
-        this.vy = -py / SOLAR_MASS;
-        this.vz = -pz / SOLAR_MASS;
+        myAnalysis.propertySet<this, f64>(this, -px / SOLAR_MASS, "vx", offsetof<this>("vx"));
+        myAnalysis.propertySet<this, f64>(this, -py / SOLAR_MASS, "vy", offsetof<this>("vy"));
+        myAnalysis.propertySet<this, f64>(this, -pz / SOLAR_MASS, "vz", offsetof<this>("vz"));
         return this;
     }
 }
@@ -75,38 +109,38 @@ class NBodySystem {
         var size = bodies.length;
         for (let i = 0; i < size; ++i) {
             let b = bodies[i];
-            let m = b.mass;
-            px += b.vx * m;
-            py += b.vy * m;
-            pz += b.vz * m;
+            let m = myAnalysis.propertyAccess<Body, f64>(b, "mass", offsetof<Body>("mass"));
+            px += myAnalysis.propertyAccess<Body, f64>(b, "vx", offsetof<Body>("vx")) * m;
+            py += myAnalysis.propertyAccess<Body, f64>(b, "vy", offsetof<Body>("vy")) * m;
+            pz += myAnalysis.propertyAccess<Body, f64>(b, "vz", offsetof<Body>("vz")) * m;
         }
         bodies[0].offsetMomentum(px, py, pz);
     }
     advance(dt: float): void {
-        var bodies = this.bodies;
+        var bodies = myAnalysis.propertyAccess<this, StaticArray<Body>>(this, "bodies", offsetof<this>("bodies"));
         var size: u32 = bodies.length;
         // var buffer = changetype<usize>(bodies.buffer_);
         for (let i: u32 = 0; i < size; ++i) {
             let bodyi = bodies[i];
             // let bodyi = load<Body>(buffer + i * sizeof<Body>(), 8);
-            let ix = bodyi.x;
-            let iy = bodyi.y;
-            let iz = bodyi.z;
-            let bivx = bodyi.vx;
-            let bivy = bodyi.vy;
-            let bivz = bodyi.vz;
-            let bodyim = bodyi.mass;
+            let ix = myAnalysis.propertyAccess<Body, f64>(bodyi, "x", offsetof<Body>("x"));
+            let iy = myAnalysis.propertyAccess<Body, f64>(bodyi, "y", offsetof<Body>("y"));
+            let iz = myAnalysis.propertyAccess<Body, f64>(bodyi, "z", offsetof<Body>("z"));
+            let bivx = myAnalysis.propertyAccess<Body, f64>(bodyi, "vx", offsetof<Body>("vx"));
+            let bivy = myAnalysis.propertyAccess<Body, f64>(bodyi, "vy", offsetof<Body>("vy"));
+            let bivz = myAnalysis.propertyAccess<Body, f64>(bodyi, "vz", offsetof<Body>("vz"));
+            let bodyim = myAnalysis.propertyAccess<Body, f64>(bodyi, "mass", offsetof<Body>("mass"));
             for (let j: u32 = i + 1; j < size; ++j) {
                 let bodyj = bodies[j];
                 // let bodyj = load<Body>(buffer + j * sizeof<Body>(), 8);
-                let dx = ix - bodyj.x;
-                let dy = iy - bodyj.y;
-                let dz = iz - bodyj.z;
+                let dx = ix - myAnalysis.propertyAccess<Body, f64>(bodyj, "x", offsetof<Body>("x"));
+                let dy = iy - myAnalysis.propertyAccess<Body, f64>(bodyj, "y", offsetof<Body>("y"));
+                let dz = iz - myAnalysis.propertyAccess<Body, f64>(bodyj, "z", offsetof<Body>("z"));
                 let distanceSq = dx * dx + dy * dy + dz * dz;
                 let distance = <float>Math.sqrt(distanceSq);
                 let mag = dt / (distanceSq * distance);
                 let bim = bodyim * mag;
-                let bjm = bodyj.mass * mag;
+                let bjm = myAnalysis.propertyAccess<Body, f64>(bodyj, "mass", offsetof<Body>("mass")) * mag;
                 bivx -= dx * bjm;
                 bivy -= dy * bjm;
                 bivz -= dz * bjm;
@@ -114,9 +148,9 @@ class NBodySystem {
                 bodyj.vy += dy * bim;
                 bodyj.vz += dz * bim;
             }
-            bodyi.vx = bivx;
-            bodyi.vy = bivy;
-            bodyi.vz = bivz;
+            myAnalysis.propertySet<Body, f64>(bodyi, bivx, "vx", offsetof<Body>("vx"));
+            myAnalysis.propertySet<Body, f64>(bodyi, bivy, "vy", offsetof<Body>("vy"));
+            myAnalysis.propertySet<Body, f64>(bodyi, bivz, "vz", offsetof<Body>("vz"));
             bodyi.x += dt * bivx;
             bodyi.y += dt * bivy;
             bodyi.z += dt * bivz;
@@ -124,24 +158,24 @@ class NBodySystem {
     }
     energy(): float {
         var e: float = 0.0;
-        var bodies = this.bodies;
+        var bodies = myAnalysis.propertyAccess<this, StaticArray<Body>>(this, "bodies", offsetof<this>("bodies"));
         for (let i: u32 = 0, size: u32 = bodies.length; i < size; ++i) {
             let bodyi = bodies[i];
-            let ix = bodyi.x;
-            let iy = bodyi.y;
-            let iz = bodyi.z;
-            let vx = bodyi.vx;
-            let vy = bodyi.vy;
-            let vz = bodyi.vz;
-            let bim = bodyi.mass;
+            let ix = myAnalysis.propertyAccess<Body, f64>(bodyi, "x", offsetof<Body>("x"));
+            let iy = myAnalysis.propertyAccess<Body, f64>(bodyi, "y", offsetof<Body>("y"));
+            let iz = myAnalysis.propertyAccess<Body, f64>(bodyi, "z", offsetof<Body>("z"));
+            let vx = myAnalysis.propertyAccess<Body, f64>(bodyi, "vx", offsetof<Body>("vx"));
+            let vy = myAnalysis.propertyAccess<Body, f64>(bodyi, "vy", offsetof<Body>("vy"));
+            let vz = myAnalysis.propertyAccess<Body, f64>(bodyi, "vz", offsetof<Body>("vz"));
+            let bim = myAnalysis.propertyAccess<Body, f64>(bodyi, "mass", offsetof<Body>("mass"));
             e += 0.5 * bim * (vx * vx + vy * vy + vz * vz);
             for (let j: u32 = i + 1; j < size; ++j) {
                 let bodyj = bodies[j];
-                let dx = ix - bodyj.x;
-                let dy = iy - bodyj.y;
-                let dz = iz - bodyj.z;
+                let dx = ix - myAnalysis.propertyAccess<Body, f64>(bodyj, "x", offsetof<Body>("x"));
+                let dy = iy - myAnalysis.propertyAccess<Body, f64>(bodyj, "y", offsetof<Body>("y"));
+                let dz = iz - myAnalysis.propertyAccess<Body, f64>(bodyj, "z", offsetof<Body>("z"));
                 let distance = <float>Math.sqrt(dx * dx + dy * dy + dz * dz);
-                e -= (bim * bodyj.mass) / distance;
+                e -= (bim * myAnalysis.propertyAccess<Body, f64>(bodyj, "mass", offsetof<Body>("mass"))) / distance;
             }
         }
         return e;
@@ -160,6 +194,6 @@ export function bench(steps: u32): void {
         system.advance(0.01);
 }
 export function getBody(index: i32): Body | null {
-    var bodies = system.bodies;
+    var bodies = myAnalysis.propertyAccess<NBodySystem, StaticArray<Body>>(system, "bodies", offsetof<NBodySystem>("bodies"));
     return <u32>index < <u32>bodies.length ? bodies[index] : null;
 }

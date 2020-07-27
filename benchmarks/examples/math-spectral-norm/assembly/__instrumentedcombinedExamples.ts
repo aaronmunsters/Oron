@@ -74,17 +74,6 @@ function apply2Args<RetType,In0,In1>(
 }
 
 
-function apply2ArgsVoid<In0,In1>(
-  fname: string,
-  fptr: usize,
-  argsBuff: ArgsBuffer,
-): void {
-  myAnalysis.genericApply(fname, fptr, argsBuff);
-  const func: (in0: In0,in1: In1) => void = changetype<(in0: In0,in1: In1)=> void>(fptr);
-  func(argsBuff.getArgument<In0>(0),argsBuff.getArgument<In1>(1))
-}
-
-
 function apply1Args<RetType,In0>(
   fname: string,
   fptr: usize,
@@ -96,17 +85,6 @@ function apply1Args<RetType,In0>(
 }
 
 
-function apply1ArgsVoid<In0>(
-  fname: string,
-  fptr: usize,
-  argsBuff: ArgsBuffer,
-): void {
-  myAnalysis.genericApply(fname, fptr, argsBuff);
-  const func: (in0: In0) => void = changetype<(in0: In0)=> void>(fptr);
-  func(argsBuff.getArgument<In0>(0))
-}
-
-
 function apply3Args<RetType,In0,In1,In2>(
   fname: string,
   fptr: usize,
@@ -115,17 +93,6 @@ function apply3Args<RetType,In0,In1,In2>(
   myAnalysis.genericApply(fname, fptr, argsBuff);
   const func: (in0: In0,in1: In1,in2: In2) => RetType = changetype<(in0: In0,in1: In1,in2: In2)=> RetType>(fptr);
   return func(argsBuff.getArgument<In0>(0),argsBuff.getArgument<In1>(1),argsBuff.getArgument<In2>(2))
-}
-
-
-function apply3ArgsVoid<In0,In1,In2>(
-  fname: string,
-  fptr: usize,
-  argsBuff: ArgsBuffer,
-): void {
-  myAnalysis.genericApply(fname, fptr, argsBuff);
-  const func: (in0: In0,in1: In1,in2: In2) => void = changetype<(in0: In0,in1: In1,in2: In2)=> void>(fptr);
-  func(argsBuff.getArgument<In0>(0),argsBuff.getArgument<In1>(1),argsBuff.getArgument<In2>(2))
 }
 // Edit here and press "Compile"
 function A(i: i32, j: i32): f64 {

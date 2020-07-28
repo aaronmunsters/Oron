@@ -1,0 +1,459 @@
+
+=====================ORON BENCHMARKS=====================
+          NOTE: These benchmarks require Node 14
+=========================================================
+
+Compiling oron
+Finished compiling oron
+Moving required files to benchmark-environment
+Installing required files in benchmark-environment
+===============================
+access-fannkuch with combinedExamples.ts
+Running default benchmarks, uninstrumented
+[ 18, 295733622 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 19, 793368245 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-fannkuch with countFunctionCalls.ts
+Running default benchmarks, uninstrumented
+[ 19, 489700067 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 20, 532879765 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-fannkuch with countPropertyReads.ts
+Running default benchmarks, uninstrumented
+[ 19, 450877374 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 19, 219084941 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-fannkuch with countPropertyWrites.ts
+Running default benchmarks, uninstrumented
+[ 19, 875906262 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 20, 507366187 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-fannkuch with emptyAnalysis.ts
+Running default benchmarks, uninstrumented
+[ 20, 28931269 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 19, 755605311 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nbody with combinedExamples.ts
+Running default benchmarks, uninstrumented
+[ 0, 696889008 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 41, 415927856 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nbody with countFunctionCalls.ts
+Running default benchmarks, uninstrumented
+[ 0, 695769237 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 697916016 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nbody with countPropertyReads.ts
+Running default benchmarks, uninstrumented
+[ 0, 708277228 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 31, 685370405 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nbody with countPropertyWrites.ts
+Running default benchmarks, uninstrumented
+[ 0, 687175207 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 6, 452083161 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nbody with emptyAnalysis.ts
+Running default benchmarks, uninstrumented
+[ 0, 714100950 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 727240172 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nsieve with combinedExamples.ts
+Running default benchmarks, uninstrumented
+[ 0, 58738131 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 87351150 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nsieve with countFunctionCalls.ts
+Running default benchmarks, uninstrumented
+[ 0, 59478096 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 96749419 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nsieve with countPropertyReads.ts
+Running default benchmarks, uninstrumented
+[ 0, 65036681 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 84754555 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nsieve with countPropertyWrites.ts
+Running default benchmarks, uninstrumented
+[ 0, 63088266 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 85757833 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nsieve with emptyAnalysis.ts
+Running default benchmarks, uninstrumented
+[ 0, 66383605 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 77284857 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-3bit-bits-in-byte with combinedExamples.ts
+Running default benchmarks, uninstrumented
+[ 0, 94350901 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 39, 335069476 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-3bit-bits-in-byte with countFunctionCalls.ts
+Running default benchmarks, uninstrumented
+[ 0, 92921231 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 38, 215735093 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-3bit-bits-in-byte with countPropertyReads.ts
+Running default benchmarks, uninstrumented
+[ 0, 91825690 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 89718868 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-3bit-bits-in-byte with countPropertyWrites.ts
+Running default benchmarks, uninstrumented
+[ 0, 97192750 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 88841933 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-3bit-bits-in-byte with emptyAnalysis.ts
+Running default benchmarks, uninstrumented
+[ 0, 90842275 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 94135144 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bits-in-byte with combinedExamples.ts
+Running default benchmarks, uninstrumented
+[ 0, 181795090 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 28, 468308668 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bits-in-byte with countFunctionCalls.ts
+Running default benchmarks, uninstrumented
+[ 0, 177426439 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 25, 708962326 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bits-in-byte with countPropertyReads.ts
+Running default benchmarks, uninstrumented
+[ 0, 175190481 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 718159024 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bits-in-byte with countPropertyWrites.ts
+Running default benchmarks, uninstrumented
+[ 0, 181190293 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 720250092 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bits-in-byte with emptyAnalysis.ts
+Running default benchmarks, uninstrumented
+[ 0, 182595001 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 744271460 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bitwise-and with combinedExamples.ts
+Running default benchmarks, uninstrumented
+[ 0, 52980648 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 56502831 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bitwise-and with countFunctionCalls.ts
+Running default benchmarks, uninstrumented
+[ 0, 53456779 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 52992414 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bitwise-and with countPropertyReads.ts
+Running default benchmarks, uninstrumented
+[ 0, 52913816 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 55944508 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bitwise-and with countPropertyWrites.ts
+Running default benchmarks, uninstrumented
+[ 0, 54860746 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 52859690 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bitwise-and with emptyAnalysis.ts
+Running default benchmarks, uninstrumented
+[ 0, 52371499 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 55045504 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-nsieve-bits with combinedExamples.ts
+Running default benchmarks, uninstrumented
+[ 11, 81174766 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 11, 476235577 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-nsieve-bits with countFunctionCalls.ts
+Running default benchmarks, uninstrumented
+[ 10, 802801010 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 11, 537987288 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-nsieve-bits with countPropertyReads.ts
+Running default benchmarks, uninstrumented
+[ 10, 938367890 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 11, 379071806 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-nsieve-bits with countPropertyWrites.ts
+Running default benchmarks, uninstrumented
+[ 10, 663867995 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 11, 44535567 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-nsieve-bits with emptyAnalysis.ts
+Running default benchmarks, uninstrumented
+[ 10, 753286595 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 11, 173570023 ]
+Benchmark - instrumented - done
+===============================
+===============================
+controlflow-recursive with combinedExamples.ts
+Running default benchmarks, uninstrumented
+[ 0, 203177821 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 74, 74303382 ]
+Benchmark - instrumented - done
+===============================
+===============================
+controlflow-recursive with countFunctionCalls.ts
+Running default benchmarks, uninstrumented
+[ 0, 195750067 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 71, 988708106 ]
+Benchmark - instrumented - done
+===============================
+===============================
+controlflow-recursive with countPropertyReads.ts
+Running default benchmarks, uninstrumented
+[ 0, 210719075 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 198787261 ]
+Benchmark - instrumented - done
+===============================
+===============================
+controlflow-recursive with countPropertyWrites.ts
+Running default benchmarks, uninstrumented
+[ 0, 205717896 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 201459389 ]
+Benchmark - instrumented - done
+===============================
+===============================
+controlflow-recursive with emptyAnalysis.ts
+Running default benchmarks, uninstrumented
+[ 0, 211300706 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 203556241 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-partial-sum with combinedExamples.ts
+Running default benchmarks, uninstrumented
+[ 49, 542124123 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 49, 982360120 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-partial-sum with countFunctionCalls.ts
+Running default benchmarks, uninstrumented
+[ 48, 575383199 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 49, 220703165 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-partial-sum with countPropertyReads.ts
+Running default benchmarks, uninstrumented
+[ 49, 155635599 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 48, 931511075 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-partial-sum with countPropertyWrites.ts
+Running default benchmarks, uninstrumented
+[ 49, 29534331 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 49, 342492435 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-partial-sum with emptyAnalysis.ts
+Running default benchmarks, uninstrumented
+[ 49, 329944115 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 50, 495582934 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-spectral-norm with combinedExamples.ts
+Running default benchmarks, uninstrumented
+[ 0, 146651668 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 19, 46197336 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-spectral-norm with countFunctionCalls.ts
+Running default benchmarks, uninstrumented
+[ 0, 140133531 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 18, 472244854 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-spectral-norm with countPropertyReads.ts
+Running default benchmarks, uninstrumented
+[ 0, 142676016 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 152884859 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-spectral-norm with countPropertyWrites.ts
+Running default benchmarks, uninstrumented
+[ 0, 147204950 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 154691610 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-spectral-norm with emptyAnalysis.ts
+Running default benchmarks, uninstrumented
+[ 0, 146664741 ]
+Benchmark - uninstrumented - done
+Running default benchmarks, instrumented
+[ 0, 144689400 ]
+Benchmark - instrumented - done
+===============================

@@ -12,7 +12,7 @@ const benchDir = __dirname;
 assert(benchDir.endsWith("benchmarks"), "Benchmark required in benchmarks");
 
 const oronDir = __dirname + "/..";
-const containsOron = fs.readdirSync(oronDir).some((file) => file === "Oron.ts");
+const containsOron = fs.readdirSync(oronDir).some((file) => file === "oron.ts");
 assert(containsOron);
 
 const containsExamples = fs
@@ -25,49 +25,45 @@ const analyses = fs
   .readdirSync(oronDir + "/orondefaults")
   .filter((file) => file.endsWith(".ts"));
 
-const keepInstrumented = true;
-
 const preTestingInstructions = `
     
+cd ${oronDir}
 echo "Compiling oron"
-npx tsc Oron.ts
+npx tsc oron.ts
 echo "Finished compiling oron"
+echo "Moving required files to benchmark-environment"
+cp -r ./orondefaults ./benchmarks/benchmark-environment/orondefaults
+echo "Installing required files in benchmark-environment"
+cd benchmarks/benchmark-environment
+npm install >/dev/null
 
 `;
 
 child_process.execSync(preTestingInstructions, { stdio: "inherit" });
 
-for (const file of fs.readdirSync(examplesDir)) {
+for (const file of ["math-spectral-norm"] /*fs.readdirSync(examplesDir)*/) {
   for (const analysis of analyses) {
-    const instructions = `
+    const originalFile =
+      oronDir + `/benchmarks/examples/${file}/assembly/index.ts`;
 
-  cd ${oronDir}
+    const benchEnv = oronDir + "/benchmarks/benchmark-environment";
+    const benchIndexDestination = benchEnv + "/assembly/index.ts";
+
+    const buildAndBenchmark = (state) => `
+  npm run asbuild >/dev/null
+  echo "Running default benchmarks, ${state}"
+  node ${benchEnv}/benchmarks ${state} ${file} ### => This will output the results to terminal
+    `;
+
+    const instructions = `
+    
   echo "==============================="
-  echo "Running ORON benchmarks for case: [${file}] with analysis [${analysis}] "
-  echo "Copying oron required files to ${file} directory"
-  cp -r ./orondefaults ./benchmarks/examples/${file}/orondefaults
-  cd ./benchmarks/examples/${file}
-  npm install >/dev/null
-  echo "Running default benchmarks, uninstrumented"
-  npm run asbuild >/dev/null
-  node ./benchmarks/index.js uninstrumented
-  echo "Running Oron to output instrumented code"
-  node ../../../Oron.js ./assembly/index.ts ./orondefaults/${analysis} ./assembly/output.ts >/dev/null
-  cd ./assembly
-  mv index.ts  uninstrumented.ts
-  echo "Replacing entry point with instrumented version"
-  mv output.ts index.ts
-  echo "Running default benchmarks, instrumented"
-  npm run asbuild >/dev/null
-  cd ..
-  node ./benchmarks/index.js instrumented
-  cd ./assembly
-  echo "Replacing instrumented with uninstrumented code"
-  ${keepInstrumented ? "mv index.ts __instrumented" + analysis : ""}
-  mv uninstrumented.ts index.ts
-  echo "Removing oron required files from ${file} directory"
-  cd ..
-  rm -r ./orondefaults
+  echo "${file} with ${analysis}"
+  cp ${originalFile} ${benchIndexDestination}
+  cd ${benchEnv}
+  ${buildAndBenchmark("uninstrumented")}
+  node ${oronDir}/oron.js ${originalFile} ${oronDir}/orondefaults/${analysis} ${benchIndexDestination}
+  ${buildAndBenchmark("instrumented")}
   echo "==============================="
 
   `;

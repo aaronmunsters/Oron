@@ -13,7 +13,8 @@
   "main": "oron.js",
   "scripts": {
     "test": "node tests",
-    "benchmark": "node benchmark"
+    "benchmark": "node benchmarks",
+    "benchmarks": "node benchmarks"
   },
   "dependencies": {
     "@assemblyscript/loader": "^0.9.4",

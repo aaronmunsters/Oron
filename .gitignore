@@ -105,5 +105,5 @@ dist
 
 
 ## The Oron compilation output and the transformation output
-Oron.js
+oron.js
 assembly/output.ts

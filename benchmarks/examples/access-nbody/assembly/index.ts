@@ -196,3 +196,8 @@ export function getBody(index: i32): Body | null {
   var bodies = system.bodies;
   return <u32>index < <u32>bodies.length ? bodies[index] : null;
 }
+
+export function main(): void {
+  init();
+  bench(200000); /* Might need some tweaking */
+}

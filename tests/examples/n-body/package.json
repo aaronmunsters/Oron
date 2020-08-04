@@ -8,14 +8,12 @@
     "asbuild:js": "asc assembly/index.ts -j build/as_nbody.js -O3 --runtime none --noAssert",
     "asbuild": "npm run asbuild:wasm && npm run asbuild:js",
     "tsbuild": "tsc -p assembly -t ES2017 -m commonjs --outDir build",
-    "rsbuild": "cd rust && RUSTFLAGS='-C link-arg=-s' cargo +nightly build --release",
-    "build": "npm run asbuild && npm run tsbuild && npm run rsbuild",
+    "build": "npm run asbuild && npm run tsbuild",
     "start": "http-server . -o -c-1",
     "test": "node --no-wasm-bounds-checks --no-wasm-stack-checks --expose-gc tests"
   },
   "devDependencies": {
     "assemblyscript": "latest",
-    "http-server": "^0.12.3",
     "typescript": "^3.9.6"
   },
   "dependencies": {

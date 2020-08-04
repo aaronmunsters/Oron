@@ -7,11 +7,10 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 exports.__esModule = true;
-// code below heavily based upon
-// https://blog.scottlogic.com/2017/05/02/typescript-compiler-api-revisited.html
+// code below heavily based upon https://blog.scottlogic.com/2017/05/02/typescript-compiler-api-revisited.html
 var ts = require("typescript");
 var fs_1 = require("fs");
-var _a = process.argv.slice(2), sourceCodeFile = _a[0], analysisFile = _a[1], outputFile = _a[2]; // only capture 3 args
+var _a = process.argv, _0 = _a[0], _1 = _a[1], sourceCodeFile = _a[2], analysisFile = _a[3], outputFile = _a[4]; // only capture 3 args
 var asTypeDefinitions = __dirname + "/orondefaults/typedefs/typedefs.d.ts";
 var stdLib = fs_1.readdirSync(__dirname + "/node_modules/assemblyscript/std/assembly").filter(function (filename) { return filename.endsWith("ts"); });
 function partOfAssemblyScriptStdLib(s) {

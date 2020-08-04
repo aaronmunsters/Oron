@@ -21,7 +21,7 @@ function test(nbody, steps) {
   return t;
 }
 
-var steps = process.argv.length > 2 ? parseInt(process.argv[2], 10) : 20000000;
+var steps = process.argv.length > 2 ? parseInt(process.argv[2], 10) : 200000;
 
 function prologue(name, steps) {
   console.log("Performing " + steps + " steps (" + name + ") ...");

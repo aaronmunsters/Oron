@@ -21,7 +21,7 @@ function test(nbody, steps) {
   return t;
 }
 
-var steps = 20000000;
+var steps = 200000;
 
 function prologue(name, steps) {
   console.log("Performing " + steps + " steps (" + name + ") ...");

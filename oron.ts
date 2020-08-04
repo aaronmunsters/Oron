@@ -1,9 +1,8 @@
-// code below heavily based upon
-// https://blog.scottlogic.com/2017/05/02/typescript-compiler-api-revisited.html
+// code below heavily based upon https://blog.scottlogic.com/2017/05/02/typescript-compiler-api-revisited.html
 import * as ts from "typescript";
-import { writeFileSync, readdirSync, fstat, readFileSync } from "fs";
+import { writeFileSync, readdirSync, readFileSync } from "fs";
 
-const [sourceCodeFile, analysisFile, outputFile] = process.argv.slice(2); // only capture 3 args
+const [_0, _1, sourceCodeFile, analysisFile, outputFile] = process.argv; // only capture 3 args
 const asTypeDefinitions = __dirname + "/orondefaults/typedefs/typedefs.d.ts";
 const stdLib = readdirSync(
   __dirname + "/node_modules/assemblyscript/std/assembly"

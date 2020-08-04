@@ -12,7 +12,7 @@ const testDir = __dirname;
 assert(testDir.endsWith("tests"), "Test file required to be in tests folder");
 
 const oronDir = __dirname + "/..";
-const containsOron = fs.readdirSync(oronDir).some((file) => file === "Oron.ts");
+const containsOron = fs.readdirSync(oronDir).some((file) => file === "oron.ts");
 assert(containsOron);
 
 const containsExamples = fs
@@ -30,7 +30,7 @@ const keepInstrumented = false;
 const preTestingInstructions = `
     
 echo "Compiling oron"
-npx tsc Oron.ts
+npx tsc oron.ts
 echo "Finished compiling oron"
 
 `;
@@ -51,7 +51,7 @@ for (const file of fs.readdirSync(examplesDir)) {
   echo "Running default tests, uninstrumented"
   npm run asbuild && npm test
   echo "Running Oron to output instrumented code"
-  node ../../../Oron.js ./assembly/index.ts ./orondefaults/${analysis} ./assembly/output.ts
+  node ../../../oron.js ./assembly/index.ts ./orondefaults/${analysis} ./assembly/output.ts
   cd ./assembly
   echo "Difference between instrumented and uninstrumented: lines words characters"
   mv output.ts __instrumented.ts

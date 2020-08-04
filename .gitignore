@@ -102,8 +102,3 @@ dist
 
 # TernJS port file
 .tern-port
-
-
-## The Oron compilation output and the transformation output
-oron.js
-assembly/output.ts

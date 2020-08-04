@@ -41,7 +41,7 @@ npm install >/dev/null
 
 child_process.execSync(preTestingInstructions, { stdio: "inherit" });
 
-for (const file of ["math-spectral-norm"] /*fs.readdirSync(examplesDir)*/) {
+for (const file of fs.readdirSync(examplesDir)) {
   for (const analysis of analyses) {
     const originalFile =
       oronDir + `/benchmarks/examples/${file}/assembly/index.ts`;

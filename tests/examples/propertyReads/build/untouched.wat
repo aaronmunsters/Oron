@@ -26,25 +26,25 @@
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
- (global $orondefaults/dependancies/analysisDependancies/Types.i32 i32 (i32.const 0))
- (global $orondefaults/dependancies/analysisDependancies/Types.u32 i32 (i32.const 1))
- (global $orondefaults/dependancies/analysisDependancies/Types.i64 i32 (i32.const 2))
- (global $orondefaults/dependancies/analysisDependancies/Types.u64 i32 (i32.const 3))
- (global $orondefaults/dependancies/analysisDependancies/Types.f32 i32 (i32.const 4))
- (global $orondefaults/dependancies/analysisDependancies/Types.f64 i32 (i32.const 5))
- (global $orondefaults/dependancies/analysisDependancies/Types.v128 i32 (i32.const 6))
- (global $orondefaults/dependancies/analysisDependancies/Types.i8 i32 (i32.const 7))
- (global $orondefaults/dependancies/analysisDependancies/Types.u8 i32 (i32.const 8))
- (global $orondefaults/dependancies/analysisDependancies/Types.i16 i32 (i32.const 9))
- (global $orondefaults/dependancies/analysisDependancies/Types.u16 i32 (i32.const 10))
- (global $orondefaults/dependancies/analysisDependancies/Types.bool i32 (i32.const 11))
- (global $orondefaults/dependancies/analysisDependancies/Types.isize i32 (i32.const 12))
- (global $orondefaults/dependancies/analysisDependancies/Types.usize i32 (i32.const 13))
- (global $orondefaults/dependancies/analysisDependancies/Types.void i32 (i32.const 14))
- (global $orondefaults/dependancies/analysisDependancies/Types.anyref i32 (i32.const 15))
- (global $orondefaults/dependancies/analysisDependancies/Types.number i32 (i32.const 16))
- (global $orondefaults/dependancies/analysisDependancies/Types.boolean i32 (i32.const 17))
- (global $orondefaults/dependancies/analysisDependancies/Types.classInstance i32 (i32.const 18))
+ (global $dependancies/analysis/analysisDependancies/Types.i32 i32 (i32.const 0))
+ (global $dependancies/analysis/analysisDependancies/Types.u32 i32 (i32.const 1))
+ (global $dependancies/analysis/analysisDependancies/Types.i64 i32 (i32.const 2))
+ (global $dependancies/analysis/analysisDependancies/Types.u64 i32 (i32.const 3))
+ (global $dependancies/analysis/analysisDependancies/Types.f32 i32 (i32.const 4))
+ (global $dependancies/analysis/analysisDependancies/Types.f64 i32 (i32.const 5))
+ (global $dependancies/analysis/analysisDependancies/Types.v128 i32 (i32.const 6))
+ (global $dependancies/analysis/analysisDependancies/Types.i8 i32 (i32.const 7))
+ (global $dependancies/analysis/analysisDependancies/Types.u8 i32 (i32.const 8))
+ (global $dependancies/analysis/analysisDependancies/Types.i16 i32 (i32.const 9))
+ (global $dependancies/analysis/analysisDependancies/Types.u16 i32 (i32.const 10))
+ (global $dependancies/analysis/analysisDependancies/Types.bool i32 (i32.const 11))
+ (global $dependancies/analysis/analysisDependancies/Types.isize i32 (i32.const 12))
+ (global $dependancies/analysis/analysisDependancies/Types.usize i32 (i32.const 13))
+ (global $dependancies/analysis/analysisDependancies/Types.void i32 (i32.const 14))
+ (global $dependancies/analysis/analysisDependancies/Types.anyref i32 (i32.const 15))
+ (global $dependancies/analysis/analysisDependancies/Types.number i32 (i32.const 16))
+ (global $dependancies/analysis/analysisDependancies/Types.boolean i32 (i32.const 17))
+ (global $dependancies/analysis/analysisDependancies/Types.classInstance i32 (i32.const 18))
  (global $assembly/index/myAnalysis (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 576))
  (global $~lib/heap/__heap_base i32 (i32.const 684))
@@ -56,7 +56,7 @@
  (export "__collect" (func $~lib/rt/pure/__collect))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "MyAnalysis" (global $assembly/index/MyAnalysis))
- (export "MyAnalysis#genericApply" (func $orondefaults/dependancies/analysis/OronAnalysis#genericApply))
+ (export "MyAnalysis#genericApply" (func $dependancies/analysis/analysis/OronAnalysis#genericApply))
  (export "main" (func $assembly/index/main))
  (export "default" (func $assembly/index/main))
  (start $~start)
@@ -1560,7 +1560,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $orondefaults/dependancies/analysis/OronAnalysis#constructor (param $0 i32) (result i32)
+ (func $dependancies/analysis/analysis/OronAnalysis#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1583,7 +1583,7 @@
    local.set $0
   end
   local.get $0
-  call $orondefaults/dependancies/analysis/OronAnalysis#constructor
+  call $dependancies/analysis/analysis/OronAnalysis#constructor
   local.set $0
   local.get $0
  )
@@ -1654,7 +1654,7 @@
   drop
   local.get $2
  )
- (func $orondefaults/dependancies/analysis/OronAnalysis#genericApply (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $dependancies/analysis/analysis/OronAnalysis#genericApply (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1700,79 +1700,79 @@
                         call $~lib/array/Array<i32>#__get
                         local.set $6
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.i32
+                        global.get $dependancies/analysis/analysisDependancies/Types.i32
                         i32.eq
                         br_if $case0|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.u32
+                        global.get $dependancies/analysis/analysisDependancies/Types.u32
                         i32.eq
                         br_if $case1|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.i64
+                        global.get $dependancies/analysis/analysisDependancies/Types.i64
                         i32.eq
                         br_if $case2|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.u64
+                        global.get $dependancies/analysis/analysisDependancies/Types.u64
                         i32.eq
                         br_if $case3|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.f32
+                        global.get $dependancies/analysis/analysisDependancies/Types.f32
                         i32.eq
                         br_if $case4|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.f64
+                        global.get $dependancies/analysis/analysisDependancies/Types.f64
                         i32.eq
                         br_if $case5|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.v128
+                        global.get $dependancies/analysis/analysisDependancies/Types.v128
                         i32.eq
                         br_if $case6|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.i8
+                        global.get $dependancies/analysis/analysisDependancies/Types.i8
                         i32.eq
                         br_if $case7|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.u8
+                        global.get $dependancies/analysis/analysisDependancies/Types.u8
                         i32.eq
                         br_if $case8|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.i16
+                        global.get $dependancies/analysis/analysisDependancies/Types.i16
                         i32.eq
                         br_if $case9|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.u16
+                        global.get $dependancies/analysis/analysisDependancies/Types.u16
                         i32.eq
                         br_if $case10|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.bool
+                        global.get $dependancies/analysis/analysisDependancies/Types.bool
                         i32.eq
                         br_if $case11|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.isize
+                        global.get $dependancies/analysis/analysisDependancies/Types.isize
                         i32.eq
                         br_if $case12|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.usize
+                        global.get $dependancies/analysis/analysisDependancies/Types.usize
                         i32.eq
                         br_if $case13|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.void
+                        global.get $dependancies/analysis/analysisDependancies/Types.void
                         i32.eq
                         br_if $case14|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.anyref
+                        global.get $dependancies/analysis/analysisDependancies/Types.anyref
                         i32.eq
                         br_if $case15|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.number
+                        global.get $dependancies/analysis/analysisDependancies/Types.number
                         i32.eq
                         br_if $case16|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.boolean
+                        global.get $dependancies/analysis/analysisDependancies/Types.boolean
                         i32.eq
                         br_if $case17|1
                         local.get $6
-                        global.get $orondefaults/dependancies/analysisDependancies/Types.classInstance
+                        global.get $dependancies/analysis/analysisDependancies/Types.classInstance
                         i32.eq
                         br_if $case18|1
                         br $break|1

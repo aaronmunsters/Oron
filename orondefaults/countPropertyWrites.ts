@@ -1,5 +1,5 @@
-import { OronAnalysis } from "../orondefaults/dependancies/analysis";
-import { dynamicPropertyWrite } from "../orondefaults/dependancies/analysisDependancies";
+import { OronAnalysis } from "../dependancies/analysis/analysis";
+import { dynamicPropertyWrite } from "../dependancies/analysis/analysisDependancies";
 
 const write: Map<string, number> = new Map();
 

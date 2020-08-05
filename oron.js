@@ -11,7 +11,12 @@ exports.__esModule = true;
 var ts = require("typescript");
 var fs_1 = require("fs");
 var _a = process.argv, _0 = _a[0], _1 = _a[1], sourceCodeFile = _a[2], analysisFile = _a[3], outputFile = _a[4]; // only capture 3 args
-var asTypeDefinitions = __dirname + "/orondefaults/typedefs/typedefs.d.ts";
+if (!(sourceCodeFile && analysisFile && outputFile)) {
+    console.error("Oron requires 3 args: <input> <analysis> <outputfile>");
+    console.info("For more, visit https://github.com/aaronmunsters/Oron");
+    process.exit();
+}
+var asTypeDefinitions = __dirname + "/dependancies/oron/typedefs.d.ts";
 var stdLib = fs_1.readdirSync(__dirname + "/node_modules/assemblyscript/std/assembly").filter(function (filename) { return filename.endsWith("ts"); });
 function partOfAssemblyScriptStdLib(s) {
     return s === "Math"; // This can be expanded with the full library

@@ -3,7 +3,14 @@ import * as ts from "typescript";
 import { writeFileSync, readdirSync, readFileSync } from "fs";
 
 const [_0, _1, sourceCodeFile, analysisFile, outputFile] = process.argv; // only capture 3 args
-const asTypeDefinitions = __dirname + "/orondefaults/typedefs/typedefs.d.ts";
+
+if (!(sourceCodeFile && analysisFile && outputFile)) {
+  console.error("Oron requires 3 args: <input> <analysis> <outputfile>");
+  console.info("For more, visit https://github.com/aaronmunsters/Oron");
+  process.exit();
+}
+
+const asTypeDefinitions = __dirname + "/dependancies/oron/typedefs.d.ts";
 const stdLib = readdirSync(
   __dirname + "/node_modules/assemblyscript/std/assembly"
 ).filter((filename) => filename.endsWith("ts"));

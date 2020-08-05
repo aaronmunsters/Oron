@@ -1,11 +1,11 @@
-import { OronAnalysis } from "../orondefaults/dependancies/analysis";
+import { OronAnalysis } from "../dependancies/analysis/analysis";
 
 import {
   Types,
   dynamicPropertyRead,
   dynamicPropertyWrite,
   ArgsBuffer,
-} from "../orondefaults/dependancies/analysisDependancies";
+} from "../dependancies/analysis/analysisDependancies";
 
 const reads: Map<string, number> = new Map();
 const sets: Map<string, number> = new Map();

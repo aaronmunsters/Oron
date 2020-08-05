@@ -1,8 +1,8 @@
-import { OronAnalysis } from "../orondefaults/dependancies/analysis";
+import { OronAnalysis } from "../dependancies/analysis/analysis";
 import {
   ArgsBuffer,
   Types,
-} from "../orondefaults/dependancies/analysisDependancies";
+} from "../dependancies/analysis/analysisDependancies";
 
 const calls: Map<string, number> = new Map();
 

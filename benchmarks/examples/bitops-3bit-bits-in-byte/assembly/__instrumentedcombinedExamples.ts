@@ -1,11 +1,11 @@
-import { OronAnalysis } from "../orondefaults/dependancies/analysis";
+import { OronAnalysis } from "../dependancies/analysis/analysis";
 
 import {
   Types,
   dynamicPropertyRead,
   dynamicPropertyWrite,
   ArgsBuffer,
-} from "../orondefaults/dependancies/analysisDependancies";
+} from "../dependancies/analysis/analysisDependancies";
 
 const reads: Map<string, number> = new Map();
 const sets: Map<string, number> = new Map();
@@ -63,26 +63,26 @@ export class MyAnalysis extends OronAnalysis {
 
 const myAnalysis = new MyAnalysis();
 
-function apply1Args<RetType,In0>(
+function apply1Args<RetType, In0>(
   fname: string,
   fptr: usize,
-  argsBuff: ArgsBuffer,
+  argsBuff: ArgsBuffer
 ): RetType {
   myAnalysis.genericApply(fname, fptr, argsBuff);
-  const func: (in0: In0) => RetType = changetype<(in0: In0)=> RetType>(fptr);
-  return func(argsBuff.getArgument<In0>(0))
+  const func: (in0: In0) => RetType = changetype<(in0: In0) => RetType>(fptr);
+  return func(argsBuff.getArgument<In0>(0));
 }
 // Copyright (c) 2004 by Arthur Langereis (arthur_ext at domain xfinitegames, tld com
 // 1 op = 6 ANDs, 3 SHRs, 3 SHLs, 4 assigns, 2 ADDs
 // O(1)
 function fast3bitlookup(b: i32): i32 {
-    let c: i32 = 0xe994;
-    let bi3b: i32 = 0xe994; // 0b1110 1001 1001 0100; // 3 2 2 1  2 1 1 0
-    c = 3 & (bi3b >> ((b << 1) & 14));
-    c += 3 & (bi3b >> ((b >> 2) & 14));
-    c += 3 & (bi3b >> ((b >> 5) & 6));
-    return c;
-    /*
+  let c: i32 = 0xe994;
+  let bi3b: i32 = 0xe994; // 0b1110 1001 1001 0100; // 3 2 2 1  2 1 1 0
+  c = 3 & (bi3b >> ((b << 1) & 14));
+  c += 3 & (bi3b >> ((b >> 2) & 14));
+  c += 3 & (bi3b >> ((b >> 5) & 6));
+  return c;
+  /*
   lir4,0xE994; 9 instructions, no memory access, minimal register dependence, 6 shifts, 2 adds, 1 inline assign
   rlwinmr5,r3,1,28,30
   rlwinmr6,r3,30,28,30
@@ -95,14 +95,22 @@ function fast3bitlookup(b: i32): i32 {
   */
 }
 export function main(): i32 {
-    let x: i32;
-    let y: i32;
-    let t: i32;
-    let sum: i32 = 0;
-    for (x = 0; x < 500; x++) {
-        for (y = 0; y < 256; y++) {
-            sum += function (arg0: i32): i32 { var args = new ArgsBuffer([sizeof<i32>()]); args.setArgument<i32>(0, Types.i32, arg0, 0); return apply1Args<i32, i32>("fast3bitlookup", changetype<usize>(fast3bitlookup), args); }(y);
-        }
+  let x: i32;
+  let y: i32;
+  let t: i32;
+  let sum: i32 = 0;
+  for (x = 0; x < 500; x++) {
+    for (y = 0; y < 256; y++) {
+      sum += (function (arg0: i32): i32 {
+        var args = new ArgsBuffer([sizeof<i32>()]);
+        args.setArgument<i32>(0, Types.i32, arg0, 0);
+        return apply1Args<i32, i32>(
+          "fast3bitlookup",
+          changetype<usize>(fast3bitlookup),
+          args
+        );
+      })(y);
     }
-    return sum;
+  }
+  return sum;
 }

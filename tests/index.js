@@ -45,6 +45,7 @@ for (const file of fs.readdirSync(examplesDir)) {
   echo "==============================="
   echo "Running ORON tests for case: [${file}] with analysis [${analysis}] "
   echo "Copying oron required files to ${file} directory"
+  cp -r ./dependancies ./tests/examples/${file}/dependancies
   cp -r ./orondefaults ./tests/examples/${file}/orondefaults
   cd ./tests/examples/${file}
   npm install
@@ -69,6 +70,7 @@ for (const file of fs.readdirSync(examplesDir)) {
   mv uninstrumented.ts index.ts
   echo "Removing oron required files from ${file} directory"
   cd ..
+  rm -r ./dependancies
   rm -r ./orondefaults
   echo "==============================="
 

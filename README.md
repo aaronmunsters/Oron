@@ -39,5 +39,5 @@ The benchmarks are based on the Sunspider Benchmark Suite, translated to TypeScr
 ## TODO:
 
 1. Provide CLI to output compiled code: `npx oron inputFile inputFileAnalysis.ts outputfile.wasm/wat`
-2. Rename methods to carry same name as Aran/MDN naming scheme (e.g. orondefaults/dependancies/analysis.ts imports two methods "dynamic...", this should be renamed and wrapped in general Reflect object)
+2. Rename methods to carry same name as Aran/MDN naming scheme (e.g. dependancies/analysis/analysis.ts imports two methods "dynamic...", this should be renamed and wrapped in general Reflect object)
 3. Pre, post and around traps (cfr. aop)

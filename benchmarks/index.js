@@ -32,6 +32,7 @@ echo "Compiling oron"
 npx tsc oron.ts
 echo "Finished compiling oron"
 echo "Moving required files to benchmark-environment"
+cp -r ./dependancies ./benchmarks/benchmark-environment/dependancies
 cp -r ./orondefaults ./benchmarks/benchmark-environment/orondefaults
 echo "Installing required files in benchmark-environment"
 cd benchmarks/benchmark-environment

@@ -1,5 +1,5 @@
-import { OronAnalysis } from "../orondefaults/dependancies/analysis";
-import { dynamicPropertyWrite } from "../orondefaults/dependancies/analysisDependancies";
+import { OronAnalysis } from "../dependancies/analysis/analysis";
+import { dynamicPropertyWrite } from "../dependancies/analysis/analysisDependancies";
 
 const write: Map<string, number> = new Map();
 
@@ -45,9 +45,9 @@ const myAnalysis = new MyAnalysis();
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 export function main(): void {
-    var bitwiseAndValue: i64 = 4294967296;
-    for (var i: i64 = 0; i < 600000; i++) {
-        bitwiseAndValue = bitwiseAndValue & i;
-    }
-    var result: i64 = bitwiseAndValue;
+  var bitwiseAndValue: i64 = 4294967296;
+  for (var i: i64 = 0; i < 600000; i++) {
+    bitwiseAndValue = bitwiseAndValue & i;
+  }
+  var result: i64 = bitwiseAndValue;
 }

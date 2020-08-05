@@ -1,8 +1,8 @@
-import { OronAnalysis } from "../orondefaults/dependancies/analysis";
+import { OronAnalysis } from "../dependancies/analysis/analysis";
 import {
   ArgsBuffer,
   Types,
-} from "../orondefaults/dependancies/analysisDependancies";
+} from "../dependancies/analysis/analysisDependancies";
 
 const calls: Map<string, number> = new Map();
 
@@ -42,9 +42,9 @@ const myAnalysis = new MyAnalysis();
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 export function main(): void {
-    var bitwiseAndValue: i64 = 4294967296;
-    for (var i: i64 = 0; i < 600000; i++) {
-        bitwiseAndValue = bitwiseAndValue & i;
-    }
-    var result: i64 = bitwiseAndValue;
+  var bitwiseAndValue: i64 = 4294967296;
+  for (var i: i64 = 0; i < 600000; i++) {
+    bitwiseAndValue = bitwiseAndValue & i;
+  }
+  var result: i64 = bitwiseAndValue;
 }

@@ -33,7 +33,7 @@
  (export "__collect" (func $~lib/rt/pure/__collect))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "MyAnalysis" (global $assembly/index/MyAnalysis))
- (export "MyAnalysis#genericApply" (func $orondefaults/dependancies/analysis/OronAnalysis#genericApply))
+ (export "MyAnalysis#genericApply" (func $dependancies/analysis/analysis/OronAnalysis#genericApply))
  (export "main" (func $assembly/index/main))
  (export "default" (func $assembly/index/main))
  (start $~start)
@@ -1130,7 +1130,7 @@
   i32.add
   i32.load
  )
- (func $orondefaults/dependancies/analysis/OronAnalysis#genericApply (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $dependancies/analysis/analysis/OronAnalysis#genericApply (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   loop $for-loop|0
    local.get $4

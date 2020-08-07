@@ -196,15 +196,11 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
       // A check should be performed whenever the type is a compound structure
       // As compount types such as "StaticArray<i32>" are currently still resolved
 
-      let retString = createStringLiteral(propAccessExpr.name.text);
-
-      if (
+      const retString =
         typechecker.typeToString(objT).endsWith("[]") &&
         propAccessExpr.name.text === "length"
-      ) {
-        // Length is a getter, refering to a method, replaced with length_ fixes the compiler complaint
-        retString = createStringLiteral("length_");
-      }
+          ? createStringLiteral("length_")
+          : createStringLiteral(propAccessExpr.name.text);
 
       // obj.prop
       // ==TRANSFORM==>
@@ -216,7 +212,7 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
         ),
         [objTn, retTn],
         [
-          propAccessExpr.expression,
+          ts.visitEachChild(propAccessExpr.expression, visit, context),
           retString,
           ts.createCall(ts.createIdentifier("offsetof"), [objTn], [retString]),
         ]
@@ -271,7 +267,7 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
           ),
           [objTn, retTn],
           [
-            propAccessExpr.expression,
+            ts.visitEachChild(propAccessExpr.expression, visit, context),
             val,
             retString,
             ts.createCall(

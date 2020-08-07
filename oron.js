@@ -153,17 +153,15 @@ var transformer = function (context) { return function (rootNode) {
             }
             // A check should be performed whenever the type is a compound structure
             // As compount types such as "StaticArray<i32>" are currently still resolved
-            var retString = createStringLiteral(propAccessExpr.name.text);
-            if (typechecker.typeToString(objT_1).endsWith("[]") &&
-                propAccessExpr.name.text === "length") {
-                // Length is a getter, refering to a method, replaced with length_ fixes the compiler complaint
-                retString = createStringLiteral("length_");
-            }
+            var retString = typechecker.typeToString(objT_1).endsWith("[]") &&
+                propAccessExpr.name.text === "length"
+                ? createStringLiteral("length_")
+                : createStringLiteral(propAccessExpr.name.text);
             // obj.prop
             // ==TRANSFORM==>
             // getTrap<ObjClass, PropType>(obj, "prop", offsetof<ObjClass>("prop"))
             return ts.createCall(ts.createPropertyAccess(analysisDefinitions.classInstance, ts.createIdentifier("propertyAccess")), [objTn, retTn], [
-                propAccessExpr.expression,
+                ts.visitEachChild(propAccessExpr.expression, visit, context),
                 retString,
                 ts.createCall(ts.createIdentifier("offsetof"), [objTn], [retString]),
             ]);
@@ -197,7 +195,7 @@ var transformer = function (context) { return function (rootNode) {
                 // ==TRANSFORM==>
                 // setTrap<ObjClass, PropType>(obj, val, "prop", offsetof<ObjClass>("prop"))
                 return ts.createCall(ts.createPropertyAccess(analysisDefinitions.classInstance, ts.createIdentifier("propertySet")), [objTn, retTn], [
-                    propAccessExpr.expression,
+                    ts.visitEachChild(propAccessExpr.expression, visit, context),
                     val,
                     retString,
                     ts.createCall(ts.createIdentifier("offsetof"), [objTn], [retString]),

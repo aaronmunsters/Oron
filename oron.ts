@@ -330,6 +330,8 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
           const nodeToRuntimeType = (index: number) => {
             const typeStr = typechecker.typeToString(funcInTypes[index]);
             switch (typeStr) {
+              case "bool":
+                return "boolean";
               case "i32":
               case "u32":
               case "i64":
@@ -341,7 +343,6 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
               case "u8":
               case "i16":
               case "u16":
-              case "bool":
               case "isize":
               case "usize":
               case "void":

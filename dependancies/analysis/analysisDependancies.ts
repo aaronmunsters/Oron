@@ -26,7 +26,6 @@ export enum Types {
   u8,
   i16,
   u16,
-  bool,
   isize,
   usize,
   void,

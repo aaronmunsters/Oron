@@ -1,12 +1,12 @@
 {
-  "access-fannkuch": 1,
-  "access-nbody": 1,
-  "access-nsieve": 1,
-  "bitops-3bit-bits-in-byte": 1,
-  "bitops-bits-in-byte": 1,
-  "bitops-bitwise-and": 1,
-  "bitops-nsieve-bits": 1,
-  "controlflow-recursive": 1,
-  "math-partial-sum": 1,
-  "math-spectral-norm": 1
+  "access-fannkuch": 15,
+  "access-nbody": 10,
+  "access-nsieve": 3000,
+  "bitops-3bit-bits-in-byte": 300,
+  "bitops-bits-in-byte": 300,
+  "bitops-bitwise-and": 300,
+  "bitops-nsieve-bits": 3000,
+  "controlflow-recursive": 300,
+  "math-partial-sum": 10,
+  "math-spectral-norm": 300
 }

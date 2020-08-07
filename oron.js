@@ -204,7 +204,8 @@ var transformer = function (context) { return function (rootNode) {
                 ]);
             }
         }
-        if (analysisDefined("genericApply") &&
+        if ((analysisDefined("genericApply") ||
+            analysisDefined("genericPostApply")) &&
             ts.isCallExpression(node) &&
             ts.isIdentifier(node.expression)) {
             if (node.typeArguments ===
@@ -228,6 +229,8 @@ var transformer = function (context) { return function (rootNode) {
                     var nodeToRuntimeType_1 = function (index) {
                         var typeStr = typechecker.typeToString(funcInTypes_1[index]);
                         switch (typeStr) {
+                            case "bool":
+                                return "boolean";
                             case "i32":
                             case "u32":
                             case "i64":
@@ -239,7 +242,6 @@ var transformer = function (context) { return function (rootNode) {
                             case "u8":
                             case "i16":
                             case "u16":
-                            case "bool":
                             case "isize":
                             case "usize":
                             case "void":
@@ -309,13 +311,19 @@ function idxFillGappedString(amount, str) {
 var applyArgsFuncs = [];
 functionCallArgs.forEach(function (amt) {
     var funcSignature = idxFillGappedString(amt, "in$: In$");
-    applyArgsFuncs.push("\nfunction apply" + amt + "Args<RetType," + idxFillGappedString(amt, "In$") + ">(\n  fname: string,\n  fptr: usize,\n  argsBuff: ArgsBuffer,\n): RetType {\n  " + analysisDefinitions.classInstance.text + ".genericApply(fname, fptr, argsBuff);\n  const func: (" + funcSignature + ") => RetType = changetype<(" + funcSignature + ")=> RetType>(fptr);\n  return func(" + idxFillGappedString(amt, "argsBuff.getArgument<In$>($)") + ")\n}\n");
+    applyArgsFuncs.push("\nfunction apply" + amt + "Args<RetType," + idxFillGappedString(amt, "In$") + ">(\n  fname: string,\n  fptr: usize,\n  argsBuff: ArgsBuffer,\n): RetType {\n  " + (analysisDefined("genericApply")
+        ? analysisDefinitions.classInstance.text + ".genericApply(fname, fptr, argsBuff);"
+        : null) + "\n  \n  const func: (" + funcSignature + ") => RetType = changetype<(" + funcSignature + ")=> RetType>(fptr);\n  const res: RetType = func(" + idxFillGappedString(amt, "argsBuff.getArgument<In$>($)") + ");\n  " + (analysisDefined("genericPostApply")
+        ? "return myAnalysis.genericPostApply<RetType>(fname, fptr, argsBuff, res);"
+        : "return res") + "\n  \n}\n");
 });
 functionVoidCallArgs.forEach(function (amt) {
     var funcSignature = idxFillGappedString(amt, "in$: In$");
     applyArgsFuncs.push("\nfunction apply" + amt + "ArgsVoid" + ((amt > 0 ? "<" : "") +
         idxFillGappedString(amt, "In$") +
-        (amt > 0 ? ">" : "")) + "(\n  fname: string,\n  fptr: usize,\n  argsBuff: ArgsBuffer,\n): void {\n  " + analysisDefinitions.classInstance.text + ".genericApply(fname, fptr, argsBuff);\n  const func: (" + funcSignature + ") => void = changetype<(" + funcSignature + ")=> void>(fptr);\n  func(" + idxFillGappedString(amt, "argsBuff.getArgument<In$>($)") + ")\n}\n");
+        (amt > 0 ? ">" : "")) + "(\n  fname: string,\n  fptr: usize,\n  argsBuff: ArgsBuffer,\n): void {\n  " + analysisDefinitions.classInstance.text + ".genericApply(fname, fptr, argsBuff);\n  const func: (" + funcSignature + ") => void = changetype<(" + funcSignature + ")=> void>(fptr);\n  func(" + idxFillGappedString(amt, "argsBuff.getArgument<In$>($)") + ")\n  " + (analysisDefined("genericPostApply")
+        ? "myAnalysis.genericPostApply<OronVoid>(fname, fptr, argsBuff, new OronVoid());"
+        : null) + "\n}\n");
 });
 var endResult = analysisSourceFile.text +
     (analysisDefinitions.oronShouldAdd

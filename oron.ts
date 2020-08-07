@@ -285,7 +285,8 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
     }
 
     if (
-      analysisDefined("genericApply") &&
+      (analysisDefined("genericApply") ||
+        analysisDefined("genericPostApply")) &&
       ts.isCallExpression(node) &&
       ts.isIdentifier(node.expression)
     ) {
@@ -482,9 +483,23 @@ function apply${amt}Args<RetType,${idxFillGappedString(amt, "In$")}>(
   fptr: usize,
   argsBuff: ArgsBuffer,
 ): RetType {
-  ${analysisDefinitions.classInstance.text}.genericApply(fname, fptr, argsBuff);
+  ${
+    analysisDefined("genericApply")
+      ? `${analysisDefinitions.classInstance.text}.genericApply(fname, fptr, argsBuff);`
+      : null
+  }
+  
   const func: (${funcSignature}) => RetType = changetype<(${funcSignature})=> RetType>(fptr);
-  return func(${idxFillGappedString(amt, "argsBuff.getArgument<In$>($)")})
+  const res: RetType = func(${idxFillGappedString(
+    amt,
+    "argsBuff.getArgument<In$>($)"
+  )});
+  ${
+    analysisDefined("genericPostApply")
+      ? "return myAnalysis.genericPostApply<RetType>(fname, fptr, argsBuff, res);"
+      : "return res"
+  }
+  
 }
 `
   );
@@ -506,6 +521,11 @@ function apply${amt}ArgsVoid${
   ${analysisDefinitions.classInstance.text}.genericApply(fname, fptr, argsBuff);
   const func: (${funcSignature}) => void = changetype<(${funcSignature})=> void>(fptr);
   func(${idxFillGappedString(amt, "argsBuff.getArgument<In$>($)")})
+  ${
+    analysisDefined("genericPostApply")
+      ? "myAnalysis.genericPostApply<OronVoid>(fname, fptr, argsBuff, new OronVoid());"
+      : null
+  }
 }
 `
   );

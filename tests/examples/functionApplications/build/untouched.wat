@@ -34,14 +34,13 @@
  (global $dependancies/analysis/analysisDependancies/Types.u8 i32 (i32.const 8))
  (global $dependancies/analysis/analysisDependancies/Types.i16 i32 (i32.const 9))
  (global $dependancies/analysis/analysisDependancies/Types.u16 i32 (i32.const 10))
- (global $dependancies/analysis/analysisDependancies/Types.bool i32 (i32.const 11))
- (global $dependancies/analysis/analysisDependancies/Types.isize i32 (i32.const 12))
- (global $dependancies/analysis/analysisDependancies/Types.usize i32 (i32.const 13))
- (global $dependancies/analysis/analysisDependancies/Types.void i32 (i32.const 14))
- (global $dependancies/analysis/analysisDependancies/Types.anyref i32 (i32.const 15))
- (global $dependancies/analysis/analysisDependancies/Types.number i32 (i32.const 16))
- (global $dependancies/analysis/analysisDependancies/Types.boolean i32 (i32.const 17))
- (global $dependancies/analysis/analysisDependancies/Types.classInstance i32 (i32.const 18))
+ (global $dependancies/analysis/analysisDependancies/Types.isize i32 (i32.const 11))
+ (global $dependancies/analysis/analysisDependancies/Types.usize i32 (i32.const 12))
+ (global $dependancies/analysis/analysisDependancies/Types.void i32 (i32.const 13))
+ (global $dependancies/analysis/analysisDependancies/Types.anyref i32 (i32.const 14))
+ (global $dependancies/analysis/analysisDependancies/Types.number i32 (i32.const 15))
+ (global $dependancies/analysis/analysisDependancies/Types.boolean i32 (i32.const 16))
+ (global $dependancies/analysis/analysisDependancies/Types.classInstance i32 (i32.const 17))
  (global $assembly/index/myAnalysis (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 288))
  (global $~lib/heap/__heap_base i32 (i32.const 388))
@@ -1671,108 +1670,101 @@
    local.get $5
    if
     block $break|1
-     block $case18|1
-      block $case17|1
-       block $case16|1
-        block $case15|1
-         block $case14|1
-          block $case13|1
-           block $case12|1
-            block $case11|1
-             block $case10|1
-              block $case9|1
-               block $case8|1
-                block $case7|1
-                 block $case6|1
-                  block $case5|1
-                   block $case4|1
-                    block $case3|1
-                     block $case2|1
-                      block $case1|1
-                       block $case0|1
-                        local.get $3
-                        i32.load offset=8
-                        local.get $4
-                        call $~lib/array/Array<i32>#__get
-                        local.set $6
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.i32
-                        i32.eq
-                        br_if $case0|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.u32
-                        i32.eq
-                        br_if $case1|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.i64
-                        i32.eq
-                        br_if $case2|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.u64
-                        i32.eq
-                        br_if $case3|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.f32
-                        i32.eq
-                        br_if $case4|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.f64
-                        i32.eq
-                        br_if $case5|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.v128
-                        i32.eq
-                        br_if $case6|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.i8
-                        i32.eq
-                        br_if $case7|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.u8
-                        i32.eq
-                        br_if $case8|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.i16
-                        i32.eq
-                        br_if $case9|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.u16
-                        i32.eq
-                        br_if $case10|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.bool
-                        i32.eq
-                        br_if $case11|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.isize
-                        i32.eq
-                        br_if $case12|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.usize
-                        i32.eq
-                        br_if $case13|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.void
-                        i32.eq
-                        br_if $case14|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.anyref
-                        i32.eq
-                        br_if $case15|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.number
-                        i32.eq
-                        br_if $case16|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.boolean
-                        i32.eq
-                        br_if $case17|1
-                        local.get $6
-                        global.get $dependancies/analysis/analysisDependancies/Types.classInstance
-                        i32.eq
-                        br_if $case18|1
-                        br $break|1
-                       end
+     block $case17|1
+      block $case16|1
+       block $case15|1
+        block $case14|1
+         block $case13|1
+          block $case12|1
+           block $case11|1
+            block $case10|1
+             block $case9|1
+              block $case8|1
+               block $case7|1
+                block $case6|1
+                 block $case5|1
+                  block $case4|1
+                   block $case3|1
+                    block $case2|1
+                     block $case1|1
+                      block $case0|1
+                       local.get $3
+                       i32.load offset=8
+                       local.get $4
+                       call $~lib/array/Array<i32>#__get
+                       local.set $6
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.i32
+                       i32.eq
+                       br_if $case0|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.u32
+                       i32.eq
+                       br_if $case1|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.i64
+                       i32.eq
+                       br_if $case2|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.u64
+                       i32.eq
+                       br_if $case3|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.f32
+                       i32.eq
+                       br_if $case4|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.f64
+                       i32.eq
+                       br_if $case5|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.v128
+                       i32.eq
+                       br_if $case6|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.i8
+                       i32.eq
+                       br_if $case7|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.u8
+                       i32.eq
+                       br_if $case8|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.i16
+                       i32.eq
+                       br_if $case9|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.u16
+                       i32.eq
+                       br_if $case10|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.isize
+                       i32.eq
+                       br_if $case11|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.usize
+                       i32.eq
+                       br_if $case12|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.void
+                       i32.eq
+                       br_if $case13|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.anyref
+                       i32.eq
+                       br_if $case14|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.number
+                       i32.eq
+                       br_if $case15|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.boolean
+                       i32.eq
+                       br_if $case16|1
+                       local.get $6
+                       global.get $dependancies/analysis/analysisDependancies/Types.classInstance
+                       i32.eq
+                       br_if $case17|1
                        br $break|1
                       end
                       br $break|1

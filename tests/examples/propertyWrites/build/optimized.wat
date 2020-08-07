@@ -1145,7 +1145,7 @@
     local.tee $0
     i32.eqz
     local.get $0
-    i32.const -18
+    i32.const -17
     i32.add
     i32.or
     i32.eqz

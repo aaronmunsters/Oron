@@ -212,58 +212,11 @@ var transformer = function (context) { return function (rootNode) {
                 undefined /* currently only support function without type args */) {
                 // funcCall(arg1, arg2);
                 // ==TRANSFORM==>
-                // (function (arg1: Typ1, arg2: Typ2){...cast function to pointer...; ...wrap args in ADT...; return apply2args(funcCallPointer, argsADT);})(arg1, arg2);
+                // apply2args("funcCall", funcCallPointer, arg1, arg2)
                 var args = node.arguments;
-                var argsIdentifier_1 = ts.createIdentifier("args");
                 var declaration = typechecker.getResolvedSignature(node).declaration;
                 if (declaration) {
-                    var funcInTypes_1 = declaration.parameters.map(function (par) { return typechecker.getTypeFromTypeNode(par.type); });
-                    /* create arguments ADT */
-                    var argsCreation = ts.createVariableStatement(undefined, ts.createVariableDeclarationList([
-                        ts.createVariableDeclaration(argsIdentifier_1 /* variable name */, undefined, ts.createNew(ts.createIdentifier("ArgsBuffer"), undefined, [
-                            ts.createArrayLiteral(args.map(function (arg, index) {
-                                return ts.createCall(ts.createIdentifier("sizeof"), [typechecker.typeToTypeNode(funcInTypes_1[index])], []);
-                            })),
-                        ])),
-                    ]));
-                    var nodeToRuntimeType_1 = function (index) {
-                        var typeStr = typechecker.typeToString(funcInTypes_1[index]);
-                        switch (typeStr) {
-                            case "bool":
-                                return "boolean";
-                            case "i32":
-                            case "u32":
-                            case "i64":
-                            case "u64":
-                            case "f32":
-                            case "f64":
-                            case "v128":
-                            case "i8":
-                            case "u8":
-                            case "i16":
-                            case "u16":
-                            case "isize":
-                            case "usize":
-                            case "void":
-                            case "anyref":
-                            case "number":
-                            case "boolean":
-                                return typeStr;
-                            default:
-                                return "classInstance";
-                        }
-                    };
-                    var argSetters = args.map(function (arg, index) {
-                        var classid = nodeToRuntimeType_1(index) === "classInstance"
-                            ? ts.createCall(ts.createIdentifier("idof"), [typechecker.typeToTypeNode(funcInTypes_1[index])], [])
-                            : ts.createNumericLiteral("0");
-                        return ts.createExpressionStatement(ts.createCall(ts.createPropertyAccess(argsIdentifier_1, "setArgument"), [typechecker.typeToTypeNode(funcInTypes_1[index])], [
-                            ts.createNumericLiteral("" + index),
-                            ts.createPropertyAccess(ts.createIdentifier("Types"), nodeToRuntimeType_1(index)),
-                            ts.createIdentifier("arg" + index),
-                            classid,
-                        ]));
-                    });
+                    var funcInTypes = declaration.parameters.map(function (par) { return typechecker.getTypeFromTypeNode(par.type); });
                     var returnTypeNode = getTypeNode(node);
                     var returnType = typechecker.getTypeAtLocation(node);
                     var hasExplicitReturnType = typechecker.typeToString(returnType) !== "void";
@@ -271,24 +224,17 @@ var transformer = function (context) { return function (rootNode) {
                     );
                     var typeArgs = (_a = (hasExplicitReturnType
                         ? [returnTypeNode]
-                        : [])).concat.apply(_a, funcInTypes_1.map(function (type) { return typechecker.typeToTypeNode(type); }));
+                        : [])).concat.apply(_a, funcInTypes.map(function (type) { return typechecker.typeToTypeNode(type); }));
                     var oronGuideFunctionName = hasExplicitReturnType // name of effective call to trap
                         ? ts.createIdentifier("apply" + args.length + "Args")
                         : ts.createIdentifier("apply" + args.length + "ArgsVoid");
-                    var effectiveCallTrap = ts.createCall(oronGuideFunctionName, typeArgs, [
+                    var effectiveCallTrap = ts.createCall(oronGuideFunctionName, typeArgs, __spreadArrays([
                         ts.createStringLiteral(ts.isIdentifier(node.expression)
                             ? node.expression.text
                             : node.getText()),
-                        ts.createCall(ts.createIdentifier("changetype"), [ts.createTypeReferenceNode("usize", [])], [node.expression]),
-                        argsIdentifier_1,
-                    ]);
-                    var argsToPars = function (_, index) {
-                        return ts.createParameter(undefined, undefined, undefined, "arg" + index, undefined, typechecker.typeToTypeNode(funcInTypes_1[index]));
-                    };
-                    var trap = hasExplicitReturnType
-                        ? ts.createReturn(effectiveCallTrap)
-                        : effectiveCallTrap; // TODO: should change
-                    return ts.createCall(ts.createFunctionExpression(undefined, undefined, undefined, undefined, node.arguments.map(argsToPars), getTypeNode(node), ts.createBlock(__spreadArrays([argsCreation], argSetters, [trap]))), undefined, node.arguments.map(function (node) { return visit(node); }));
+                        ts.createCall(ts.createIdentifier("changetype"), [ts.createTypeReferenceNode("usize", [])], [node.expression])
+                    ], args.map(function (node) { return visit(node); })));
+                    return effectiveCallTrap;
                 }
             }
             // else unable to resolve function signature, such as "assert"
@@ -311,18 +257,18 @@ function idxFillGappedString(amount, str) {
 var applyArgsFuncs = [];
 functionCallArgs.forEach(function (amt) {
     var funcSignature = idxFillGappedString(amt, "in$: In$");
-    applyArgsFuncs.push("\nfunction apply" + amt + "Args<RetType," + idxFillGappedString(amt, "In$") + ">(\n  fname: string,\n  fptr: usize,\n  argsBuff: ArgsBuffer,\n): RetType {\n  " + (analysisDefined("genericApply")
-        ? analysisDefinitions.classInstance.text + ".genericApply(fname, fptr, argsBuff);"
-        : null) + "\n  \n  const func: (" + funcSignature + ") => RetType = changetype<(" + funcSignature + ")=> RetType>(fptr);\n  const res: RetType = func(" + idxFillGappedString(amt, "argsBuff.getArgument<In$>($)") + ");\n  " + (analysisDefined("genericPostApply")
-        ? "return myAnalysis.genericPostApply<RetType>(fname, fptr, argsBuff, res);"
+    applyArgsFuncs.push("\nfunction apply" + amt + "Args<RetType," + idxFillGappedString(amt, "In$") + ">(\n  fname: string,\n  fptr: usize,\n  " + funcSignature + "\n): RetType {\n  " + (analysisDefined("genericApply")
+        ? analysisDefinitions.classInstance.text + ".genericApply(fname, fptr);"
+        : null) + "\n  \n  const func: (" + funcSignature + ") => RetType = changetype<(" + funcSignature + ")=> RetType>(fptr);\n  const res: RetType = func(" + idxFillGappedString(amt, "in$") + ");\n  " + (analysisDefined("genericPostApply")
+        ? "return myAnalysis.genericPostApply<RetType>(fname, fptr, res);"
         : "return res") + "\n  \n}\n");
 });
 functionVoidCallArgs.forEach(function (amt) {
     var funcSignature = idxFillGappedString(amt, "in$: In$");
     applyArgsFuncs.push("\nfunction apply" + amt + "ArgsVoid" + ((amt > 0 ? "<" : "") +
         idxFillGappedString(amt, "In$") +
-        (amt > 0 ? ">" : "")) + "(\n  fname: string,\n  fptr: usize,\n  argsBuff: ArgsBuffer,\n): void {\n  " + analysisDefinitions.classInstance.text + ".genericApply(fname, fptr, argsBuff);\n  const func: (" + funcSignature + ") => void = changetype<(" + funcSignature + ")=> void>(fptr);\n  func(" + idxFillGappedString(amt, "argsBuff.getArgument<In$>($)") + ")\n  " + (analysisDefined("genericPostApply")
-        ? "myAnalysis.genericPostApply<OronVoid>(fname, fptr, argsBuff, new OronVoid());"
+        (amt > 0 ? ">" : "")) + "(\n  fname: string,\n  fptr: usize,\n  " + funcSignature + "\n): void {\n  " + analysisDefinitions.classInstance.text + ".genericApply(fname, fptr);\n  const func: (" + funcSignature + ") => void = changetype<(" + funcSignature + ")=> void>(fptr);\n  func(" + idxFillGappedString(amt, "in$") + ")\n  " + (analysisDefined("genericPostApply")
+        ? "myAnalysis.genericPostApply<OronVoid>(fname, fptr, new OronVoid());"
         : null) + "\n}\n");
 });
 var endResult = analysisSourceFile.text +

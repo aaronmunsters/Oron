@@ -1,8 +1,4 @@
 import { OronAnalysis } from "../dependancies/analysis/analysis";
-import {
-  ArgsBuffer,
-  Types,
-} from "../dependancies/analysis/analysisDependancies";
 
 const calls: Map<string, number> = new Map();
 
@@ -11,7 +7,7 @@ export function getRes(target: string): number {
 }
 
 export class MyAnalysis extends OronAnalysis {
-  genericApply(fname: string, fptr: usize, args: ArgsBuffer): void {
+  genericApply(fname: string, fptr: usize): void {
     calls.set(fname, (calls.has(fname) ? calls.get(fname) : 0) + 1);
   }
 }

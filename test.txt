@@ -1,0 +1,1301 @@
+
+> oron-as@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron
+> node tests
+
+
+=====================ORON TESTS=====================
+          NOTE: These tests require Node 14
+====================================================
+
+Compiling oron
+Finished compiling oron
+===============================
+Running ORON tests for case: [functionApplications] with analysis [combinedExamples.ts] 
+Copying oron required files to functionApplications directory
+audited 4 packages in 0.628s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> functionapplications@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> functionapplications@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> functionapplications@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> functionapplications@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> node tests
+
+Function application - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  95  299 2605 __instrumented.ts
+  19   80  386 uninstrumented.ts
+ 114  379 2991 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> functionapplications@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> functionapplications@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> functionapplications@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> functionapplications@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> node tests
+
+Function application - Uninstrumented behavior - ok
+Running instrumentation tests
+Function application - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from functionApplications directory
+===============================
+===============================
+Running ORON tests for case: [functionApplications] with analysis [countFunctionCalls.ts] 
+Copying oron required files to functionApplications directory
+audited 4 packages in 1.089s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> functionapplications@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> functionapplications@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> functionapplications@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> functionapplications@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> node tests
+
+Function application - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  48  183 1436 __instrumented.ts
+  19   80  386 uninstrumented.ts
+  67  263 1822 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> functionapplications@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> functionapplications@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> functionapplications@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> functionapplications@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> node tests
+
+Function application - Uninstrumented behavior - ok
+Running instrumentation tests
+Function application - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from functionApplications directory
+===============================
+===============================
+Running ORON tests for case: [functionApplications] with analysis [countPropertyReads.ts] 
+Copying oron required files to functionApplications directory
+audited 4 packages in 0.545s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> functionapplications@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> functionapplications@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> functionapplications@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> functionapplications@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> node tests
+
+Function application - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  44  150 1128 __instrumented.ts
+  19   80  386 uninstrumented.ts
+  63  230 1514 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> functionapplications@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> functionapplications@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> functionapplications@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> functionapplications@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> node tests
+
+Function application - Uninstrumented behavior - ok
+Running instrumentation tests
+Function application - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from functionApplications directory
+===============================
+===============================
+Running ORON tests for case: [functionApplications] with analysis [countPropertyWrites.ts] 
+Copying oron required files to functionApplications directory
+audited 4 packages in 0.476s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> functionapplications@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> functionapplications@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> functionapplications@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> functionapplications@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> node tests
+
+Function application - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  42  150 1108 __instrumented.ts
+  19   80  386 uninstrumented.ts
+  61  230 1494 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> functionapplications@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> functionapplications@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> functionapplications@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> functionapplications@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> node tests
+
+Function application - Uninstrumented behavior - ok
+Running instrumentation tests
+Function application - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from functionApplications directory
+===============================
+===============================
+Running ORON tests for case: [functionApplications] with analysis [emptyAnalysis.ts] 
+Copying oron required files to functionApplications directory
+audited 4 packages in 1.052s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> functionapplications@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> functionapplications@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> functionapplications@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> functionapplications@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> node tests
+
+Function application - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+ 25  97 588 __instrumented.ts
+ 19  80 386 uninstrumented.ts
+ 44 177 974 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> functionapplications@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> functionapplications@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> functionapplications@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> functionapplications@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/functionApplications
+> node tests
+
+Function application - Uninstrumented behavior - ok
+Running instrumentation tests
+Function application - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from functionApplications directory
+===============================
+===============================
+Running ORON tests for case: [n-body] with analysis [combinedExamples.ts] 
+Copying oron required files to n-body directory
+audited 5 packages in 0.509s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> @assemblyscript/n-body-example@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> npm run asbuild:wasm && npm run asbuild:js
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:wasm /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -b build/as_nbody.wasm -t build/as_nbody.wat -O3 --runtime none --noAssert --importMemory
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:js /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -j build/as_nbody.js -O3 --runtime none --noAssert
+
+
+> @assemblyscript/n-body-example@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> node --no-wasm-bounds-checks --no-wasm-stack-checks --expose-gc tests
+
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 40.669615ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 42.671515ms
+N-body - Instrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  200   964  9403 __instrumented.ts
+  198   673  4786 uninstrumented.ts
+  398  1637 14189 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> @assemblyscript/n-body-example@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> npm run asbuild:wasm && npm run asbuild:js
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:wasm /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -b build/as_nbody.wasm -t build/as_nbody.wat -O3 --runtime none --noAssert --importMemory
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:js /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -j build/as_nbody.js -O3 --runtime none --noAssert
+
+
+> @assemblyscript/n-body-example@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> node --no-wasm-bounds-checks --no-wasm-stack-checks --expose-gc tests
+
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 962.920684ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 1019.006562ms
+N-body - Instrumented behavior - ok
+Running instrumentation tests
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 1299.331841ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 1263.252459ms
+N-body - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from n-body directory
+===============================
+===============================
+Running ORON tests for case: [n-body] with analysis [countFunctionCalls.ts] 
+Copying oron required files to n-body directory
+audited 5 packages in 0.55s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> @assemblyscript/n-body-example@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> npm run asbuild:wasm && npm run asbuild:js
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:wasm /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -b build/as_nbody.wasm -t build/as_nbody.wat -O3 --runtime none --noAssert --importMemory
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:js /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -j build/as_nbody.js -O3 --runtime none --noAssert
+
+
+> @assemblyscript/n-body-example@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> node --no-wasm-bounds-checks --no-wasm-stack-checks --expose-gc tests
+
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 42.7763ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 43.683135ms
+N-body - Instrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  153   749  5987 __instrumented.ts
+  198   673  4786 uninstrumented.ts
+  351  1422 10773 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> @assemblyscript/n-body-example@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> npm run asbuild:wasm && npm run asbuild:js
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:wasm /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -b build/as_nbody.wasm -t build/as_nbody.wat -O3 --runtime none --noAssert --importMemory
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:js /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -j build/as_nbody.js -O3 --runtime none --noAssert
+
+
+> @assemblyscript/n-body-example@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> node --no-wasm-bounds-checks --no-wasm-stack-checks --expose-gc tests
+
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 42.832104ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 42.192172ms
+N-body - Instrumented behavior - ok
+Running instrumentation tests
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 56.459775ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 50.021684ms
+N-body - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from n-body directory
+===============================
+===============================
+Running ORON tests for case: [n-body] with analysis [countPropertyReads.ts] 
+Copying oron required files to n-body directory
+audited 5 packages in 0.605s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> @assemblyscript/n-body-example@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> npm run asbuild:wasm && npm run asbuild:js
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:wasm /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -b build/as_nbody.wasm -t build/as_nbody.wat -O3 --runtime none --noAssert --importMemory
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:js /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -j build/as_nbody.js -O3 --runtime none --noAssert
+
+
+> @assemblyscript/n-body-example@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> node --no-wasm-bounds-checks --no-wasm-stack-checks --expose-gc tests
+
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 41.010219ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 41.284167ms
+N-body - Instrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  149   821  7685 __instrumented.ts
+  198   673  4786 uninstrumented.ts
+  347  1494 12471 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> @assemblyscript/n-body-example@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> npm run asbuild:wasm && npm run asbuild:js
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:wasm /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -b build/as_nbody.wasm -t build/as_nbody.wat -O3 --runtime none --noAssert --importMemory
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:js /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -j build/as_nbody.js -O3 --runtime none --noAssert
+
+
+> @assemblyscript/n-body-example@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> node --no-wasm-bounds-checks --no-wasm-stack-checks --expose-gc tests
+
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 868.471301ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 826.525051ms
+N-body - Instrumented behavior - ok
+Running instrumentation tests
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 1040.031809ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 1038.497501ms
+N-body - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from n-body directory
+===============================
+===============================
+Running ORON tests for case: [n-body] with analysis [countPropertyWrites.ts] 
+Copying oron required files to n-body directory
+audited 5 packages in 1.047s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> @assemblyscript/n-body-example@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> npm run asbuild:wasm && npm run asbuild:js
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:wasm /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -b build/as_nbody.wasm -t build/as_nbody.wat -O3 --runtime none --noAssert --importMemory
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:js /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -j build/as_nbody.js -O3 --runtime none --noAssert
+
+
+> @assemblyscript/n-body-example@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> node --no-wasm-bounds-checks --no-wasm-stack-checks --expose-gc tests
+
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 41.14334ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 41.880243ms
+N-body - Instrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  147   746  6126 __instrumented.ts
+  198   673  4786 uninstrumented.ts
+  345  1419 10912 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> @assemblyscript/n-body-example@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> npm run asbuild:wasm && npm run asbuild:js
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:wasm /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -b build/as_nbody.wasm -t build/as_nbody.wat -O3 --runtime none --noAssert --importMemory
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:js /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -j build/as_nbody.js -O3 --runtime none --noAssert
+
+
+> @assemblyscript/n-body-example@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> node --no-wasm-bounds-checks --no-wasm-stack-checks --expose-gc tests
+
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 191.940214ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 189.959489ms
+N-body - Instrumented behavior - ok
+Running instrumentation tests
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 216.037959ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 220.887241ms
+N-body - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from n-body directory
+===============================
+===============================
+Running ORON tests for case: [n-body] with analysis [emptyAnalysis.ts] 
+Copying oron required files to n-body directory
+audited 5 packages in 0.532s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> @assemblyscript/n-body-example@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> npm run asbuild:wasm && npm run asbuild:js
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:wasm /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -b build/as_nbody.wasm -t build/as_nbody.wat -O3 --runtime none --noAssert --importMemory
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:js /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -j build/as_nbody.js -O3 --runtime none --noAssert
+
+
+> @assemblyscript/n-body-example@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> node --no-wasm-bounds-checks --no-wasm-stack-checks --expose-gc tests
+
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 48.444054ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 47.553095ms
+N-body - Instrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  130   681  5252 __instrumented.ts
+  198   673  4786 uninstrumented.ts
+  328  1354 10038 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> @assemblyscript/n-body-example@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> npm run asbuild:wasm && npm run asbuild:js
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:wasm /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -b build/as_nbody.wasm -t build/as_nbody.wat -O3 --runtime none --noAssert --importMemory
+
+
+> @assemblyscript/n-body-example@1.0.0 asbuild:js /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> asc assembly/index.ts -j build/as_nbody.js -O3 --runtime none --noAssert
+
+
+> @assemblyscript/n-body-example@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/n-body
+> node --no-wasm-bounds-checks --no-wasm-stack-checks --expose-gc tests
+
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 46.427123ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 44.687217ms
+N-body - Instrumented behavior - ok
+Running instrumentation tests
+
+COLD SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 55.429329ms
+
+WARMED UP SERIES:
+
+Performing 200000 steps (AssemblyScript WASM) ...
+Took 48.026273ms
+N-body - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from n-body directory
+===============================
+===============================
+Running ORON tests for case: [propertyReads] with analysis [combinedExamples.ts] 
+Copying oron required files to propertyReads directory
+audited 4 packages in 0.519s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> node tests
+
+Property read - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  77  249 2449 __instrumented.ts
+  19   67  439 uninstrumented.ts
+  96  316 2888 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> node tests
+
+Property read - Uninstrumented behavior - ok
+Running instrumentation tests
+Property read - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from propertyReads directory
+===============================
+===============================
+Running ORON tests for case: [propertyReads] with analysis [countFunctionCalls.ts] 
+Copying oron required files to propertyReads directory
+audited 4 packages in 0.549s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> node tests
+
+Property read - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  30  118  884 __instrumented.ts
+  19   67  439 uninstrumented.ts
+  49  185 1323 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> node tests
+
+Property read - Uninstrumented behavior - ok
+Running instrumentation tests
+Property read - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from propertyReads directory
+===============================
+===============================
+Running ORON tests for case: [propertyReads] with analysis [countPropertyReads.ts] 
+Copying oron required files to propertyReads directory
+audited 4 packages in 0.547s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> node tests
+
+Property read - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  39  144 1354 __instrumented.ts
+  19   67  439 uninstrumented.ts
+  58  211 1793 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> node tests
+
+Property read - Uninstrumented behavior - ok
+Running instrumentation tests
+Property read - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from propertyReads directory
+===============================
+===============================
+Running ORON tests for case: [propertyReads] with analysis [countPropertyWrites.ts] 
+Copying oron required files to propertyReads directory
+audited 4 packages in 0.648s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> node tests
+
+Property read - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  37  141 1316 __instrumented.ts
+  19   67  439 uninstrumented.ts
+  56  208 1755 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> node tests
+
+Property read - Uninstrumented behavior - ok
+Running instrumentation tests
+Property read - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from propertyReads directory
+===============================
+===============================
+Running ORON tests for case: [propertyReads] with analysis [emptyAnalysis.ts] 
+Copying oron required files to propertyReads directory
+audited 4 packages in 0.514s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> node tests
+
+Property read - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  20   82  607 __instrumented.ts
+  19   67  439 uninstrumented.ts
+  39  149 1046 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyReads
+> node tests
+
+Property read - Uninstrumented behavior - ok
+Running instrumentation tests
+Property read - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from propertyReads directory
+===============================
+===============================
+Running ORON tests for case: [propertyWrites] with analysis [combinedExamples.ts] 
+Copying oron required files to propertyWrites directory
+audited 4 packages in 0.535s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> node tests
+
+Property write - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  81  298 3094 __instrumented.ts
+  26  103  686 uninstrumented.ts
+ 107  401 3780 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> node tests
+
+Property write - Uninstrumented behavior - ok
+Running instrumentation tests
+Property write - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from propertyWrites directory
+===============================
+===============================
+Running ORON tests for case: [propertyWrites] with analysis [countFunctionCalls.ts] 
+Copying oron required files to propertyWrites directory
+audited 4 packages in 0.552s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> node tests
+
+Property write - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  34  152 1127 __instrumented.ts
+  26  103  686 uninstrumented.ts
+  60  255 1813 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> node tests
+
+Property write - Uninstrumented behavior - ok
+Running instrumentation tests
+Property write - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from propertyWrites directory
+===============================
+===============================
+Running ORON tests for case: [propertyWrites] with analysis [countPropertyReads.ts] 
+Copying oron required files to propertyWrites directory
+audited 4 packages in 0.61s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> node tests
+
+Property write - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  43  187 1804 __instrumented.ts
+  26  103  686 uninstrumented.ts
+  69  290 2490 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> node tests
+
+Property write - Uninstrumented behavior - ok
+Running instrumentation tests
+Property write - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from propertyWrites directory
+===============================
+===============================
+Running ORON tests for case: [propertyWrites] with analysis [countPropertyWrites.ts] 
+Copying oron required files to propertyWrites directory
+audited 4 packages in 0.564s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> node tests
+
+Property write - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  41  181 1754 __instrumented.ts
+  26  103  686 uninstrumented.ts
+  67  284 2440 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> node tests
+
+Property write - Uninstrumented behavior - ok
+Running instrumentation tests
+Property write - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from propertyWrites directory
+===============================
+===============================
+Running ORON tests for case: [propertyWrites] with analysis [emptyAnalysis.ts] 
+Copying oron required files to propertyWrites directory
+audited 4 packages in 0.549s
+
+1 package is looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Running default tests, uninstrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> node tests
+
+Property write - Uninstrumented behavior - ok
+Running Oron to output instrumented code
+Difference between instrumented and uninstrumented: lines words characters
+  24  116  850 __instrumented.ts
+  26  103  686 uninstrumented.ts
+  50  219 1536 total
+Replacing entry point with instrumented version
+Running default tests, instrumented
+
+> propertyreads@1.0.0 asbuild /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> npm run asbuild:untouched && npm run asbuild:optimized
+
+
+> propertyreads@1.0.0 asbuild:untouched /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+
+
+> propertyreads@1.0.0 asbuild:optimized /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+
+
+> propertyreads@1.0.0 test /home/aaron/Documents/VUB3BA/BACHELORTHESIS/Oron/tests/examples/propertyWrites
+> node tests
+
+Property write - Uninstrumented behavior - ok
+Running instrumentation tests
+Property write - Instrumented behavior - ok
+Replacing instrumented with uninstrumented code
+Removing oron required files from propertyWrites directory
+===============================

@@ -1,10 +1,8 @@
 import { OronAnalysis } from "../dependancies/analysis/analysis";
 
 import {
-  Types,
   dynamicPropertyRead,
   dynamicPropertyWrite,
-  ArgsBuffer,
 } from "../dependancies/analysis/analysisDependancies";
 
 const reads: Map<string, number> = new Map();
@@ -56,7 +54,7 @@ export class MyAnalysis extends OronAnalysis {
     dynamicPropertyWrite<ClassInstance, Value>(classInstance, value, offset);
   }
 
-  genericApply(fname: string, fptr: usize, args: ArgsBuffer): void {
+  genericApply(fname: string, fptr: usize): void {
     increase(calls, fname);
   }
 }

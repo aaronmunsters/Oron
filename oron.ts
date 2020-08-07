@@ -296,9 +296,8 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
       ) {
         // funcCall(arg1, arg2);
         // ==TRANSFORM==>
-        // (function (arg1: Typ1, arg2: Typ2){...cast function to pointer...; ...wrap args in ADT...; return apply2args(funcCallPointer, argsADT);})(arg1, arg2);
+        // apply2args("funcCall", funcCallPointer, arg1, arg2)
         const args = node.arguments;
-        const argsIdentifier = ts.createIdentifier(`args`);
 
         const declaration = typechecker.getResolvedSignature(node).declaration;
 
@@ -306,82 +305,6 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
           const funcInTypes: ts.Type[] = (declaration.parameters as ts.NodeArray<
             ts.ParameterDeclaration
           >).map((par) => typechecker.getTypeFromTypeNode(par.type));
-          /* create arguments ADT */
-          const argsCreation = ts.createVariableStatement(
-            undefined,
-            ts.createVariableDeclarationList([
-              ts.createVariableDeclaration(
-                argsIdentifier /* variable name */,
-                undefined,
-                ts.createNew(ts.createIdentifier("ArgsBuffer"), undefined, [
-                  ts.createArrayLiteral(
-                    args.map((arg, index) =>
-                      ts.createCall(
-                        ts.createIdentifier("sizeof"),
-                        [typechecker.typeToTypeNode(funcInTypes[index])],
-                        []
-                      )
-                    )
-                  ),
-                ])
-              ),
-            ])
-          );
-
-          const nodeToRuntimeType = (index: number) => {
-            const typeStr = typechecker.typeToString(funcInTypes[index]);
-            switch (typeStr) {
-              case "bool":
-                return "boolean";
-              case "i32":
-              case "u32":
-              case "i64":
-              case "u64":
-              case "f32":
-              case "f64":
-              case "v128":
-              case "i8":
-              case "u8":
-              case "i16":
-              case "u16":
-              case "isize":
-              case "usize":
-              case "void":
-              case "anyref":
-              case "number":
-              case "boolean":
-                return typeStr;
-              default:
-                return "classInstance";
-            }
-          };
-
-          const argSetters = args.map((arg, index) => {
-            const classid =
-              nodeToRuntimeType(index) === "classInstance"
-                ? ts.createCall(
-                    ts.createIdentifier("idof"),
-                    [typechecker.typeToTypeNode(funcInTypes[index])],
-                    []
-                  )
-                : ts.createNumericLiteral("0");
-            return ts.createExpressionStatement(
-              ts.createCall(
-                ts.createPropertyAccess(argsIdentifier, "setArgument"),
-                [typechecker.typeToTypeNode(funcInTypes[index])],
-                [
-                  ts.createNumericLiteral(`${index}`),
-                  ts.createPropertyAccess(
-                    ts.createIdentifier("Types"),
-
-                    nodeToRuntimeType(index)
-                  ),
-                  ts.createIdentifier(`arg${index}`),
-                  classid,
-                ]
-              )
-            );
-          });
 
           const returnTypeNode = getTypeNode(node);
           const returnType = typechecker.getTypeAtLocation(node);
@@ -418,37 +341,11 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
                 [ts.createTypeReferenceNode("usize", [])],
                 [node.expression]
               ),
-              argsIdentifier,
+              ...args.map((node) => <ts.Expression>visit(node)),
             ]
           );
 
-          const argsToPars = (_: ts.Expression, index: number) =>
-            ts.createParameter(
-              undefined,
-              undefined,
-              undefined,
-              `arg${index}`,
-              undefined,
-              typechecker.typeToTypeNode(funcInTypes[index])
-            );
-
-          const trap: ts.Statement = hasExplicitReturnType
-            ? ts.createReturn(effectiveCallTrap)
-            : ((effectiveCallTrap as unknown) as ts.Statement); // TODO: should change
-
-          return ts.createCall(
-            ts.createFunctionExpression(
-              undefined,
-              undefined,
-              undefined,
-              undefined,
-              node.arguments.map(argsToPars),
-              getTypeNode(node),
-              ts.createBlock([argsCreation, ...argSetters, trap])
-            ),
-            undefined,
-            <ts.Expression[]>node.arguments.map((node) => visit(node))
-          );
+          return effectiveCallTrap;
         }
       }
       // else unable to resolve function signature, such as "assert"
@@ -481,22 +378,19 @@ functionCallArgs.forEach((amt) => {
 function apply${amt}Args<RetType,${idxFillGappedString(amt, "In$")}>(
   fname: string,
   fptr: usize,
-  argsBuff: ArgsBuffer,
+  ${funcSignature}
 ): RetType {
   ${
     analysisDefined("genericApply")
-      ? `${analysisDefinitions.classInstance.text}.genericApply(fname, fptr, argsBuff);`
+      ? `${analysisDefinitions.classInstance.text}.genericApply(fname, fptr);`
       : null
   }
   
   const func: (${funcSignature}) => RetType = changetype<(${funcSignature})=> RetType>(fptr);
-  const res: RetType = func(${idxFillGappedString(
-    amt,
-    "argsBuff.getArgument<In$>($)"
-  )});
+  const res: RetType = func(${idxFillGappedString(amt, "in$")});
   ${
     analysisDefined("genericPostApply")
-      ? "return myAnalysis.genericPostApply<RetType>(fname, fptr, argsBuff, res);"
+      ? "return myAnalysis.genericPostApply<RetType>(fname, fptr, res);"
       : "return res"
   }
   
@@ -516,14 +410,14 @@ function apply${amt}ArgsVoid${
     }(
   fname: string,
   fptr: usize,
-  argsBuff: ArgsBuffer,
+  ${funcSignature}
 ): void {
-  ${analysisDefinitions.classInstance.text}.genericApply(fname, fptr, argsBuff);
+  ${analysisDefinitions.classInstance.text}.genericApply(fname, fptr);
   const func: (${funcSignature}) => void = changetype<(${funcSignature})=> void>(fptr);
-  func(${idxFillGappedString(amt, "argsBuff.getArgument<In$>($)")})
+  func(${idxFillGappedString(amt, "in$")})
   ${
     analysisDefined("genericPostApply")
-      ? "myAnalysis.genericPostApply<OronVoid>(fname, fptr, argsBuff, new OronVoid());"
+      ? "myAnalysis.genericPostApply<OronVoid>(fname, fptr, new OronVoid());"
       : null
   }
 }

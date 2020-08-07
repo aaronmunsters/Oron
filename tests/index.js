@@ -25,7 +25,7 @@ const analyses = fs
   .readdirSync(oronDir + "/orondefaults")
   .filter((file) => file.endsWith(".ts"));
 
-const keepInstrumented = false;
+const keepInstrumented = true;
 
 const preTestingInstructions = `
     

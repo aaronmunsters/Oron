@@ -1,8 +1,6 @@
 import {
   dynamicPropertyRead,
   dynamicPropertyWrite,
-  ArgsBuffer,
-  Types,
 } from "./analysisDependancies";
 
 export { dynamicPropertyRead, dynamicPropertyWrite };
@@ -25,12 +23,11 @@ export interface Oron {
     offset: usize
   ): void;
 
-  genericApply(fname: string, fptr: usize, args: ArgsBuffer): void;
+  genericApply(fname: string, fptr: usize): void;
 
   genericPostApply<ResType>(
     fname: string,
     fptr: usize,
-    args: ArgsBuffer,
     result: ResType
   ): ResType;
 }
@@ -58,71 +55,13 @@ export class OronAnalysis implements Oron {
     dynamicPropertyWrite<ClassInstance, Value>(classInstance, value, offset);
   }
 
-  genericApply(fname: string, fptr: usize, args: ArgsBuffer): void {
+  genericApply(fname: string, fptr: usize): void {
     /* Analysis would go here */
-    for (let argIdx = 0; argIdx < args.argsAmount; argIdx++) {
-      switch (args.dynamicTypes[argIdx]) {
-        case Types.i32:
-          break;
-        case Types.u32:
-          break;
-        case Types.i64:
-          break;
-        case Types.u64:
-          break;
-        case Types.f32:
-          break;
-        case Types.f64:
-          break;
-        case Types.v128:
-          break;
-        case Types.i8:
-          break;
-        case Types.u8:
-          break;
-        case Types.i16:
-          break;
-        case Types.u16:
-          break;
-        case Types.isize:
-          break;
-        case Types.usize:
-          break;
-        case Types.void:
-          break;
-        case Types.anyref:
-          break;
-        case Types.number:
-          break;
-        case Types.boolean:
-          break;
-        case Types.classInstance:
-          switch (args.classIds[argIdx]) {
-            case idof<ArrayBuffer>():
-              break;
-            case idof<DataView>():
-              break;
-            case idof<Date>():
-              break;
-            case idof<Error>():
-              break;
-            case idof<String>():
-              break;
-            /* Possible to include idof<Array<String>>, though finite, all combinations not included here */
-            /* */
-            default:
-              // Encountered a classInstance, type unspecified in analysis
-              break;
-          }
-          break;
-      }
-    }
   }
 
   genericPostApply<ResType>(
     fname: string,
     fptr: usize,
-    args: ArgsBuffer,
     result: ResType
   ): ResType {
     /* Analysis would go here */

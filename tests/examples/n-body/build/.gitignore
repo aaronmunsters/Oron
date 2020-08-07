@@ -1,3 +1,4 @@
 *
 !.gitignore
 !as_nbody.wasm
+*.wasm

@@ -4,6 +4,8 @@ console.log(`
 =========================================================
 `);
 
+const outputSizes = true;
+
 const fs = require("fs");
 const child_process = require("child_process");
 const assert = require("assert");
@@ -52,6 +54,14 @@ for (const file of fs.readdirSync(examplesDir)) {
 
     const buildAndBenchmark = (state) => `
   npm run asbuild >/dev/null
+  ${
+    outputSizes
+      ? `
+  wc assembly/index.ts
+  wc build/optimized.wasm
+  `
+      : null
+  }
   echo "Running default benchmarks, ${state}"
   node ${benchEnv}/benchmarks ${state} ${file} ### => This will output the results to terminal
     `;

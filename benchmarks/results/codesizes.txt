@@ -1,0 +1,663 @@
+
+> oron-as@1.0.0 benchmark /home/aaron/Documents/VUB/VUB3BA/bachelorThesis/Oron
+> node benchmarks
+
+
+=====================ORON BENCHMARKS=====================
+          NOTE: These benchmarks require Node 14
+=========================================================
+
+Compiling oron
+Finished compiling oron
+Moving required files to benchmark-environment
+Installing required files in benchmark-environment
+===============================
+access-fannkuch with combinedExamples.ts
+  74  272 1592 assembly/index.ts
+  26  404 4411 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 1, 174981702 ]
+Benchmark - uninstrumented - done
+ 142  496 4046 assembly/index.ts
+  60  683 7284 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 1, 355039859 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-fannkuch with countFunctionCalls.ts
+  74  272 1592 assembly/index.ts
+  26  404 4411 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 1, 174731602 ]
+Benchmark - uninstrumented - done
+  97  385 2942 assembly/index.ts
+  50  653 7043 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 1, 178444157 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-fannkuch with countPropertyReads.ts
+  74  272 1592 assembly/index.ts
+  26  404 4411 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 1, 165784032 ]
+Benchmark - uninstrumented - done
+  89  342 2600 assembly/index.ts
+  37  520 5740 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 1, 356703918 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-fannkuch with countPropertyWrites.ts
+  74  272 1592 assembly/index.ts
+  26  404 4411 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 1, 364682499 ]
+Benchmark - uninstrumented - done
+  87  342 2580 assembly/index.ts
+  37  520 5740 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 1, 430792413 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-fannkuch with emptyAnalysis.ts
+  74  272 1592 assembly/index.ts
+  26  404 4411 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 1, 193680678 ]
+Benchmark - uninstrumented - done
+  70  288 2053 assembly/index.ts
+  23  407 4466 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 1, 249376047 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nbody with combinedExamples.ts
+ 203  687 4878 assembly/index.ts
+  25  348 4367 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 87216650 ]
+Benchmark - uninstrumented - done
+  230  1126 10680 assembly/index.ts
+  98  862 9922 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 3, 552168634 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nbody with countFunctionCalls.ts
+ 203  687 4878 assembly/index.ts
+  25  348 4367 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 82740914 ]
+Benchmark - uninstrumented - done
+ 185  916 7329 assembly/index.ts
+  79  793 8909 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 81093091 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nbody with countPropertyReads.ts
+ 203  687 4878 assembly/index.ts
+  25  348 4367 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 85668562 ]
+Benchmark - uninstrumented - done
+ 153  835 7780 assembly/index.ts
+  65  630 7385 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 2, 697768077 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nbody with countPropertyWrites.ts
+ 203  687 4878 assembly/index.ts
+  25  348 4367 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 96282969 ]
+Benchmark - uninstrumented - done
+ 151  760 6221 assembly/index.ts
+  60  597 6942 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 561025001 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nbody with emptyAnalysis.ts
+ 203  687 4878 assembly/index.ts
+  25  348 4367 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 88122985 ]
+Benchmark - uninstrumented - done
+ 134  694 5340 assembly/index.ts
+  25  350 4422 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 82647350 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nsieve with combinedExamples.ts
+ 30 122 588 assembly/index.ts
+  19  378 4194 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 69931 ]
+Benchmark - uninstrumented - done
+ 104  356 2956 assembly/index.ts
+  60  678 7222 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 84374 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nsieve with countFunctionCalls.ts
+ 30 122 588 assembly/index.ts
+  19  378 4194 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 74436 ]
+Benchmark - uninstrumented - done
+  59  245 1852 assembly/index.ts
+  50  654 6981 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 101898 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nsieve with countPropertyReads.ts
+ 30 122 588 assembly/index.ts
+  19  378 4194 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 69832 ]
+Benchmark - uninstrumented - done
+  51  192 1354 assembly/index.ts
+  30  500 5526 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 69869 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nsieve with countPropertyWrites.ts
+ 30 122 588 assembly/index.ts
+  19  378 4194 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 59983 ]
+Benchmark - uninstrumented - done
+  49  192 1334 assembly/index.ts
+  30  500 5526 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 72315 ]
+Benchmark - instrumented - done
+===============================
+===============================
+access-nsieve with emptyAnalysis.ts
+ 30 122 588 assembly/index.ts
+  19  378 4194 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 60350 ]
+Benchmark - uninstrumented - done
+ 32 138 807 assembly/index.ts
+  16  381 4249 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 76907 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-3bit-bits-in-byte with combinedExamples.ts
+ 37 165 887 assembly/index.ts
+   2  209 2681 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 348410 ]
+Benchmark - uninstrumented - done
+ 111  389 3091 assembly/index.ts
+  56  629 6872 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 107801400 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-3bit-bits-in-byte with countFunctionCalls.ts
+ 37 165 887 assembly/index.ts
+   2  209 2681 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 454281 ]
+Benchmark - uninstrumented - done
+  66  278 1987 assembly/index.ts
+  46  608 6631 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 107517546 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-3bit-bits-in-byte with countPropertyReads.ts
+ 37 165 887 assembly/index.ts
+   2  209 2681 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 335893 ]
+Benchmark - uninstrumented - done
+  58  235 1639 assembly/index.ts
+  30  383 4555 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 358722 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-3bit-bits-in-byte with countPropertyWrites.ts
+ 37 165 887 assembly/index.ts
+   2  209 2681 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 442529 ]
+Benchmark - uninstrumented - done
+  56  235 1619 assembly/index.ts
+  30  383 4555 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 356709 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-3bit-bits-in-byte with emptyAnalysis.ts
+ 37 165 887 assembly/index.ts
+   2  209 2681 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 376210 ]
+Benchmark - uninstrumented - done
+  39  181 1092 assembly/index.ts
+   2  211 2736 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 359951 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bits-in-byte with combinedExamples.ts
+ 20  77 352 assembly/index.ts
+   2  211 2684 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 2589308 ]
+Benchmark - uninstrumented - done
+  96  301 2540 assembly/index.ts
+  56  630 6858 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 79908923 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bits-in-byte with countFunctionCalls.ts
+ 20  77 352 assembly/index.ts
+   2  211 2684 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 801504 ]
+Benchmark - uninstrumented - done
+  51  190 1436 assembly/index.ts
+  46  609 6617 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 76643973 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bits-in-byte with countPropertyReads.ts
+ 20  77 352 assembly/index.ts
+   2  211 2684 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 3792271 ]
+Benchmark - uninstrumented - done
+  43  147 1092 assembly/index.ts
+  30  385 4558 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 4357044 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bits-in-byte with countPropertyWrites.ts
+ 20  77 352 assembly/index.ts
+   2  211 2684 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 3720206 ]
+Benchmark - uninstrumented - done
+  41  147 1072 assembly/index.ts
+  30  385 4558 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 2844573 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bits-in-byte with emptyAnalysis.ts
+ 20  77 352 assembly/index.ts
+   2  211 2684 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 756563 ]
+Benchmark - uninstrumented - done
+ 24  93 545 assembly/index.ts
+   2  213 2739 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 2465056 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bitwise-and with combinedExamples.ts
+  32  248 1553 assembly/index.ts
+   2  204 2615 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 198567 ]
+Benchmark - uninstrumented - done
+  95  421 3204 assembly/index.ts
+  52  436 4971 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 1342052 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bitwise-and with countFunctionCalls.ts
+  32  248 1553 assembly/index.ts
+   2  204 2615 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 199674 ]
+Benchmark - uninstrumented - done
+  50  310 2100 assembly/index.ts
+  40  412 4730 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 1344292 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bitwise-and with countPropertyReads.ts
+  32  248 1553 assembly/index.ts
+   2  204 2615 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 199566 ]
+Benchmark - uninstrumented - done
+  55  318 2257 assembly/index.ts
+  30  378 4489 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 204968 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bitwise-and with countPropertyWrites.ts
+  32  248 1553 assembly/index.ts
+   2  204 2615 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 207330 ]
+Benchmark - uninstrumented - done
+  53  318 2237 assembly/index.ts
+  30  378 4489 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 207806 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-bitwise-and with emptyAnalysis.ts
+  32  248 1553 assembly/index.ts
+   2  204 2615 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 214774 ]
+Benchmark - uninstrumented - done
+  36  264 1710 assembly/index.ts
+   2  206 2670 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 219590 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-nsieve-bits with combinedExamples.ts
+ 31 150 707 assembly/index.ts
+  19  385 4264 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 3428434 ]
+Benchmark - uninstrumented - done
+ 105  384 3077 assembly/index.ts
+  60  683 7279 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 4726083 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-nsieve-bits with countFunctionCalls.ts
+ 31 150 707 assembly/index.ts
+  19  385 4264 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 3718781 ]
+Benchmark - uninstrumented - done
+  60  273 1973 assembly/index.ts
+  50  658 7038 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 4234908 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-nsieve-bits with countPropertyReads.ts
+ 31 150 707 assembly/index.ts
+  19  385 4264 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 3847564 ]
+Benchmark - uninstrumented - done
+  52  220 1475 assembly/index.ts
+  30  504 5593 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 3446477 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-nsieve-bits with countPropertyWrites.ts
+ 31 150 707 assembly/index.ts
+  19  385 4264 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 3658696 ]
+Benchmark - uninstrumented - done
+  50  220 1455 assembly/index.ts
+  30  504 5593 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 3806883 ]
+Benchmark - instrumented - done
+===============================
+===============================
+bitops-nsieve-bits with emptyAnalysis.ts
+ 31 150 707 assembly/index.ts
+  19  385 4264 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 3821357 ]
+Benchmark - uninstrumented - done
+ 33 166 928 assembly/index.ts
+  16  388 4319 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 3645390 ]
+Benchmark - instrumented - done
+===============================
+===============================
+controlflow-recursive with combinedExamples.ts
+ 41 174 752 assembly/index.ts
+   2  226 2789 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 781280 ]
+Benchmark - uninstrumented - done
+ 140  789 6801 assembly/index.ts
+  69  764 8141 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 214187159 ]
+Benchmark - instrumented - done
+===============================
+===============================
+controlflow-recursive with countFunctionCalls.ts
+ 41 174 752 assembly/index.ts
+   2  226 2789 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 807851 ]
+Benchmark - uninstrumented - done
+  95  678 5697 assembly/index.ts
+  59  718 7900 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 208931169 ]
+Benchmark - instrumented - done
+===============================
+===============================
+controlflow-recursive with countPropertyReads.ts
+ 41 174 752 assembly/index.ts
+   2  226 2789 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 781180 ]
+Benchmark - uninstrumented - done
+  59  244 1501 assembly/index.ts
+  30  400 4663 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 835940 ]
+Benchmark - instrumented - done
+===============================
+===============================
+controlflow-recursive with countPropertyWrites.ts
+ 41 174 752 assembly/index.ts
+   2  226 2789 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 789149 ]
+Benchmark - uninstrumented - done
+  57  244 1481 assembly/index.ts
+  30  400 4663 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 801767 ]
+Benchmark - instrumented - done
+===============================
+===============================
+controlflow-recursive with emptyAnalysis.ts
+ 41 174 752 assembly/index.ts
+   2  226 2789 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 792979 ]
+Benchmark - uninstrumented - done
+ 40 190 954 assembly/index.ts
+   2  229 2844 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 747341 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-partial-sum with combinedExamples.ts
+ 46 166 787 assembly/index.ts
+   3  225 2909 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 5, 188244665 ]
+Benchmark - uninstrumented - done
+ 120  471 3782 assembly/index.ts
+  60  679 7441 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 5, 230228207 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-partial-sum with countFunctionCalls.ts
+ 46 166 787 assembly/index.ts
+   3  225 2909 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 5, 196041716 ]
+Benchmark - uninstrumented - done
+  75  360 2678 assembly/index.ts
+  50  652 7195 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 5, 284781864 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-partial-sum with countPropertyReads.ts
+ 46 166 787 assembly/index.ts
+   3  225 2909 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 5, 413068793 ]
+Benchmark - uninstrumented - done
+  55  236 1508 assembly/index.ts
+  30  397 4783 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 5, 224019333 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-partial-sum with countPropertyWrites.ts
+ 46 166 787 assembly/index.ts
+   3  225 2909 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 5, 102040107 ]
+Benchmark - uninstrumented - done
+  53  236 1488 assembly/index.ts
+  30  397 4783 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 5, 108987320 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-partial-sum with emptyAnalysis.ts
+ 46 166 787 assembly/index.ts
+   3  225 2909 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 5, 95849867 ]
+Benchmark - uninstrumented - done
+ 36 182 961 assembly/index.ts
+   3  228 2964 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 5, 132041980 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-spectral-norm with combinedExamples.ts
+  54  261 1126 assembly/index.ts
+  27  402 4518 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 571180 ]
+Benchmark - uninstrumented - done
+ 152  679 5455 assembly/index.ts
+  78  813 8472 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 56062922 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-spectral-norm with countFunctionCalls.ts
+  54  261 1126 assembly/index.ts
+  27  402 4518 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 531133 ]
+Benchmark - uninstrumented - done
+ 107  568 4351 assembly/index.ts
+  68  787 8226 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 54983359 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-spectral-norm with countPropertyReads.ts
+  54  261 1126 assembly/index.ts
+  27  402 4518 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 640414 ]
+Benchmark - uninstrumented - done
+  71  331 1916 assembly/index.ts
+  38  536 5883 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 558628 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-spectral-norm with countPropertyWrites.ts
+  54  261 1126 assembly/index.ts
+  27  402 4518 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 679066 ]
+Benchmark - uninstrumented - done
+  69  331 1896 assembly/index.ts
+  38  536 5883 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 595372 ]
+Benchmark - instrumented - done
+===============================
+===============================
+math-spectral-norm with emptyAnalysis.ts
+  54  261 1126 assembly/index.ts
+  27  402 4518 build/optimized.wasm
+Running default benchmarks, uninstrumented
+[ 0, 563768 ]
+Benchmark - uninstrumented - done
+  52  277 1369 assembly/index.ts
+  24  405 4573 build/optimized.wasm
+Running default benchmarks, instrumented
+[ 0, 536641 ]
+Benchmark - instrumented - done
+===============================

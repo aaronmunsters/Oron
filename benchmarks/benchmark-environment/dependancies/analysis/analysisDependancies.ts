@@ -14,6 +14,8 @@ export function dynamicPropertyWrite<C, V>(
   store<V>(changetype<usize>(classInstance) + offset, value);
 }
 
+export class OronVoid {}
+
 export enum Types {
   i32,
   u32,
@@ -26,7 +28,6 @@ export enum Types {
   u8,
   i16,
   u16,
-  bool,
   isize,
   usize,
   void,
@@ -40,27 +41,23 @@ export /* ######################################################################
 ArgsBuffer, class representing function arguments and their types (provided by Oron)
 #################################################################################### */
 class ArgsBuffer {
-  argsAmount: i32;
-  argSizes: i32[]; // sizeof <= is a value of type i32
+  argSizes: Int32Array;
   dynamicTypes: Types[];
   argBuffer: ArrayBuffer;
-  classIds: u32[];
-  constructor(argSizes: i32[]) {
-    this.argsAmount = argSizes.length;
-    this.argSizes = argSizes;
-    const bufLength = argSizes.reduce((p, n) => p + n, 0);
-    this.argBuffer = new ArrayBuffer(bufLength);
-    this.dynamicTypes = new Array<Types>(this.argsAmount);
-    this.classIds = new Array<u32>(this.argsAmount);
+  classIds: Uint32Array;
+  constructor(maxProgramArgs: i32, maxBuffLength: i32) {
+    this.argSizes = new Int32Array(maxProgramArgs);
+    this.argBuffer = new ArrayBuffer(maxBuffLength);
+    this.dynamicTypes = new Array<Types>(maxProgramArgs);
+    this.classIds = new Uint32Array(maxProgramArgs);
   }
 
-  setArgument<ArgTyp>(
+  setArgument<ArgTyp> /* Requires them to be set in order! */(
     argIdx: i32,
     dynamicType: Types,
     arg: ArgTyp,
     classId: u32
   ): void {
-    assert(argIdx >= 0 && argIdx < this.argsAmount, "arg idx out of arg range");
     this.dynamicTypes[argIdx] = dynamicType;
     let argStartIdx = 0;
     for (let i = 0; i < argIdx; i++) {

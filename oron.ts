@@ -294,7 +294,6 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
         // ==TRANSFORM==>
         // (function (arg1: Typ1, arg2: Typ2){...cast function to pointer...; ...wrap args in ADT...; return apply2args(funcCallPointer, argsADT);})(arg1, arg2);
         const args = node.arguments;
-        const argsIdentifier = ts.createIdentifier(`args`);
 
         const declaration = typechecker.getResolvedSignature(node).declaration;
 
@@ -302,27 +301,6 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
           const funcInTypes: ts.Type[] = (declaration.parameters as ts.NodeArray<
             ts.ParameterDeclaration
           >).map((par) => typechecker.getTypeFromTypeNode(par.type));
-          /* create arguments ADT */
-          const argsCreation = ts.createVariableStatement(
-            undefined,
-            ts.createVariableDeclarationList([
-              ts.createVariableDeclaration(
-                argsIdentifier /* variable name */,
-                undefined,
-                ts.createNew(ts.createIdentifier("ArgsBuffer"), undefined, [
-                  ts.createArrayLiteral(
-                    args.map((arg, index) =>
-                      ts.createCall(
-                        ts.createIdentifier("sizeof"),
-                        [typechecker.typeToTypeNode(funcInTypes[index])],
-                        []
-                      )
-                    )
-                  ),
-                ])
-              ),
-            ])
-          );
 
           const nodeToRuntimeType = (index: number) => {
             const typeStr = typechecker.typeToString(funcInTypes[index]);
@@ -352,33 +330,6 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
             }
           };
 
-          const argSetters = args.map((arg, index) => {
-            const classid =
-              nodeToRuntimeType(index) === "classInstance"
-                ? ts.createCall(
-                    ts.createIdentifier("idof"),
-                    [typechecker.typeToTypeNode(funcInTypes[index])],
-                    []
-                  )
-                : ts.createNumericLiteral("0");
-            return ts.createExpressionStatement(
-              ts.createCall(
-                ts.createPropertyAccess(argsIdentifier, "setArgument"),
-                [typechecker.typeToTypeNode(funcInTypes[index])],
-                [
-                  ts.createNumericLiteral(`${index}`),
-                  ts.createPropertyAccess(
-                    ts.createIdentifier("Types"),
-
-                    nodeToRuntimeType(index)
-                  ),
-                  ts.createIdentifier(`arg${index}`),
-                  classid,
-                ]
-              )
-            );
-          });
-
           const returnTypeNode = getTypeNode(node);
           const returnType = typechecker.getTypeAtLocation(node);
 
@@ -400,51 +351,46 @@ const transformer = <T extends ts.Node>(context: ts.TransformationContext) => (
             ? ts.createIdentifier(`apply${args.length}Args`)
             : ts.createIdentifier(`apply${args.length}ArgsVoid`);
 
-          const effectiveCallTrap = ts.createCall(
-            oronGuideFunctionName,
-            typeArgs,
-            [
-              ts.createStringLiteral(
-                ts.isIdentifier(node.expression)
-                  ? node.expression.text
-                  : node.getText()
-              ),
-              ts.createCall(
-                ts.createIdentifier("changetype"),
-                [ts.createTypeReferenceNode("usize", [])],
-                [node.expression]
-              ),
-              argsIdentifier,
-            ]
-          );
-
-          const argsToPars = (_: ts.Expression, index: number) =>
-            ts.createParameter(
-              undefined,
-              undefined,
-              undefined,
-              `arg${index}`,
-              undefined,
-              typechecker.typeToTypeNode(funcInTypes[index])
+          const returnRuntimeType = (idx) =>
+            ts.createPropertyAccess(
+              ts.createIdentifier("Types"),
+              nodeToRuntimeType(idx)
             );
 
-          const trap: ts.Statement = hasExplicitReturnType
-            ? ts.createReturn(effectiveCallTrap)
-            : ((effectiveCallTrap as unknown) as ts.Statement); // TODO: should change
+          const returnClassid = (idx) =>
+            nodeToRuntimeType(idx) === "classInstance"
+              ? ts.createCall(
+                  ts.createIdentifier("idof"),
+                  [typechecker.typeToTypeNode(funcInTypes[idx])],
+                  []
+                )
+              : ts.createNumericLiteral("0");
 
-          return ts.createCall(
-            ts.createFunctionExpression(
-              undefined,
-              undefined,
-              undefined,
-              undefined,
-              node.arguments.map(argsToPars),
-              getTypeNode(node),
-              ts.createBlock([argsCreation, ...argSetters, trap])
-            ),
-            undefined,
-            <ts.Expression[]>node.arguments.map((node) => visit(node))
+          const extraArgs = [];
+
+          args.forEach((val, idx) =>
+            extraArgs.push(
+              ...[
+                ts.visitNode(val, visit), // further instrument args
+                returnRuntimeType(idx),
+                returnClassid(idx),
+              ]
+            )
           );
+
+          return ts.createCall(oronGuideFunctionName, typeArgs, [
+            ts.createStringLiteral(
+              ts.isIdentifier(node.expression)
+                ? node.expression.text
+                : node.getText()
+            ),
+            ts.createCall(
+              ts.createIdentifier("changetype"),
+              [ts.createTypeReferenceNode("usize", [])],
+              [node.expression]
+            ),
+            ...extraArgs,
+          ]);
         }
       }
       // else unable to resolve function signature, such as "assert"
@@ -462,37 +408,55 @@ const transformedSourceFile = result.transformed[0];
 /* For every function call keep track of amount of arguments,
  * for every amount, create generic apply */
 
-function idxFillGappedString(amount: number, str: string) {
+function idxFillGappedString(amount: number, str: string, join: string) {
   return Array(amount)
     .fill(str)
     .map((toFormat, idx) => toFormat.replace(/\$/g, `${idx}`))
-    .join(",");
+    .join(join);
 }
 
 const applyArgsFuncs = [];
 functionCallArgs.forEach((amt) => {
-  const funcSignature = idxFillGappedString(amt, "in$: In$");
+  const funcSignature = idxFillGappedString(amt, "in$: In$", ",");
   applyArgsFuncs.push(
     `
-function apply${amt}Args<RetType,${idxFillGappedString(amt, "In$")}>(
+function apply${amt}Args<RetType,${idxFillGappedString(amt, "In$", ",")}>(
   fname: string,
   fptr: usize,
-  argsBuff: ArgsBuffer,
+  ${idxFillGappedString(amt, "arg$: In$, typ$: Types, classId$: u32", ",")}
 ): RetType {
   ${
     analysisDefined("genericApply")
-      ? `${analysisDefinitions.classInstance.text}.genericApply(fname, fptr, argsBuff);`
+      ? `
+      ${idxFillGappedString(
+        amt,
+        "globalBuffer.setArgument<In$>($, typ$, arg$, classId$);",
+        "\n"
+      )}
+      ${
+        analysisDefinitions.classInstance.text
+      }.genericApply(fname, fptr, globalBuffer, ${amt});
+      `
       : null
   }
   
   const func: (${funcSignature}) => RetType = changetype<(${funcSignature})=> RetType>(fptr);
   const res: RetType = func(${idxFillGappedString(
     amt,
-    "argsBuff.getArgument<In$>($)"
+    "arg$",
+    // "globalBuffer.getArgument<In$>($)",
+    ","
   )});
   ${
     analysisDefined("genericPostApply")
-      ? "return myAnalysis.genericPostApply<RetType>(fname, fptr, argsBuff, res);"
+      ? `
+      ${idxFillGappedString(
+        amt,
+        "globalBuffer.setArgument<In$>($, typ$, arg$, classId$);",
+        "\n"
+      )}
+      return myAnalysis.genericPostApply<RetType>(fname, fptr, globalBuffer, ${amt}, res);
+      `
       : "return res"
   }
   
@@ -502,24 +466,48 @@ function apply${amt}Args<RetType,${idxFillGappedString(amt, "In$")}>(
 });
 
 functionVoidCallArgs.forEach((amt) => {
-  const funcSignature = idxFillGappedString(amt, "in$: In$");
+  const funcSignature = idxFillGappedString(amt, "in$: In$", ",");
   applyArgsFuncs.push(
     `
 function apply${amt}ArgsVoid${
       (amt > 0 ? "<" : "") +
-      idxFillGappedString(amt, "In$") +
+      idxFillGappedString(amt, "In$", ",") +
       (amt > 0 ? ">" : "")
     }(
   fname: string,
   fptr: usize,
-  argsBuff: ArgsBuffer,
+  ${idxFillGappedString(amt, "arg$: In$, typ$: Types, classId$: u32", ",")}
 ): void {
-  ${analysisDefinitions.classInstance.text}.genericApply(fname, fptr, argsBuff);
+  ${
+    analysisDefined("genericApply")
+      ? `
+      ${idxFillGappedString(
+        amt,
+        "globalBuffer.setArgument<In$>($, typ$, arg$, classId$);",
+        "\n"
+      )}
+      ${
+        analysisDefinitions.classInstance.text
+      }.genericApply(fname, fptr, globalBuffer, ${amt});
+      `
+      : null
+  }
   const func: (${funcSignature}) => void = changetype<(${funcSignature})=> void>(fptr);
-  func(${idxFillGappedString(amt, "argsBuff.getArgument<In$>($)")})
+  func(${idxFillGappedString(
+    amt,
+    "arg$" /* "globalBuffer.getArgument<In$>($)" */,
+    ","
+  )})
   ${
     analysisDefined("genericPostApply")
-      ? "myAnalysis.genericPostApply<OronVoid>(fname, fptr, argsBuff, new OronVoid());"
+      ? `
+      ${idxFillGappedString(
+        amt,
+        "globalBuffer.setArgument<In$>($, typ$, arg$, classId$);",
+        "\n"
+      )}
+      myAnalysis.genericPostApply<OronVoid>(fname, fptr, globalBuffer, ${amt}, new OronVoid());
+      `
       : null
   }
 }
@@ -527,10 +515,22 @@ function apply${amt}ArgsVoid${
   );
 });
 
+let maxArgs = 0;
+functionCallArgs.forEach((val) => (maxArgs = Math.max(maxArgs, val)));
+functionVoidCallArgs.forEach((val) => (maxArgs = Math.max(maxArgs, val)));
+
 const endResult =
   analysisSourceFile.text +
   (analysisDefinitions.oronShouldAdd
-    ? `\nconst ${analysisDefinitions.classInstance.text} = new ${analysisDefinitions.className}();\n`
+    ? `\nconst ${analysisDefinitions.classInstance.text} = new ${
+        analysisDefinitions.className
+      }();\n ${
+        analysisDefined("genericApply") || analysisDefined("genericPostApply")
+          ? `const globalBuffer = new ArgsBuffer(${maxArgs}, ${
+              maxArgs * 16 // max arg size, type v128
+            });\n`
+          : ""
+      }`
     : "") +
   applyArgsFuncs.join("\n") +
   printer.printNode(null, transformedSourceFile, sourceFile);

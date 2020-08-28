@@ -212,18 +212,9 @@ var transformer = function (context) { return function (rootNode) {
                 // ==TRANSFORM==>
                 // (function (arg1: Typ1, arg2: Typ2){...cast function to pointer...; ...wrap args in ADT...; return apply2args(funcCallPointer, argsADT);})(arg1, arg2);
                 var args = node.arguments;
-                var argsIdentifier_1 = ts.createIdentifier("args");
                 var declaration = typechecker.getResolvedSignature(node).declaration;
                 if (declaration) {
                     var funcInTypes_1 = declaration.parameters.map(function (par) { return typechecker.getTypeFromTypeNode(par.type); });
-                    /* create arguments ADT */
-                    var argsCreation = ts.createVariableStatement(undefined, ts.createVariableDeclarationList([
-                        ts.createVariableDeclaration(argsIdentifier_1 /* variable name */, undefined, ts.createNew(ts.createIdentifier("ArgsBuffer"), undefined, [
-                            ts.createArrayLiteral(args.map(function (arg, index) {
-                                return ts.createCall(ts.createIdentifier("sizeof"), [typechecker.typeToTypeNode(funcInTypes_1[index])], []);
-                            })),
-                        ])),
-                    ]));
                     var nodeToRuntimeType_1 = function (index) {
                         var typeStr = typechecker.typeToString(funcInTypes_1[index]);
                         switch (typeStr) {
@@ -251,17 +242,6 @@ var transformer = function (context) { return function (rootNode) {
                                 return "classInstance";
                         }
                     };
-                    var argSetters = args.map(function (arg, index) {
-                        var classid = nodeToRuntimeType_1(index) === "classInstance"
-                            ? ts.createCall(ts.createIdentifier("idof"), [typechecker.typeToTypeNode(funcInTypes_1[index])], [])
-                            : ts.createNumericLiteral("0");
-                        return ts.createExpressionStatement(ts.createCall(ts.createPropertyAccess(argsIdentifier_1, "setArgument"), [typechecker.typeToTypeNode(funcInTypes_1[index])], [
-                            ts.createNumericLiteral("" + index),
-                            ts.createPropertyAccess(ts.createIdentifier("Types"), nodeToRuntimeType_1(index)),
-                            ts.createIdentifier("arg" + index),
-                            classid,
-                        ]));
-                    });
                     var returnTypeNode = getTypeNode(node);
                     var returnType = typechecker.getTypeAtLocation(node);
                     var hasExplicitReturnType = typechecker.typeToString(returnType) !== "void";
@@ -273,20 +253,28 @@ var transformer = function (context) { return function (rootNode) {
                     var oronGuideFunctionName = hasExplicitReturnType // name of effective call to trap
                         ? ts.createIdentifier("apply" + args.length + "Args")
                         : ts.createIdentifier("apply" + args.length + "ArgsVoid");
-                    var effectiveCallTrap = ts.createCall(oronGuideFunctionName, typeArgs, [
+                    var returnRuntimeType_1 = function (idx) {
+                        return ts.createPropertyAccess(ts.createIdentifier("Types"), nodeToRuntimeType_1(idx));
+                    };
+                    var returnClassid_1 = function (idx) {
+                        return nodeToRuntimeType_1(idx) === "classInstance"
+                            ? ts.createCall(ts.createIdentifier("idof"), [typechecker.typeToTypeNode(funcInTypes_1[idx])], [])
+                            : ts.createNumericLiteral("0");
+                    };
+                    var extraArgs_1 = [];
+                    args.forEach(function (val, idx) {
+                        return extraArgs_1.push.apply(extraArgs_1, [
+                            ts.visitNode(val, visit),
+                            returnRuntimeType_1(idx),
+                            returnClassid_1(idx),
+                        ]);
+                    });
+                    return ts.createCall(oronGuideFunctionName, typeArgs, __spreadArrays([
                         ts.createStringLiteral(ts.isIdentifier(node.expression)
                             ? node.expression.text
                             : node.getText()),
-                        ts.createCall(ts.createIdentifier("changetype"), [ts.createTypeReferenceNode("usize", [])], [node.expression]),
-                        argsIdentifier_1,
-                    ]);
-                    var argsToPars = function (_, index) {
-                        return ts.createParameter(undefined, undefined, undefined, "arg" + index, undefined, typechecker.typeToTypeNode(funcInTypes_1[index]));
-                    };
-                    var trap = hasExplicitReturnType
-                        ? ts.createReturn(effectiveCallTrap)
-                        : effectiveCallTrap; // TODO: should change
-                    return ts.createCall(ts.createFunctionExpression(undefined, undefined, undefined, undefined, node.arguments.map(argsToPars), getTypeNode(node), ts.createBlock(__spreadArrays([argsCreation], argSetters, [trap]))), undefined, node.arguments.map(function (node) { return visit(node); }));
+                        ts.createCall(ts.createIdentifier("changetype"), [ts.createTypeReferenceNode("usize", [])], [node.expression])
+                    ], extraArgs_1));
                 }
             }
             // else unable to resolve function signature, such as "assert"
@@ -300,32 +288,42 @@ var result = ts.transform(sourceFile, [transformer]);
 var transformedSourceFile = result.transformed[0];
 /* For every function call keep track of amount of arguments,
  * for every amount, create generic apply */
-function idxFillGappedString(amount, str) {
+function idxFillGappedString(amount, str, join) {
     return Array(amount)
         .fill(str)
         .map(function (toFormat, idx) { return toFormat.replace(/\$/g, "" + idx); })
-        .join(",");
+        .join(join);
 }
 var applyArgsFuncs = [];
 functionCallArgs.forEach(function (amt) {
-    var funcSignature = idxFillGappedString(amt, "in$: In$");
-    applyArgsFuncs.push("\nfunction apply" + amt + "Args<RetType," + idxFillGappedString(amt, "In$") + ">(\n  fname: string,\n  fptr: usize,\n  argsBuff: ArgsBuffer,\n): RetType {\n  " + (analysisDefined("genericApply")
-        ? analysisDefinitions.classInstance.text + ".genericApply(fname, fptr, argsBuff);"
-        : null) + "\n  \n  const func: (" + funcSignature + ") => RetType = changetype<(" + funcSignature + ")=> RetType>(fptr);\n  const res: RetType = func(" + idxFillGappedString(amt, "argsBuff.getArgument<In$>($)") + ");\n  " + (analysisDefined("genericPostApply")
-        ? "return myAnalysis.genericPostApply<RetType>(fname, fptr, argsBuff, res);"
+    var funcSignature = idxFillGappedString(amt, "in$: In$", ",");
+    applyArgsFuncs.push("\nfunction apply" + amt + "Args<RetType," + idxFillGappedString(amt, "In$", ",") + ">(\n  fname: string,\n  fptr: usize,\n  " + idxFillGappedString(amt, "arg$: In$, typ$: Types, classId$: u32", ",") + "\n): RetType {\n  " + (analysisDefined("genericApply")
+        ? "\n      " + idxFillGappedString(amt, "globalBuffer.setArgument<In$>($, typ$, arg$, classId$);", "\n") + "\n      " + analysisDefinitions.classInstance.text + ".genericApply(fname, fptr, globalBuffer, " + amt + ");\n      "
+        : null) + "\n  \n  const func: (" + funcSignature + ") => RetType = changetype<(" + funcSignature + ")=> RetType>(fptr);\n  const res: RetType = func(" + idxFillGappedString(amt, "arg$", 
+    // "globalBuffer.getArgument<In$>($)",
+    ",") + ");\n  " + (analysisDefined("genericPostApply")
+        ? "\n      " + idxFillGappedString(amt, "globalBuffer.setArgument<In$>($, typ$, arg$, classId$);", "\n") + "\n      return myAnalysis.genericPostApply<RetType>(fname, fptr, globalBuffer, " + amt + ", res);\n      "
         : "return res") + "\n  \n}\n");
 });
 functionVoidCallArgs.forEach(function (amt) {
-    var funcSignature = idxFillGappedString(amt, "in$: In$");
+    var funcSignature = idxFillGappedString(amt, "in$: In$", ",");
     applyArgsFuncs.push("\nfunction apply" + amt + "ArgsVoid" + ((amt > 0 ? "<" : "") +
-        idxFillGappedString(amt, "In$") +
-        (amt > 0 ? ">" : "")) + "(\n  fname: string,\n  fptr: usize,\n  argsBuff: ArgsBuffer,\n): void {\n  " + analysisDefinitions.classInstance.text + ".genericApply(fname, fptr, argsBuff);\n  const func: (" + funcSignature + ") => void = changetype<(" + funcSignature + ")=> void>(fptr);\n  func(" + idxFillGappedString(amt, "argsBuff.getArgument<In$>($)") + ")\n  " + (analysisDefined("genericPostApply")
-        ? "myAnalysis.genericPostApply<OronVoid>(fname, fptr, argsBuff, new OronVoid());"
+        idxFillGappedString(amt, "In$", ",") +
+        (amt > 0 ? ">" : "")) + "(\n  fname: string,\n  fptr: usize,\n  " + idxFillGappedString(amt, "arg$: In$, typ$: Types, classId$: u32", ",") + "\n): void {\n  " + (analysisDefined("genericApply")
+        ? "\n      " + idxFillGappedString(amt, "globalBuffer.setArgument<In$>($, typ$, arg$, classId$);", "\n") + "\n      " + analysisDefinitions.classInstance.text + ".genericApply(fname, fptr, globalBuffer, " + amt + ");\n      "
+        : null) + "\n  const func: (" + funcSignature + ") => void = changetype<(" + funcSignature + ")=> void>(fptr);\n  func(" + idxFillGappedString(amt, "arg$" /* "globalBuffer.getArgument<In$>($)" */, ",") + ")\n  " + (analysisDefined("genericPostApply")
+        ? "\n      " + idxFillGappedString(amt, "globalBuffer.setArgument<In$>($, typ$, arg$, classId$);", "\n") + "\n      myAnalysis.genericPostApply<OronVoid>(fname, fptr, globalBuffer, " + amt + ", new OronVoid());\n      "
         : null) + "\n}\n");
 });
+var maxArgs = 0;
+functionCallArgs.forEach(function (val) { return (maxArgs = Math.max(maxArgs, val)); });
+functionVoidCallArgs.forEach(function (val) { return (maxArgs = Math.max(maxArgs, val)); });
 var endResult = analysisSourceFile.text +
     (analysisDefinitions.oronShouldAdd
-        ? "\nconst " + analysisDefinitions.classInstance.text + " = new " + analysisDefinitions.className + "();\n"
+        ? "\nconst " + analysisDefinitions.classInstance.text + " = new " + analysisDefinitions.className + "();\n " + (analysisDefined("genericApply") || analysisDefined("genericPostApply")
+            ? "const globalBuffer = new ArgsBuffer(" + maxArgs + ", " + maxArgs * 16 // max arg size, type v128
+             + ");\n"
+            : "")
         : "") +
     applyArgsFuncs.join("\n") +
     printer.printNode(null, transformedSourceFile, sourceFile);

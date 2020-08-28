@@ -5,6 +5,7 @@ console.log(`
 `);
 
 const outputSizes = true;
+const keepInstrumented = true;
 
 const fs = require("fs");
 const child_process = require("child_process");
@@ -74,6 +75,13 @@ for (const file of fs.readdirSync(examplesDir)) {
   cd ${benchEnv}
   ${buildAndBenchmark("uninstrumented")}
   node ${oronDir}/oron.js ${originalFile} ${oronDir}/orondefaults/${analysis} ${benchIndexDestination}
+  ${
+    keepInstrumented
+      ? `cp ${benchIndexDestination} ${
+          oronDir + `/benchmarks/examples/${file}/assembly/__${analysis}`
+        }`
+      : null
+  }
   ${buildAndBenchmark("instrumented")}
   echo "==============================="
 

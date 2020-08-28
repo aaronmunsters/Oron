@@ -56,7 +56,12 @@ export class MyAnalysis extends OronAnalysis {
     dynamicPropertyWrite<ClassInstance, Value>(classInstance, value, offset);
   }
 
-  genericApply(fname: string, fptr: usize, args: ArgsBuffer): void {
+  genericApply(
+    fname: string,
+    fptr: usize,
+    args: ArgsBuffer,
+    argsAmt: i32
+  ): void {
     increase(calls, fname);
   }
 }

@@ -25,7 +25,20 @@ export interface Oron {
     offset: usize
   ): void;
 
-  genericApply(fname: string, fptr: usize, args: ArgsBuffer): void;
+  genericApply(
+    fname: string,
+    fptr: usize,
+    args: ArgsBuffer,
+    argsAmt: i32
+  ): void;
+
+  genericPostApply<ResType>(
+    fname: string,
+    fptr: usize,
+    args: ArgsBuffer,
+    argsAmt: i32,
+    result: ResType
+  ): ResType;
 }
 
 export class OronAnalysis implements Oron {
@@ -51,9 +64,14 @@ export class OronAnalysis implements Oron {
     dynamicPropertyWrite<ClassInstance, Value>(classInstance, value, offset);
   }
 
-  genericApply(fname: string, fptr: usize, args: ArgsBuffer): void {
+  genericApply(
+    fname: string,
+    fptr: usize,
+    args: ArgsBuffer,
+    argsAmt: i32
+  ): void {
     /* Analysis would go here */
-    for (let argIdx = 0; argIdx < args.argsAmount; argIdx++) {
+    for (let argIdx = 0; argIdx < argsAmt; argIdx++) {
       switch (args.dynamicTypes[argIdx]) {
         case Types.i32:
           break;
@@ -76,8 +94,6 @@ export class OronAnalysis implements Oron {
         case Types.i16:
           break;
         case Types.u16:
-          break;
-        case Types.bool:
           break;
         case Types.isize:
           break;
@@ -112,5 +128,16 @@ export class OronAnalysis implements Oron {
           break;
       }
     }
+  }
+
+  genericPostApply<ResType>(
+    fname: string,
+    fptr: usize,
+    args: ArgsBuffer,
+    argsAmt: i32,
+    result: ResType
+  ): ResType {
+    /* Analysis would go here */
+    return result;
   }
 }

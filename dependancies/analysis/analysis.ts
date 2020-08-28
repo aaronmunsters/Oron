@@ -17,20 +17,23 @@ export interface Oron {
     key: string,
     offset: usize
   ): ReturnValue;
-
   propertySet<ClassInstance, Value>(
     classInstance: ClassInstance,
     value: Value,
     key: string,
     offset: usize
   ): void;
-
-  genericApply(fname: string, fptr: usize, args: ArgsBuffer): void;
-
+  genericApply(
+    fname: string,
+    fptr: usize,
+    args: ArgsBuffer,
+    argsAmt: i32
+  ): void;
   genericPostApply<ResType>(
     fname: string,
     fptr: usize,
     args: ArgsBuffer,
+    argsAmt: i32,
     result: ResType
   ): ResType;
 }
@@ -58,9 +61,14 @@ export class OronAnalysis implements Oron {
     dynamicPropertyWrite<ClassInstance, Value>(classInstance, value, offset);
   }
 
-  genericApply(fname: string, fptr: usize, args: ArgsBuffer): void {
+  genericApply(
+    fname: string,
+    fptr: usize,
+    args: ArgsBuffer,
+    argsAmt: i32
+  ): void {
     /* Analysis would go here */
-    for (let argIdx = 0; argIdx < args.argsAmount; argIdx++) {
+    for (let argIdx = 0; argIdx < argsAmt; argIdx++) {
       switch (args.dynamicTypes[argIdx]) {
         case Types.i32:
           break;
@@ -123,6 +131,7 @@ export class OronAnalysis implements Oron {
     fname: string,
     fptr: usize,
     args: ArgsBuffer,
+    argsAmt: i32,
     result: ResType
   ): ResType {
     /* Analysis would go here */
